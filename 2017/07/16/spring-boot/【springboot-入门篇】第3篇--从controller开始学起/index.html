@@ -1,0 +1,1367 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="java,springboot,controller," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="虽然文章标题是“学起”，但是我也不会真的从头开始讲，默认，你是懂springmvc的 o.o  1. 返回数据与返回页面在写web项目的时候，controller里的返回值一般分为两种，一种是返回页面，也就是ModeAndView，另一种是直接返回数据，比如json格式的数据。 返回一个页面，我们需要用到一些模板引擎，比如熟知的jsp，模板引擎后面会详细讲解。 返回数据一般会选择返回json数据">
+<meta name="keywords" content="java,springboot,controller">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【springboot-入门篇】第3篇--从controller开始学起">
+<meta property="og:url" content="http://yoursite.com/2017/07/16/spring-boot/【springboot-入门篇】第3篇--从controller开始学起/index.html">
+<meta property="og:site_name" content="舒铭的后花园">
+<meta property="og:description" content="虽然文章标题是“学起”，但是我也不会真的从头开始讲，默认，你是懂springmvc的 o.o  1. 返回数据与返回页面在写web项目的时候，controller里的返回值一般分为两种，一种是返回页面，也就是ModeAndView，另一种是直接返回数据，比如json格式的数据。 返回一个页面，我们需要用到一些模板引擎，比如熟知的jsp，模板引擎后面会详细讲解。 返回数据一般会选择返回json数据">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/4047674-f6ba0c1593b88b39.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/4047674-5efacb70d1897e28.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/4047674-e7c3d2c384cd15f4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/4047674-895e29794cec1337.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/4047674-19884d47d194b15f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/4047674-b05a7c4b0880012b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/4047674-94038d94efe18c72.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/4047674-5b6ef3ca2d0bb1d7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2017-11-25T16:50:50.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="【springboot-入门篇】第3篇--从controller开始学起">
+<meta name="twitter:description" content="虽然文章标题是“学起”，但是我也不会真的从头开始讲，默认，你是懂springmvc的 o.o  1. 返回数据与返回页面在写web项目的时候，controller里的返回值一般分为两种，一种是返回页面，也就是ModeAndView，另一种是直接返回数据，比如json格式的数据。 返回一个页面，我们需要用到一些模板引擎，比如熟知的jsp，模板引擎后面会详细讲解。 返回数据一般会选择返回json数据">
+<meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/4047674-f6ba0c1593b88b39.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/07/16/spring-boot/【springboot-入门篇】第3篇--从controller开始学起/"/>
+
+
+
+
+
+  <title>【springboot-入门篇】第3篇--从controller开始学起 | 舒铭的后花园</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">舒铭的后花园</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/07/16/spring-boot/【springboot-入门篇】第3篇--从controller开始学起/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="CFshuming">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="舒铭的后花园">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">【springboot-入门篇】第3篇--从controller开始学起</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-16T20:46:25+08:00">
+                2017-07-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index">
+                    <span itemprop="name">java</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java/springboot/" itemprop="url" rel="index">
+                    <span itemprop="name">springboot</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-comment-o"></i>
+              </span>
+              
+                <a href="/2017/07/16/spring-boot/【springboot-入门篇】第3篇--从controller开始学起/#SOHUCS" itemprop="discussionUrl">
+                  <span id="changyan_count_unit" class="post-comments-count hc-comment-count" data-xid="2017/07/16/spring-boot/【springboot-入门篇】第3篇--从controller开始学起/" itemprop="commentsCount"></span>
+                </a>
+              
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-eye">本文总阅读量:</i>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>虽然文章标题是“学起”，但是我也不会真的从头开始讲，默认，你是懂springmvc的 o.o</p>
+</blockquote>
+<h2 id="1-返回数据与返回页面"><a href="#1-返回数据与返回页面" class="headerlink" title="1. 返回数据与返回页面"></a><strong>1. 返回数据与返回页面</strong></h2><p>在写web项目的时候，controller里的返回值一般分为两种，一种是返回页面，也就是ModeAndView，另一种是直接返回数据，比如json格式的数据。</p>
+<p>返回一个页面，我们需要用到一些模板引擎，比如熟知的jsp，模板引擎后面会详细讲解。</p>
+<p>返回数据一般会选择返回json数据，我们之前的demo项目中使用的@RestController就是一个返回数据的注解。</p>
+<blockquote>
+<p>@RestController是一个组合注解，是由@Controller和@ResponseBody组合而成的。<br>@Controller：将返回值渲染为页面。<br>@ResponseBody：将返回值渲染为数据。</p>
+</blockquote>
+<h2 id="2-spring-boot支持的模板引擎"><a href="#2-spring-boot支持的模板引擎" class="headerlink" title="2. spring boot支持的模板引擎"></a><strong>2. spring boot支持的模板引擎</strong></h2><p><strong>spring-boot 支持多种模版引擎包括：</strong></p>
+<blockquote>
+<ul>
+<li>FreeMarker </li>
+<li>Groovy </li>
+<li>Thymeleaf （Spring 官网使用这个） </li>
+<li>Velocity </li>
+<li>JSP （不推荐，jsp在内嵌的servlet容器中运行有一些问题。）</li>
+</ul>
+</blockquote>
+<p>我们在讲前后端分离之前，都会使用Thymeleaf模板引擎，先简单的介绍一下它。</p>
+<h3 id="2-1-Thymeleaf模板引擎"><a href="#2-1-Thymeleaf模板引擎" class="headerlink" title="2.1 Thymeleaf模板引擎"></a><strong>2.1 Thymeleaf模板引擎</strong></h3><p>Thymeleaf是一个java类库，它是一个xml/xhtml/html5的模板引擎，可以作为mvc的web应用的view层。</p>
+<p>Thymeleaf还提供了额外的木块与spring mvc集成，所以使用ssm框架的也可以使用这个模板引擎。</p>
+<blockquote>
+<p>本来想列一下Thymeleaf的用法的，但是感觉有点多，以后哪里用到哪里讲好了。</p>
+</blockquote>
+<h2 id="3-实战"><a href="#3-实战" class="headerlink" title="3. 实战"></a><strong>3. 实战</strong></h2><p>接下来，我们通过一个项目，来实践一下两种不同的返回结果。</p>
+<p>先看一下最终的目录结构：</p>
+<blockquote>
+<p><img src="http://upload-images.jianshu.io/upload_images/4047674-f6ba0c1593b88b39.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="目录结构"></p>
+</blockquote>
+<h3 id="3-1-创建项目project-1"><a href="#3-1-创建项目project-1" class="headerlink" title="3.1 创建项目project_1"></a><strong>3.1 创建项目project_1</strong></h3><ul>
+<li>选择依赖：web Thymeleaf<blockquote>
+<p><img src="http://upload-images.jianshu.io/upload_images/4047674-5efacb70d1897e28.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="选择依赖"></p>
+</blockquote>
+</li>
+</ul>
+<h3 id="3-2-新建一个person类，用来封装数据"><a href="#3-2-新建一个person类，用来封装数据" class="headerlink" title="3.2 新建一个person类，用来封装数据"></a><strong>3.2 新建一个person类，用来封装数据</strong></h3><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> com.example.model;</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Person</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="keyword">private</span> String name;</div><div class="line">    <span class="keyword">private</span> Integer age;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Person</span><span class="params">()</span> </span>&#123;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Person</span><span class="params">(String name, Integer age)</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.name = name;</div><div class="line">        <span class="keyword">this</span>.age = age;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setName</span><span class="params">(String name)</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.name = name;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setAge</span><span class="params">(Integer age)</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.age = age;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getName</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> name;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> Integer <span class="title">getAge</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> age;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="3-3-新建一个ViewController，用来返回一个视图"><a href="#3-3-新建一个ViewController，用来返回一个视图" class="headerlink" title="3.3 新建一个ViewController，用来返回一个视图"></a><strong>3.3 新建一个ViewController，用来返回一个视图</strong></h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line">package com.example.controller;</div><div class="line"></div><div class="line">import com.example.model.Person;</div><div class="line">import org.springframework.stereotype.Controller;</div><div class="line">import org.springframework.ui.Model;</div><div class="line">import org.springframework.web.bind.annotation.RequestMapping;</div><div class="line"></div><div class="line">import java.util.ArrayList;</div><div class="line">import java.util.List;</div><div class="line"></div><div class="line">@Controller</div><div class="line">public class ViewController &#123;</div><div class="line"></div><div class="line">    @RequestMapping(&quot;/view&quot;)</div><div class="line">    public String view(Model model)&#123;</div><div class="line">        Person person = new Person(&quot;x&quot;, 22);</div><div class="line"></div><div class="line">        List&lt;Person&gt; list = new ArrayList&lt;&gt;();</div><div class="line">        list.add(new Person(&quot;a&quot;, 11));</div><div class="line">        list.add(new Person(&quot;b&quot;, 12));</div><div class="line">        list.add(new Person(&quot;c&quot;, 13));</div><div class="line"></div><div class="line">        model.addAttribute(&quot;onePerson&quot;, person);</div><div class="line">        model.addAttribute(&quot;manyPerson&quot;, list);</div><div class="line"></div><div class="line">        return &quot;index&quot;;</div><div class="line"></div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="3-4-创建index-html，用来接收数据"><a href="#3-4-创建index-html，用来接收数据" class="headerlink" title="3.4 创建index.html，用来接收数据"></a><strong>3.4 创建index.html，用来接收数据</strong></h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div></pre></td><td class="code"><pre><div class="line">&lt;html xmlns:th=&quot;http://www.thymeleaf.org&quot;&gt;</div><div class="line">&lt;head&gt;</div><div class="line">    &lt;meta charset=&quot;UTF-8&quot;/&gt;</div><div class="line">    &lt;title&gt;test&lt;/title&gt;</div><div class="line"></div><div class="line">    &lt;link href=&quot;https://cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css&quot; rel=&quot;stylesheet&quot;/&gt;</div><div class="line">    &lt;link href=&quot;https://cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap-theme.min.css&quot; rel=&quot;stylesheet&quot;/&gt;</div><div class="line">&lt;/head&gt;</div><div class="line"></div><div class="line">&lt;body&gt;</div><div class="line">    &lt;div class=&quot;panel panel-primary&quot;&gt;</div><div class="line">        &lt;div class=&quot;panel-heading&quot;&gt;</div><div class="line">            &lt;h3 class=&quot;panel-title&quot;&gt;访问model&lt;/h3&gt;</div><div class="line">        &lt;/div&gt;</div><div class="line">        &lt;div class=&quot;panel-body&quot;&gt;</div><div class="line">            &lt;span th:text=&quot;$&#123;onePerson.name&#125;&quot;&gt;&lt;/span&gt;</div><div class="line">        &lt;/div&gt;</div><div class="line">    &lt;/div&gt;</div><div class="line"></div><div class="line">    &lt;div th:if=&quot;$&#123;not #lists.isEmpty(manyPerson)&#125;&quot;&gt;</div><div class="line">        &lt;div class=&quot;panel panel-primary&quot;&gt;</div><div class="line">            &lt;div class=&quot;panel-heading&quot;&gt;</div><div class="line">                &lt;h3 class=&quot;panel-title&quot;&gt;列表&lt;/h3&gt;</div><div class="line">            &lt;/div&gt;</div><div class="line">            &lt;div class=&quot;panel-body&quot;&gt;</div><div class="line">                &lt;ul class=&quot;list-group&quot;&gt;</div><div class="line">                    &lt;li class=&quot;list-group-item&quot; th:each=&quot;person:$&#123;manyPerson&#125;&quot;&gt;</div><div class="line">                        &lt;span th:text=&quot;$&#123;person.name&#125;&quot;&gt;&lt;/span&gt;</div><div class="line">                        &lt;span th:text=&quot;$&#123;person.age&#125;&quot;&gt;&lt;/span&gt;</div><div class="line">                    &lt;/li&gt;</div><div class="line">                &lt;/ul&gt;</div><div class="line">            &lt;/div&gt;</div><div class="line">        &lt;/div&gt;</div><div class="line">    &lt;/div&gt;</div><div class="line">&lt;/body&gt;</div><div class="line">&lt;/html&gt;</div></pre></td></tr></table></figure>
+<p>这里我们使用了Thymeleaf模板引擎来获得后台传来的数据并解析，使用bootstrap框架显示数据。可以看到，Thymeleaf的用法和jsp还是有点像的。可以直接通过${}的形式来获得attribute中的数据。</p>
+<blockquote>
+<p>在 spring boot 中，模板引擎默认是开启缓存的，如果修改了页面内容，刷新页面是得不到修改后的内容的。我们可以在application.yml中关闭模板引擎缓存：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">spring:</div><div class="line">  thymeleaf:</div><div class="line">    cache: false</div></pre></td></tr></table></figure></p>
+<p>如果需要详细的Thymeleaf模板的使用方式教程，可以给我留言，我看情况来决定是否要写一篇。因为我用的也不是很多，大部分情况我都是前后端分离的。</p>
+</blockquote>
+<h3 id="3-5-运行项目，浏览器访问http-localhost-8080-view"><a href="#3-5-运行项目，浏览器访问http-localhost-8080-view" class="headerlink" title="3.5 运行项目，浏览器访问http://localhost:8080/view"></a><strong>3.5 运行项目，浏览器访问<a href="http://localhost:8080/view" target="_blank" rel="external">http://localhost:8080/view</a></strong></h3><blockquote>
+<p><img src="http://upload-images.jianshu.io/upload_images/4047674-e7c3d2c384cd15f4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="view"></p>
+</blockquote>
+<p>可以看到，我们成功的在前端获取到了数据。方式就是将数据保存在attribute中，然后再前端页面获取。</p>
+<h3 id="3-6-修改ViewController中的-Controller为-RestController，重新运行"><a href="#3-6-修改ViewController中的-Controller为-RestController，重新运行" class="headerlink" title="3.6 修改ViewController中的@Controller为@RestController，重新运行"></a><strong>3.6 修改ViewController中的@Controller为@RestController，重新运行</strong></h3><blockquote>
+<p><img src="http://upload-images.jianshu.io/upload_images/4047674-895e29794cec1337.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="view"></p>
+</blockquote>
+<p>我们修改了注解，发现结果变了，直接显示了“index”,是因为@RestController会直接返回数据，而不是渲染页面，所以直接返回了index(这个index，是return语句中的)</p>
+<h3 id="3-7-创建DataController，用来直接返回数据"><a href="#3-7-创建DataController，用来直接返回数据" class="headerlink" title="3.7 创建DataController，用来直接返回数据"></a><strong>3.7 创建DataController，用来直接返回数据</strong></h3><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> com.example.controller;</div><div class="line"></div><div class="line"><span class="keyword">import</span> com.example.model.Person;</div><div class="line"><span class="keyword">import</span> org.springframework.web.bind.annotation.RequestMapping;</div><div class="line"><span class="keyword">import</span> org.springframework.web.bind.annotation.RestController;</div><div class="line"></div><div class="line"><span class="keyword">import</span> java.util.Arrays;</div><div class="line"><span class="keyword">import</span> java.util.List;</div><div class="line"></div><div class="line"><span class="meta">@RestController</span>  <span class="comment">// 使用RestController注解</span></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DataController</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="meta">@RequestMapping</span>(<span class="string">"/person"</span>)</div><div class="line">    <span class="function"><span class="keyword">public</span> Person <span class="title">person</span><span class="params">()</span></span>&#123;</div><div class="line">        <span class="keyword">return</span> <span class="keyword">new</span> Person(<span class="string">"aa"</span>, <span class="number">10</span>);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="meta">@RequestMapping</span>(<span class="string">"persons"</span>)</div><div class="line">    <span class="function"><span class="keyword">public</span> List&lt;Person&gt; <span class="title">persons</span><span class="params">()</span></span>&#123;</div><div class="line">        <span class="keyword">return</span> Arrays.asList(<span class="keyword">new</span> Person(<span class="string">"bb"</span>, <span class="number">11</span>), <span class="keyword">new</span> Person(<span class="string">"cc"</span>, <span class="number">12</span>));</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="3-8-重新运行项目"><a href="#3-8-重新运行项目" class="headerlink" title="3.8 重新运行项目"></a><strong>3.8 重新运行项目</strong></h3><p>访问<a href="http://localhost:8080/person" target="_blank" rel="external">http://localhost:8080/person</a></p>
+<blockquote>
+<p><img src="http://upload-images.jianshu.io/upload_images/4047674-19884d47d194b15f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="person"></p>
+</blockquote>
+<p>获得了json格式的数据</p>
+<p>访问<a href="http://localhost:8080/persons" target="_blank" rel="external">http://localhost:8080/persons</a></p>
+<blockquote>
+<p><img src="http://upload-images.jianshu.io/upload_images/4047674-b05a7c4b0880012b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="persons"></p>
+</blockquote>
+<p>列表也可以直接渲染为json。</p>
+<blockquote>
+<p>这里需要注意，如果我们方法的返回值是String（参考上面的index），那么返回的结果就是你return的字符串，如果方法的返回值是一个对象（person）或者一个集合（list，map等），那么得到的结果就是一个json字符串。spring boot默认使用jackson来进行解析。</p>
+<p>jackson也是可以修改为gson或者fastjson的，我们下篇再讲。</p>
+</blockquote>
+<h3 id="3-9-修改DataController中的-RestController为-Controller，重新运行"><a href="#3-9-修改DataController中的-RestController为-Controller，重新运行" class="headerlink" title="3.9 修改DataController中的@RestController为@Controller，重新运行"></a><strong>3.9 修改DataController中的@RestController为@Controller，重新运行</strong></h3><p>访问<a href="http://localhost:8080/person" target="_blank" rel="external">http://localhost:8080/person</a></p>
+<blockquote>
+<p><img src="http://upload-images.jianshu.io/upload_images/4047674-94038d94efe18c72.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="person"></p>
+</blockquote>
+<hr>
+<p>访问<a href="http://localhost:8080/persons" target="_blank" rel="external">http://localhost:8080/persons</a></p>
+<blockquote>
+<p><img src="http://upload-images.jianshu.io/upload_images/4047674-5b6ef3ca2d0bb1d7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="persons"></p>
+</blockquote>
+<p>会发现这两个都报错了，因为@Controller注解是渲染视图的，而我们返回的是对象或者集合，不能完成正常的渲染。</p>
+<h2 id="4-小结"><a href="#4-小结" class="headerlink" title="4. 小结"></a><strong>4. 小结</strong></h2><p>本文主要讲解了spring boot 如何渲染视图和数据，讲解了@Controller和@RestController的区别与用法。如果有什么疑问，请及时联系我。</p>
+<hr>
+<p>我之前写过一个重新认识java系类（还没写完，会写完的。。），篇幅很长，每一篇文章多的有7、8千字，和多人抱怨说看到一半就不想看了，因为太长了，所以 spring boot 这个系类会尽量的短小精悍，每篇文章只讲一个知识点，这样看着不累~</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>坚持原创技术分享，您的支持将鼓励我继续创作！</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/uploads/weixin.JPG" alt="CFshuming 微信支付"/>
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/uploads/zhifubao.JPG" alt="CFshuming 支付宝"/>
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/java/" rel="tag"># java</a>
+          
+            <a href="/tags/springboot/" rel="tag"># springboot</a>
+          
+            <a href="/tags/controller/" rel="tag"># controller</a>
+          
+        </div>
+      
+
+      
+      
+        <div class="post-widgets">
+        
+
+        
+
+        
+          
+          <div id="needsharebutton-postbottom">
+            <span class="btn">
+              <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </span>
+          </div>
+        
+        </div>
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/07/15/spring-boot/【springboot-入门篇】第2篇--springboot的各种配置/" rel="next" title="【springboot-入门篇】第2篇--springboot的各种配置">
+                <i class="fa fa-chevron-left"></i> 【springboot-入门篇】第2篇--springboot的各种配置
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/07/16/effectivejava/eff-java-6/" rel="prev" title="【effective java】6:消除过期的对象引用">
+                【effective java】6:消除过期的对象引用 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="SOHUCS"></div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">CFshuming</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">32</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">27</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/CFshuming" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="chengfan818@qq.com" target="_blank" title="E-Mail">
+                    
+                      <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="http://blog.csdn.net/qq_31655965" target="_blank" title="CSDN">
+                    
+                      <i class="fa fa-fw fa-rss"></i>CSDN</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="http://www.jianshu.com/u/8dc5811b228f" target="_blank" title="简书">
+                    
+                      <i class="fa fa-fw fa-book"></i>简书</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-返回数据与返回页面"><span class="nav-number">1.</span> <span class="nav-text">1. 返回数据与返回页面</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-spring-boot支持的模板引擎"><span class="nav-number">2.</span> <span class="nav-text">2. spring boot支持的模板引擎</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-Thymeleaf模板引擎"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 Thymeleaf模板引擎</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-实战"><span class="nav-number">3.</span> <span class="nav-text">3. 实战</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-创建项目project-1"><span class="nav-number">3.1.</span> <span class="nav-text">3.1 创建项目project_1</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-新建一个person类，用来封装数据"><span class="nav-number">3.2.</span> <span class="nav-text">3.2 新建一个person类，用来封装数据</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-新建一个ViewController，用来返回一个视图"><span class="nav-number">3.3.</span> <span class="nav-text">3.3 新建一个ViewController，用来返回一个视图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-4-创建index-html，用来接收数据"><span class="nav-number">3.4.</span> <span class="nav-text">3.4 创建index.html，用来接收数据</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-5-运行项目，浏览器访问http-localhost-8080-view"><span class="nav-number">3.5.</span> <span class="nav-text">3.5 运行项目，浏览器访问http://localhost:8080/view</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-6-修改ViewController中的-Controller为-RestController，重新运行"><span class="nav-number">3.6.</span> <span class="nav-text">3.6 修改ViewController中的@Controller为@RestController，重新运行</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-7-创建DataController，用来直接返回数据"><span class="nav-number">3.7.</span> <span class="nav-text">3.7 创建DataController，用来直接返回数据</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-8-重新运行项目"><span class="nav-number">3.8.</span> <span class="nav-text">3.8 重新运行项目</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-9-修改DataController中的-RestController为-Controller，重新运行"><span class="nav-number">3.9.</span> <span class="nav-text">3.9 修改DataController中的@RestController为@Controller，重新运行</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-小结"><span class="nav-number">4.</span> <span class="nav-text">4. 小结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">CFshuming</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.3</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user">本站访客数:</i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye">本站总访问量:</i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+  
+    <script type="text/javascript">
+    (function(){
+      var appid = 'cyt8Eo1xq';
+      var conf = 'f5f331174d31bcb21b3bec1b41eaae54';
+      var width = window.innerWidth || document.documentElement.clientWidth;
+      if (width < 960) {
+      window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>'); } else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){
+        window.changyan.api.config({appid:appid,conf:conf})});
+      }
+    })();
+    </script>
+    <script type="text/javascript" src="https://assets.changyan.sohu.com/upload/plugins/plugins.count.js"></script>
+  
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+  
+  <link rel="stylesheet" href="/lib/needsharebutton/needsharebutton.css">
+
+  
+  
+  <script src="/lib/needsharebutton/needsharebutton.js"></script>
+
+  <script>
+    
+      pbOptions = {};
+      
+          pbOptions.iconStyle = "box";
+      
+          pbOptions.boxForm = "horizontal";
+      
+          pbOptions.position = "bottomCenter";
+      
+          pbOptions.networks = "Weibo,Wechat,Douban,QQZone,Twitter,Facebook,Evernote,Tumblr";
+      
+      new needShareButton('#needsharebutton-postbottom', pbOptions);
+    
+    
+  </script>
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

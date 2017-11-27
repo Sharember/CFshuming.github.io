@@ -1,0 +1,449 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title><![CDATA[【计算机网络-概论】2. 协议分层]]></title>
+    <url>%2F2017%2F11%2F27%2Fnetwork%2F%E6%A6%82%E8%AE%BA%2F%E5%8D%8F%E8%AE%AE%E5%88%86%E5%B1%82%2F</url>
+    <content type="text"><![CDATA[协议定义了发送者、接收 者和所有中间设备为了高效通信需要遵循的规则。当通信简单时，我们可能只是需要一个简单的协 议;当通信复杂时，我们可能需要把任务划分到不同层，每层需要一个协议，也就是说需要协议分层(protocol layering)。 2.1 场景为了更好地理解为什么需要协议分层，我们来看两种简单的场景。 场景一在第一个场景中，通信如此简单以至于它能够在一层中实现。假设 Maria 和 Ann 是拥有很多 共同想法的邻居。Maria 和 Ann 之间的通信发生在一个层次中，她们面对面并使用相同的语言，如图： 即使在这个简单的场景中也需要遵循一系列的规则。 Maria 和 Ann 了解当她们相遇时应该互相问候。 她们明白她们应该限制使用的词汇在她们友谊的层次上。 一方知道当另一方讲话时，她应该抑制自己讲话。 每一方都知道应该是对话而不是独角戏: 双方都应该有机会对某一问题发表看法。 当她们分别时，应该交换一些祝福语。 但是 Maria 和 Ann 使用的协议与课堂上老师和学生的通信不同。上课的时候，大部分情况下是老师的独角戏，除非学生有问题，否则老师的谈话会占用大部分时间。在这种情况下，协议应该规定：学生只有举手并被允许说话后才可以发言。 场景二在第二个场景中，我们假设公司提拔了 Ann，但是她需要到距离 Maria 很远的城市上班。由于 这两位朋友着手进行一个新的项目以便退休后启动新生意，因此她们希望继续她们的通信、交换她 们的想法。她们决定定期通过邮局使用信件继续交换她们的想法。但是，即使信件被拦截，她们也 不希望她们的想法被其他人知道。她们一致同意采用一种加密/解密技术。信件的发送者对信件加 密，使之对入侵者不可读;信件的接收者对信件解密，从而得到原始的信件。我们将在第 10 章讨 论加密/解密方法，但是现在我们假设 Maria 和 Ann 采用了一种技术，该技术在一个人不拥有密钥 的情况下很难解密信件。现在我们可以说 Maria 和 Ann 之间的通信在 3 个层次上进行，如图 1-10 所示。我们假设 Ann 和 Maria 每个人拥有 3 台机器(机器人)，这 3 台机器分别在每一层执行任务。 我们假设 Maria 向 Ann 发送第一封邮件。Maria 在第 3 层对机器谈话，仿佛这台机器就是 Ann， 并且在听她谈话。第 3 层机器聆听 Maria 所说的内容并形成了明文(用英文书写的邮件)，传递给 第 2 层机器。第 2 层机器接收明文，对它进行加密并形成密文，传递给第 1 层机器。第 1 层机器， 大概是个机器人，接收密文，把它放入一个信封中，添加发送者和接收者地址，然后进行邮寄。 在 Ann 的一端，第 1 层机器从 Ann 的信箱中取出邮件，通过发送者的地址得知该邮件来自于 Maria。机器从信封中取出密文并将它投递给第 2 层机器。第 2 层机器解密这个信息，形成明文并 将明文传递给第 3 层机器。第 3 层机器接收明文并仿佛 Maria 正在说话一样将它读出来。 协议分层允许我们将一个复杂的任务分解成几个较小的、简单的任务。例如，我们可以只使用一台机器完成所有 3 台机器的工作。可是，如果 Maria 和 Ann 判定这台机器所做 的加密/解密不足以保护她们的秘密，那么她们需要更换整台机器。在现在的情况下，她们只需要更换第 2 层的机器，另外两台机器能够保持不变。这种方法称为模块化(modularity)。 在这个示例中，模块化意味着独立的层次。一层(一个模块)可以定义为一个具有输入和输出的黑盒子，我们不必关心输入如何变成输出。如果给定相同的输入，两台机器提供相同的输出，那么它们可以相互 替换。例如，Ann 和 Maria 可以从两个不同的厂商购买第 2 层机器。只要这两台机器能把相同的明文变成相同的密文，相同的密文变成相同的明文，那么它们就可以相互替换。 协议分层优点 它允许我们将服务从实现中分离出来 一层需要能够接收较低层的一系列服务，同时向较高层提供服务，而我们不关心这一层是如何实现的。 协议分层后，中间系统可以只提供一部分功能而不需要实现所有的功能。 如果不使用协议分层，形成的中间系统就不得不像端系统一样复杂，这样就会提高整个系统的造价。 协议分层原则 如果想要双向通信，那么我们需要每一层能够 实现两个相反的任务，每个方向上一个。 例如，第 3 层的任务就是听(在一个方向上)和说(在另 一个方向上)，第 2 层需要能够加密和解密，第 1 层需要发送和接收邮件。 两端每一层中的两个对象应该相同。 例如，两端第 3 层的对象应该为明文信件。两端第 2 层的对象应该为密文信件。两端第 1 层的对象应该为一封邮件。 2.2 TCP/IP 协议簇TCP/IP(Transmission Control Protocol/Internet Protocol，传输控制协议/互联网协议)。TCP/IP 是目前 Internet 使用的一个协议簇(按不同层次组织的协议集)。它是由相互交互的模块组成的一个层次结构协议，每一个模块提供特定的功能。层次意味着较上层次的协议需要得到一个或多个较下层次协议提供的服务支 持。初始的 TCP/IP 协议簇在硬件基础上定义了 4 个软件层次。但是，目前 TCP/IP 通常是一个 5 层模型。 2.2.1 层次化结构为了展示如何利用 TCP/IP 协议簇的层次在两台主机之间进行通信，我们假设将协议簇用于一个由 3 个局域网(链接)组成的小型互联网，每个局域网拥有一个链路层交换机。同时我们假设局 域网连接到一个路由器，如图： 我们假设计算机 A 与计算机 B 进行通信。正像图中显示的那样，这个通信中涉及 5 个 通信设备:源主机(计算机 A)、链路 1 的链路层交换机、路由器、链路 2 的链路层交换机和目的主机(计算机 B)。 按照设备在互联网中扮演的角色不同，每一台设备包含了几个层次。两台主机包含了所有 5 个层次，源主机需要在应用层创建一个信息并把它发送到下层，以便把该信息物理上 发送到目的主机。目的主机需要在物理层接收这个信息，然后通过其他层投递到应用层。 路由器只涉及 3 层，只要路由器仅仅作为路由选择，在路由器中就没有传输层或应用层。一个路由器包括一个网络层、n 个数据链路层和物理层的组合(其中 n 为路由器连接的链路的数目)。其主要原因是每一个链路可以使用它自己的数据链路或物理层。例如在图中，路由器拥有 3 条链接，但是从源 A 发送到目的地 B 的消息涉及两条链接。每一条链接可以使用不同的链路层和物理层协议;路由器需要从基于一对协议的链路 1 接收分组并将它投递到基于另一对协议的链路 2。 和路由器不同在一条链路上的链路层交换机只涉及两个层次：数据链路层和物理层。尽管交换机拥有两个不同的连接，但是这两个连接在同一链路上，它们只使用一个协议集。这意味着交换机只涉及一个数据链路层和一个物理层。 2.2.2 TCP/IP 协议簇中的层次为了更好地理解每一层的任务，我们首先需要知道在层次间存在的逻辑连接。 采用逻辑连接使我们考虑每一层的任务变得比较容易。如上图所示，应用层、传输层和网络层的任务是端到端的(end-to-end)。但是，数据链路层和物理层的任务是点到点的(hop-to-hop)， 其中一个跳步是一个主机或路由器。也就是说，高三层的任务范围是互联网，低两层的任务范围是链路。 另一种理解逻辑连接的方法是考虑每一层创建的数据单元。在高三层，数据单元(分组)不应该被任何路由器或链路层交换机改变。在低两层，主机创建的分组仅仅被路由器改变，链路层交换机不改变它们。 注意，尽管网络层的逻辑连接在两个主机之间，但是由于一个路由器在网络层对分组进行分片， 并且发送的分组比接收的多，因此在这种情况下，对等体只存在于两个跳步之间。 2.2.3 TCP/IP 各层描述 应用层 两个应用层之间的逻辑连接是端到端的。两个应用层之间仿佛存在一座桥梁 一样相互交换消息。可是，我们应该明白通信需要通过所有层次完成。 应用层的通信处于两个进程(该层正在运行的两个程序)之间。为了进行通信，一个进程向另一个进程发送请求，并且接收另一个进程的响应。进程到进程的通信就是应用层的任务。虽然 Internet 的应用层包含了很多预定义的协议，但是也可以在两台主机上运行用户创建的一对进程。 下面是一些应用层常用协议。 超级文本传输协议(Hypertext Transfer Protocol，HTTP)是访问万维网(World Wide Web， WWW)的载体。 简单邮件传输协议(Simple Mail Transfer Protocol，SMTP)是电子邮件(e-mail) 服务的主要协议。 文件传输协议(File Transfer Protocol，FTP)用于将文件从一台主机传输到另一 台主机。 远程登录(Terminal Network，TELNET)和安全外壳(Secure Shell，SSH)用于访问远端的站点。 管理员使用简单网络管理协议(Simple Network Management Protocol，SNMP)对 Internet 全局或局部进行管理。 域名系统(Domain Name System，DNS)使其他的协议能够查询一台计算 机的网络层地址。 因特网组管理协议(Internet Group Management Protocol，IGMP)用于管理一个 组的成员资格。 传输层 传输层的逻辑连接也是端到端的。源主机的传输层从应用层得到消息，封装成传输层的分组(称 为段或用户数据报，不同协议叫法不同)，然后进行发送。通过逻辑(想象的)连接，分组到达目的主机的传输层。 也就是说，传输层负责向应用层提供服务:从运行于应用层的程序得到信息，并 将它投递到目的主机相应的应用程序。 下面是一些传输层常用协议。 传输控制协议(Transmission Control Protocol，TCP)是一个面向连接的协议，它在传输 数据之前，首先在两台主机的传输层之间建立一条逻辑连接。TCP 协议在两个 TCP 层之间创建一个管道，以便传输字节流。TCP 协议提供流量控制差错控制、拥塞控制。 用户数据报协议(User Datagram Protocol，UDP)。UDP 是一种无连接协议，它传输用户数据报之前不需要创建逻辑 连接。在 UDP 中，每个用户数据报是一个独立的实体，它和前一个或后一个用户数据报没有关系。UDP 是一种比较简单的协议，它不提供流量控制、差错控制或拥塞控制。 它的简单性对某些应用程序具有吸引力，这些应用程序发送较短的消息且不能容忍 TCP 在分组损坏或丢失时使用重发机制。 流控制传输协议(Stream Control Transmission Protocol，SCTP)是一种新协议，它是为多媒体出现的新应用设计的。 网络层 网络层负责在源计算机和目的计算机之间创建一个连接。网络层的通信是主机到主机的。可是， 由于从源主机到目的主机可能存在多个路由器，因此路径上的路由器负责为每个分组选择最好的路径。我们可以说网络层负责主机到主机的通信，并且指挥分组通过合适的路由器。 下面是一些网络层常用协议。 因特网协议(Internet Protocol，IP)，因特网协议定义了在 网络层称为数据报的分组格式。IP 同时定义了在这一层使用的地址格式和结构。与此同时，IP 负 责从源主机把一个分组路由到目的主机。这种功能主要是通过每个路由器都将数据报转发到路径上的下一个路由器而实现的。IP 是一个无连接的协议，不提供流量控制、差错控制和拥塞控制服务。 因特网控制报文协议(Internet Control Message Protocol，ICMP)帮助 IP 报告遇到的问题。 因特网组管理协议 (Internet Group Management Protocol，IGMP)协助 IP 进行多任务处理。 动态主机配置协议(Dynamic Host Configuration Protocol，DHCP)帮助 IP 获取一台主机的网络层地址。 地址解析协议(Address Resolution Protocol，ARP)帮助 IP 寻找一台主机或一台路由器的链路层地址。 数据链路层 我们已经知道一个互联网是多个链路(LAN 和 WAN)通过路由器连接而构成的。从主机传输数据报到目的地可能存在多个交叠的链路集。路由器负责选择最好的链路进行传输。当路由器定好需要传输的下一条链路后，数据链路层接管这个数据报并使它穿过这条链路。这条链路可以是一个具有链路层交换机的有线局域网、一个无线局域网、一个有线广域网或者一个无线广域网。 对于不同链路类型也存在不同的协议。无论哪种情况，数据链路层都要负责通过链路传输分组。 TCP/IP 没有为数据链路层定义任何特定的协议。它支持所有标准的和私有的协议。能够接管 数据报并携带它穿过链路的任何协议都能满足网络层的要求。数据链路层接管一个数据报并将它封 装在一个称为帧(frame)的分组中。 每个链路层协议可能提供不同的服务。有些链路层协议提供完整的检查和纠错，有些只提供纠错。 物理层 我们可以说物理层负责携带一个帧中单独的比特穿过链路。尽管物理层位于 TCP/IP 协议簇的最底层，但是由于在物理层之下存在另外一个隐藏的传输介质层，因此两个设备物理层之间的通信仍然是逻辑通信。两个设备通过一种传输介质(电缆或大气)连接。我们需要知道传输介质不携带比特，它携带电或光信号。所以，从数据链路层接收的一个帧的比特需要被变换，然后通过传输介质传输。但是我们可以认为两个设备物理层之间的逻辑单元是一个比特(bit)。将一个比特变换成一个信号存在多种协议。 2.2.4 封装和解封装 由于在链路层交换机中没有封装/解封装发生，因此没有显示链路层交换机的层次。 源主机的封装 在源主机端只进行封装。 在应用层，交换的数据称为消息(message)。消息通常不包含任何头部和尾部，但是即使 包含了这些，我们也将其整体称为消息。消息会被传递到传输层。 传输层把这个消息作为有效载荷，该载荷是传输层应该关注的负载。传输层在有效载荷基础上增加传输层头部，其中包括了希望进行通信的源和目的应用程序的标识符和一些投递该消息需要的更多信息，例如进行流量控制、差错控制和拥塞控制需要的信息。其结果为一个传输层分组。 该分组在 TCP 中称为段(segment)，在 UDP 中称为用户数据报(user datagram)。然后传输层传递该分组到网络层。 网络层把传输层分组作为数据或有效载荷，并且在该有效载荷上添加自己的头部。头部包含源和目的主机的地址，以及用于头部差错检查、分片的信息等其他一些信息。其结果为一个称为 数据报(datagram)的网络层分组。然后，网络层传递这个分组到数据链路层。 数据链路层把网络层分组作为数据或有效载荷，并且添加上自己的头部。该头部包含主机 或下一跳步(路由器)的链路层地址。其结果为一个称为帧(frame)的链路层分组。该帧被传递 到物理层进行传输。 路由器的解封装与封装 由于路由器连接两个或多个链路，因此在路由器中我们既需要进行解封装也需要进行封装。 在比特集被投递到数据链路层后，这一层从帧中解封装出数据报并将它投递到网络层。 网络层只检查数据报头部的源地址和目的地址，查阅它的转发表以寻找该数据报将被投递 到的下一跳步。除非数据报太大以至于不能通过下一链路时需要对其进行分片，数据报的内容不应 该被网络层改变。然后，数据报被传递到下一链路的数据链路层。 下一链路的数据链路层将数据报封装成一个帧，将其传递到物理层进行传输。 目的主机的解封装 在目的主机端，每层都只解封装接收到的分组，移出有效载荷，并将有效载荷传递至较高一层，直到消息到达应用层。需要说明的是主机中的解封装包含差错检查。 2.2.5 地址在 Internet 中，与协议分层相关的另一个概念是地址。正像以前讨论的那样，在这种模型中一 对层次之间存在逻辑通信。包含两方的任意通信都需要两个地址:源地址和目的地址。尽管看起来我们似乎需要 5 对地址(每层一对)，但是由于物理层不需要地址，我们通常只需要 4 对，物理层的数据交换单元是一个比特，它没有地址。 在应用层，我们通常使用一个像 someorg.com 的名字定义提供服务的站点，或者使用像 somebody@coldmail.com 一样的电子邮件地 址。在传输层，地址称为端口号，这些端口号指 定源和目的地的应用层程序。端口号是本地地址， 用于区分同一时间运行的几个程序。网络层地址是全局的，其范围涵盖了整 Internet。链路层地址有时叫做 MAC 地址(MAC address)，是本地定义的地址。每个链路层地址用于在网络(LAN 或 WAN)中定义一个特定的主机或路由器。 2.2.6 多路复用与多路分解由于 TCP/IP 协议簇在一些层次使用多个协议，因此我们在源端需要进行多路复用 (multiplexing)，在目的端需要进行多路分解(demultiplexing)。 多路复用的意思是一个协议能够封装来自多个上层协议的分组(一次一个);多路分解的意思是一个协议能够进行解封装， 并且将分组投递到多个上层协议(一次一个)。 为了进行多路复用和多路分解，协议需要一个用于标识被封装的分组属于哪种协议的头部字 段。在传输层，无论 UDP 还是 TCP 都可以接收多个应用层协议的消息。在网络层，IP 既可以接收来自 TCP 的段也可以接收来自 UDP 的用户数据报。同时，IP 也可以接收来自其他协议的分组，如ICMP 协议、IGMP 协议等等。在数据链路层，数据帧可以携带来自 IP 或 ARP 等协议的有效载荷。 2.2.7 OSI 模型]]></content>
+      <categories>
+        <category>network</category>
+        <category>计算机网络</category>
+        <category>概论</category>
+      </categories>
+      <tags>
+        <tag>network</tag>
+        <tag>计算机网络</tag>
+        <tag>网络</tag>
+        <tag>读书笔记</tag>
+        <tag>协议</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[【算法-剑指offer】2. 替换空格]]></title>
+    <url>%2F2017%2F11%2F27%2Falgorithm%2F%E5%89%91%E6%8C%87offer%2F%E6%9B%BF%E6%8D%A2%E7%A9%BA%E6%A0%BC%2F</url>
+    <content type="text"><![CDATA[题目描述： 请实现一个函数，将一个字符串中的空格替换成“%20”。例如，当字符串为We Are Happy.则经过替换之后的字符串为We%20Are%20Happy。 分析： 如果能用自带的方法的话，这道题大概是考对 jdk 的熟悉程度？ 1234// 还能更简单一点么public String replaceSpace(StringBuffer str) &#123; return str.toString().replaceAll(" ", "%20");&#125; 当然，写算法题肯定不应该用上面那种方法的，要不然也就失去它的意义了。 从前往后替换，后面的字符要不断往后移动，要多次移动，所以效率低下 从后往前，先计算需要多少空间，然后从后往前移动，则每个字符只为移动一次，这样效率更高一点。 答案： 123456789101112131415161718192021222324public String replaceSpace(StringBuffer str) &#123; int spacenum = 0;//spacenum为计算空格数 for(int i=0;i&lt;str.length();i++)&#123; if(str.charAt(i) == ' ') spacenum++; &#125; int indexold = str.length()-1; //indexold 为替换前的 str 下标 int newlength = str.length() + spacenum * 2;//计算空格转换成 %20 之后的 str 长度 int indexnew = newlength - 1;//indexold 为把空格替换为 %20 后的 str 下标 str.setLength(newlength);//使 str 的长度扩大到转换成 %20之 后的长度,防止下标越界 for( ; indexold &gt;= 0; --indexold)&#123; if(str.charAt(indexold) == ' ')&#123; // str.setCharAt(indexnew--, '0'); str.setCharAt(indexnew--, '2'); str.setCharAt(indexnew--, '%'); spacenum--; if(spacenum == 0) // 如果最后一个空格已经被替换完了，那么剩下的字符就不需要再一个一个判断了。 break; &#125;else&#123; str.setCharAt(indexnew--, str.charAt(indexold)); &#125; &#125; return str.toString(); &#125;]]></content>
+      <categories>
+        <category>算法</category>
+        <category>剑指offer</category>
+        <category>字符串</category>
+      </categories>
+      <tags>
+        <tag>算法</tag>
+        <tag>剑指offer</tag>
+        <tag>字符串</tag>
+        <tag>String</tag>
+        <tag>StringBuffer</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[【算法-剑指offer】1. 二维数组中的查找]]></title>
+    <url>%2F2017%2F11%2F25%2Falgorithm%2F%E5%89%91%E6%8C%87offer%2F%E4%BA%8C%E7%BB%B4%E6%95%B0%E7%BB%84%E4%B8%AD%E7%9A%84%E6%9F%A5%E6%89%BE%2F</url>
+    <content type="text"><![CDATA[题目描述： 在一个二维数组中，每一行都按照从左到右递增的顺序排序，每一列都按照从上到下递增的顺序排序。请完成一个函数，输入这样的一个二维数组和一个整数，判断数组中是否含有该整数。 分析： 矩阵是有序的，从左下角来看，向上数字递减，向右数字递增，因此从左下角开始查找，当要查找数字比左下角数字大时。右移要查找数字比左下角数字小时，上移。 答案： 123456789101112131415public boolean Find(int target, int [][] array) &#123; int len = array.length - 1; int i = 0; while((len &gt;= 0)&amp;&amp; (i &lt; array[0].length))&#123; if(array[len][i] &gt; target)&#123; len--; &#125;else if(array[len][i] &lt; target)&#123; i++; &#125;else&#123; return true; &#125; &#125; return false;&#125;]]></content>
+      <categories>
+        <category>算法</category>
+        <category>剑指offer</category>
+        <category>数组</category>
+      </categories>
+      <tags>
+        <tag>算法</tag>
+        <tag>剑指offer</tag>
+        <tag>数组</tag>
+        <tag>二维数组</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[【计算机网络-概论】1. 网络]]></title>
+    <url>%2F2017%2F11%2F25%2Fnetwork%2F%E6%A6%82%E8%AE%BA%2Fnetwork%2F</url>
+    <content type="text"><![CDATA[1.网络网络(network)是由一组具有通信能力的设备相互连接而形成的。在这个定义中，设备可以是主机(host，有时也称为端系统(end system)，如大型计算机、桌面计算机、笔记本电脑、工作站、无线电话、安全系统等)，也可以是连接设备，如连接网络到其他网络的路由器、将设备连接到一起的交换机、变换数据形式的调制解调器等。在一个网络中，这些设备使用有线或无线的传输介质(如电缆或大气)连接起来。 1.1 局域网局域网(local areanetwork，LAN)通常是私有的，连接一个办公室、大楼或校园内的一些主机。按照需求的不同，一个局域网既可以简单地由两台电脑和一台打印机组成，用于家庭办公，也可以贯穿整个公司，包含语音和视频设备。在局域网中的每台主机都具有一个标识符(一个地址)，用于在局域网中唯一地定义这台主机。一台主机向另一台主机发送的数据包携带了源主机和目的主机的地址。 当孤立地使用局域网时(目前已很少见)，它们用于主机之间共享资源。我们马上能看到，目前的局域网常常相互连接，同时连接到广域网(下面我们将讨论)，以进行更广范围的通信。 1.2 广域网广域网(wide area network，WAN)也是由具有通信能力的设备相互连接而形成的。可是，局 域网和广域网有一些不同。局域网通常覆盖范围受限，可以覆盖一间办公室、一栋大楼或一个校园;广域网则具有更广的地理覆盖范围，可以覆盖一个城市、一个省、一个国家甚至整个世界。 局域网 互联主机;广域网互联交换机、路由器、调制解调器等连接设备。局域网通常由使用它的组织拥有; 广域网通常由通信公司建设和运营，使用它的组织进行租用。 我们看看目前使用的两种典型的广域网:点到点广域网和交换式广域网。 点到点广域网 点到点广域网通过传输介质(电缆或大气)连接两个通信设备: 交换式广域网 交换式广域网具有多个端点。不久我们将看到，交换式广域网目前用作全球通信的主干。我们可以说，交换式广域网是交换机连接几个点到点的广域网而形成的。 互联网络 现在我们很少看到孤立的局域网或广域网，它们都相互连接在一起。当两个或多个网络连接起 来，它们就形成了一个互联网络(internetwork)，或者互联网(internet)。 例如，假如一个机构有 两个办公室，一个在东海岸，另一个在西海岸。每一个办公室都拥有一个局域网，允许办公室的员 工相互进行通信。为了使不同办公室的员工能够互相通信，管理部门从服务提供商(例如电话公司) 租用一个点到点的专用广域网，用来连接两个局域网。现在公司拥有了一个互联网络，或者说一个 私有互联网。不同办公室之间的通信变成了可能:当西海岸办公室中的一台主机给同一办公室的另一台主机发送消息时，路由器阻截这条消息， 但是交换机指引这条消息到达目的地。另一方面，当西海岸的一台主机给东海岸的一台主机发送消 息时，路由器 R1 将数据包路由到路由器 R2，然后数据包到达目的地. 下面是多个局域网和广域网连接形成的另一个互联网。广域网之一为具有 4 个交换机的 交换式广域网。 2.交换互联网是由链路和交换机组成的，例如我们前面使用的链路层交换机和路由器。 实际上，互联网是一个交换式的网络，其中一台交换机至少将两条链路连接在一起。当需要的时候， 交换机需要将数据从一条链路转发到另一条链路。交换式网络最常见的类型为电路交换网络和分组交换网络。 2.1 电路交换网络在电路交换网络(circuit-switched network)中，两个端系统之间总是存在一条专用的连接(称 为电路)，交换机只能使其变成活跃或非活跃状态。 下面一个简单的交换式网络，该网络在每端连接 4 部电话。由于过去电话网络经常采用电路交换，因此我们使用电话机代替计算机作为 端系统，尽管目前部分电话系统采用分组交换网络。每端的 4 部电话连接到一个交换机。交换机将一端的电话机连接到另一端的电话 机。连接两台交换机的粗线是一个高容量的通信线路，它能够同时处理 4 路语音通信，其容量能够 被所有电话对之间共享。本例使用的交换机具有转发功能但是没有存储能力。我们看看以下两种情况。在第一种情况下，所有电话机均处于忙状态;一端的 4 个人正在与另一端的 4 个人进行通话;粗线的容量被完全使用。在第二种情况下，一端只有一部电话机连接到另一端的电 话机;粗线容量仅仅四分之一被使用。这意味着仅当占用全部容量时，电路交换网络才具有高效率;在 多数时间中，由于工作仅仅占用部分容量，因此它的效率低下。需要将粗线的容量做成每条语音线路容 量 4 倍的原因是，当一端的所有电话机想要与另一端所有电话机连接时，我们不希望通信失败。 2.2 分组交换网络在一个计算机网络中，两个端点之间使用被称为分组(packet)的数据块进行通信。也就是说，两台计算机之间交换的是独立的数据分组。 由于分组是一个能够被存储和以后发送的独立实体，因此这种机制允许我们实施存储转发的交换功能。 下面显示了一个每端分别连接 4 台计算机的小型分组交换网络。 分组交换网络中的路由器具有能够存储和转发分组的队列。现在假设粗线的容量(即高容量)仅仅为连接计算机到路由器数据线容量的两倍。如果只有两台计算机(分别在两端)需要相互通信,那么发送的分组不需要等待。但是，如果当粗线已经工作在满负荷时分组到达一个路由器，那么应该存储分组并且按照它们到达的次序进行转发。虽然这两个简单的例子显示分组交换网络比电路交换网络效率高，但是分组可能会遇到一些延迟。 2.3 Internet互联网是由两个或多个能够相互通信的网络组成的。最著名的互联 网叫做因特网(Internet)，Internet 由成千上万个相互连接的网络组成。下面显示了一个 Internet 概念上(而不是地理上)的视图。 Internet 由一系列主干、提供者网络和客户网络组成。主干(backbone)处于 最高层次，是一些通信公司拥有的大型网络，如 Sprint、Verizon(MCI)、AT&amp;T、NTT。主干网络通 过称为对等点(peering point)的复杂交换系统进行连接。一些小些的提供者网络(provider network) 处于第二个层次，这些网络通过付费使用主干网络服务。提供者网络连接主干网络，有时提供者网 络之间也相互连接。客户网络(customer network)是 Internet 边缘的网络，它们使用 Internet 提供 的服务。为了接收服务，客户网络需要向提供者网络付费。主干和提供者网络也称为 Internet 服务提供商(Internet Service Provider，ISP)。主干常常称为国际 ISP;提供者网络常常称为国家或区域 ISP。 2.4 访问 Internet今天的 Internet 是一个允许任何用户变成它的一部分的互联网。但是，用户需要物理上连接到 一个 ISP。物理连接通常利用一条点到点的广域网实现。 使用电话网络目前大多数居民和小公司具有电话服务，这就意味着他们能够连接到电话网络。由于大多数电 话网络自身已经连接到 Internet，因此居民和小公司连接 Internet 的一个选择是把他们和电话中心的 语音线路转换成点到点的广域网。这可以用两种方式实现。 拨号服务。第一种解决方法是在电话线路中增加将数据转换成语音的调制解调器。安装在 计算机中的软件拨打 ISP 的号码，形成一条电话连接。非常不幸，拨号服务非常慢，同时 当线路用于 Internet 连接时，线路就不能进行电话(语音)连接。因此，这种方式只对偶尔 访问 Internet 的居民和小公司有效。我们将在第 5 章中讨论拨号服务。 DSL 服务。自从 Internet 出现后，一些电话公司开始升级它们的电话线路，以向居民和小公司提 供较高速率的 Internet 服务。DSL 服务允许语音和数据通信同时进行。我们将在第 5 章讨论 DSL。 利用有线电视网络近 20 年，越来越多的居民开始使用有线电视服务替代天线接收电视广播。有线电视公司已经 升级了它们的有线电视网络并连接到 Internet。居民和小公司可以通过这种服务连接到 Internet。虽 然这种方法可提供较高速率的连接，但是速率与使用同一电缆的用户数目有关。我们将在第 5 章讨 论有线电视网络。 采用无线网络无线连接最近变得非常流行。住户或小公司可以使用无线和有线连接混合的方法访问 Internet。 随着无线广域网接入的发展，住户或小公司能够通过无线广域网连入 Internet。我们将在第 6 章讨 论无线接入。 直接连接到 Internet大机构或大公司自身可以变成一个本地 ISP 并连入 Internet。这种方法要求组织或公司从一个 线路提供者那里租用高速广域网并将它连入地区 ISP。例如，具有几个校园的大学可以组建一个互 联网，然后连接互联网至 Internet。]]></content>
+      <categories>
+        <category>network</category>
+        <category>计算机网络</category>
+        <category>概论</category>
+      </categories>
+      <tags>
+        <tag>network</tag>
+        <tag>计算机网络</tag>
+        <tag>网络</tag>
+        <tag>读书笔记</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[【effective java】15:使可变性最小化]]></title>
+    <url>%2F2017%2F07%2F24%2Feffectivejava%2Feff-java-15%2F</url>
+    <content type="text"><![CDATA[15:使可变性最小化使用不可变类的理由不可变类只是其实例不能被修改的类。不可变的类比可变类更加易于设计、实现和使用。它们不容易出错，且更加安全。 使类变成不可变类的几个规则 1.不要提供任何会修改对象状态的方法。 2.保证类不会被扩展。 3.使所有的域都是 final 的。 4.使所有的域都是私有的。 5.确保对于任何可变组建的互斥访问。 几个优点 1.不可变对象本质上是线程安全的，它们不要求同步 2.不可变类可以提供一些静态工厂，它们把频繁的请求的实例缓存起来，从而当现有实例可以符合请求的时候，就不必创建新的实例。 3.“不可变对象可以被自由的共享” ==&gt; 永远不需要进行保护性拷贝。 4.不仅可以共享不可变对象，甚至也可以共享它们的内部信息。 5.不可变对象为其他对象提供了大量的构件，无论是可变的还是不可变的。 缺点 1.对于每一个不同的值都需要一个单独的对象 设计方案 1.使类是 final 的。 2.让类的所有构造器都是私有的或者包级私有的并添加公有的静态工厂来代替公有构造器。 3.坚决不要为每个 get 方法都提供一个 set 方法。 4.构造器应该创建完全初始化的对象，不要在构造器或者静态工厂之外再提供公有的初始化方法，除非有令人信服的理由必须这么做。 5.如果有的类不能做成不可变的，扔应该尽可能的限制它的可变性。 6.如果不可变类要实现 Serilizable 接口，并且它包含一个或者多个指向可变对象的域，就必须提供一个显示的 readObject 或者 readResolve 方法。（或者使用 ObjectOutputStream.writeUnshared 和 ObjectInputStream.readUnshared 方法）]]></content>
+      <categories>
+        <category>java</category>
+        <category>effectivejava</category>
+      </categories>
+      <tags>
+        <tag>java</tag>
+        <tag>effectivejava</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[【java 并发】4. 对象的共享（2）]]></title>
+    <url>%2F2017%2F07%2F24%2Fjava%20concurrency%2Fjava-concurrency-4%2F</url>
+    <content type="text"><![CDATA[2.发布与溢出发布一个对象是指，使对象能够在当前作用域之外的代码中使用。 比如，将一个执行该对象的引用保存带其他代码可以访问待的地方，或者在某一个非私有的方法中返回该引用，或者将引用传递到其他类的方法中。 许多时候，我们需要确保对象及其内部状态不被发布。而在某些情况下，我们又需要发布某个对象，但如果在发布时要确保线程安全性，则可能需要同步。 发布内部状态可能会破坏封装性，并使得程序难以维持不变性条件。 例如，如果在对象构造完成之前就发布该对象，就会破坏线程安全性。 当某个不应该发布的对象被发布时，这种情况就被称为逸出。 2.1 发布对象的几种情况 将对象的引用保存到一个公有的静态变量中。 12345public static Set&lt;Secret&gt; knownSecrets;public void initialize() &#123; knownSecrets = new HashSet&lt;Secret&gt;();&#125; 当发布某个变量的时候，可能会间接的发布其他对象。 如果将一个 Secret 对象添加到集合 knownSecrets 中，那么同样会发布这个对象。 如果从非私有方法中返回一个引用，那么同样会发布返回时的对象。 发布一个内部的类实例。 2.2 几个要点 当发布一个对象时，在该对象的非死有余中引用的所有对象同样会被发布。 当某个对象逸出后，你必须假设有某个类或者线程可能会误用该对象，并作出相应的处理。 不要在构造函数中使 this 逸出。 在构造函数中创建线程并没有错误，但最好不要立即启动它，而是通过一个 start 或者 initialize 方法来启动。]]></content>
+      <categories>
+        <category>java</category>
+        <category>concurrency</category>
+      </categories>
+      <tags>
+        <tag>java</tag>
+        <tag>concurrency</tag>
+        <tag>线程</tag>
+        <tag>并发</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[【effective java】14:在公有类中使用访问方法而非公有域]]></title>
+    <url>%2F2017%2F07%2F23%2Feffectivejava%2Feff-java-14%2F</url>
+    <content type="text"><![CDATA[14:在公有类中使用访问方法而非公有域就是提供 get set 方法]]></content>
+      <categories>
+        <category>java</category>
+        <category>effectivejava</category>
+      </categories>
+      <tags>
+        <tag>java</tag>
+        <tag>effectivejava</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[【java 并发】 3. 对象的共享（1）]]></title>
+    <url>%2F2017%2F07%2F23%2Fjava%20concurrency%2Fjava-concurrency-3%2F</url>
+    <content type="text"><![CDATA[同步的另一个重要的方面是：内存可见性。我们不仅希望放置某个现场正在使用对象状态而另一个线程在同时修改该状态，而且希望确保当一个线程修改了对象状态后，其他线程能够看到发生的状态变化。 1.可见性多线程环境中，如果没有使用同步机制，编译器、处理器以及运行时等都可能对操作的执行顺序进行一些意想不到的调整，这就导致一个线程修改了一个变量，另一个线程不能及时的得知该变量的更新，最终导致意外错误。 1.1 失效数据当一个数据被一个线程改变，而另一个线程读取到了修改前的值，就出现了失效数据。 1.2 非原子的64位操作java 内存模型要求，变量的读取操作和写入操作都必须是原子操作。对于 java 中的 double 和 long 来说，他们都是64位的。jvm 允许将64位的读操作或者写操作分解为两个32位操作。当读取一个非 volatite 类型的 long 变量时，如果对该变量的读操作和写操作是在两个不同的线程中执行的，那么很可能会读到某个值的高32位和另一个值的低32位。 因此，除非用 volatile 来声明或者用锁来保护，否则在多线程环境中，long 和 double 都是不安全的。 1.3 加锁与可见性内置锁可以用于确保某个线程以一种可预测的方式来查看另一个线程的执行结果。这样可以确保某个线程写入该变量的值对于其他线程来说都是可见的。 加锁的行为不仅仅局限于互斥行为，还包括内存可见性。 1.4 volatile 变量java 语言提供了一种稍弱的同步机制，即 volatile 变量，用来确保将变量的更新操作通知到其他线程。 volatile 变量不会被缓存在寄存器或者对其他处理器不可见的地方，因此在读取 volatile 类型的变量时总会返回最新写入的值。 从内存的角度看，写入 volatile 变量相当于退出同步代码块，而读取 volatile 变量就相当于读取同步代码块。 并不建议过度依赖 volatile 变量提供可见性。因为这样的代码相对于加锁来说更脆弱，也更难理解。]]></content>
+      <categories>
+        <category>java</category>
+        <category>concurrency</category>
+      </categories>
+      <tags>
+        <tag>java</tag>
+        <tag>concurrency</tag>
+        <tag>线程</tag>
+        <tag>并发</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[DNS域名解析过程（不考虑负载均衡等复杂情况）]]></title>
+    <url>%2F2017%2F07%2F22%2Fweb%2Fweb-dns%2F</url>
+    <content type="text"><![CDATA[DNS域名解析过程（不考虑负载均衡等复杂情况）在浏览器中输入：www.abc.com 会发生哪些事情呢？ 1.浏览器检查缓存中有没有该域名对应的解析过的ip地址，如果有，解析过程结束。 浏览器缓存域名是有限制的，不仅缓存的大小有限制，缓存的时间也有限制。缓存时间可以通过TTL属性来控制。这个缓存时间太长或者太短都不好，如果缓存时间太长，一旦域名对应的ip地址变化了，会导致客户端无法正常访问到相应的服务。如果设置的时间太短，会导致用户要频繁的进行域名解析。现在大部分域名解析服务中，默认的TTL时间是10分钟。 2.浏览器会查找本地操作系统的缓存中有没有这个域名对应的DNS解析结果。 操作系统也会有一个域名解析的过程，也就是我们熟知的host文件。例如，我们在测试的时候，可以将一个域名解析到一台测试服务器上，这样不用修改仍和代码就能测试到单独服务器上的代码。 正是因为有这种本地DNS解析的过程，所以黑客就有可能通过修改你的host文件来把特定的域名解析到他指定的ip地址上，导致这些域名被劫持。 3.浏览器会把这个域名发送给LDNS（本地区域名服务器），看看该服务器的缓存有没有结果。 怎么知道LDNS的地址呢？我们自己电脑的网络配置中都会有“DNS服务器”地址这一项（可能不止一个），这个就是LDNS，即本地域名服务器。 这个DNS通常都是提供给你本地互联网接入的一个DNS服务，如果你在学校接入的互联网，那这个DNS服务器肯定在你的学校，如果你是在小区里接入的互联网，那DNS就是共给你接入互联网的服务提供商，即电信或者联通。当然，你也可以自己设置LDNS域名，比如114.114.114.114. 这个专门的域名解析服务器性能都会很好，一般都会缓存域名解析的结果，大约80%的域名解析打这里就已经完成了。 4.LNDS依旧没有命中，直接到ROOT Server域名服务器请求解析。 5.根域名服务器返回给本地域名服务器一个所查寻域的主域名服务器（gTLD Server）地址。 gTLD 是国际顶级域名服务器，如.com、.cn、.org等 6.本地域名服务器（LDNS）再向上一步中的gTLD服务器发送请求。 7.接受请求的gTLD服务器查找并返回此域名对应的Name Server域名服务器的地址。 这个Name Server通常是你注册的域名服务器，比如你在阿里云买了一个域名，那么这个域名解析的热舞就由阿里云提供的服务器来完成。 8.Name Server域名服务器会查询存储的域名和IP的映射关系表,返回给gTLD Server。 正常情况下，会返回IP地址和TTL. 9.gTLD Server返回该域名的IP地址和TTL值给LDNS。 LDNS会将得到的信息进行缓存。 10.LDNS把解析的结果返回给用户（浏览器），用户根据TTL值缓存在本地缓存系统中，域名解析结束。]]></content>
+      <categories>
+        <category>web</category>
+        <category>dns</category>
+      </categories>
+      <tags>
+        <tag>web</tag>
+        <tag>dns</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[【effective java】13:使类和成员的可访问性最小化]]></title>
+    <url>%2F2017%2F07%2F22%2Feffectivejava%2Feff-java-13%2F</url>
+    <content type="text"><![CDATA[13:使类和成员的可访问性最小化1. 简介要区别设计良好的模块与设计不好的模块，最重要的因素在于，这个模块对于外部的其他模块而言，是否隐藏其内部数据和其他实现细节。 设计良好的模块会隐藏所有的实现细节，把它的 API 与它的实现清晰的隔离开来。然后模块之间只通过它们的 API 进行通信，一个模块不需要知道其他模块的内部工作情况。 这个概念被称为信息隐藏。 2. 尽可能的使每个类或者成员不被外界访问 对于顶层的类和接口，只有两种肯的访问级别：包私有的和公有的。 如果一个包级私有的顶层类只是在某一个类的内部被用到，就应该考虑使它成为唯一使用它的那个类的私有嵌套类。 不能为了测试而将类、接口或者成员变成包的导出的 API 的一部分。当然，一般以没必要这么做，因为可以让测试作为被测试的包的一部分来运行。 实例域绝对不能是公有的。静态域也一样。 长度非零的数组总是可变的，所以，类具有公有的静态 final 数组域，或者返回这种数组域的方法，这几乎总是错误的。]]></content>
+      <categories>
+        <category>java</category>
+        <category>effectivejava</category>
+      </categories>
+      <tags>
+        <tag>java</tag>
+        <tag>effectivejava</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[【java 并发】2. 线程的安全性]]></title>
+    <url>%2F2017%2F07%2F22%2Fjava%20concurrency%2Fjava-concurrency-2%2F</url>
+    <content type="text"><![CDATA[要编写线程安全的代码，其核心在于要对状态访问操作进行管理，特别是对共享的和可变的状态的访问。 共享，意味着变量可以由多个线程同时访问。 可变，意味着变量的值在其生命周期内可以发生变化。 java 中主要的同步机制是synchronized 关键字，它提供一种独占的加锁方式。但“同步”这个术语还包括 volatile 类型的变量，显式锁以及原子变量。 1. 什么是线程安全性当多个线程访问某个类时，这个类始终都能表现出正确的行为，那么就称这个类是线程安全的。 无状态对象一定是线程安全的。 无状态对象：既不包含任何域，也不包含任何对其他类中域的引用，计算中过程中的临时状态仅存在于线程栈上的局部变量中，并且只能由正在执行的线程访问。 比如： 大多数 Servlet 类 都是无状态的，从而极大地降低了在实现 Servlet 线程安全性时的复杂性，只有当 Servlet 在处理请求时需要保存一些信息，线程安全性才会成为一个问题。 2. 原子性静态条件（RaceCondition）：在并发编程中，由于不恰当的执行顺序而出现不正确的结果的情况。 2.1 竞态条件当某个计算的正确性取决于多个线程的交替执行顺序时，就会发生竞态条件。 正确的结果取决于运气。 最常见的竞态条件是“先检查后执行（Check-Then-Act）”。比如懒加载（延迟初始化）。 2.2 延迟初始化12345678910public class LazyInitCase &#123; private ExpensiveObj instance = null; public ExpensiveObj getInstance() &#123; if (instance == null) &#123; instance = new ExpensiveObj(); &#125; return instance; &#125;&#125; 在多线程环境下，这样写就有可能出现错误。 与大多数并发错误一样，竞态条件并不总是会产生错误，还需要执行了某种不恰当的顺序。 2.3 复合操作我们将“先检查后执行”以及“读取-修改-写入”等操作统称为复合操作。为了达到线程安全，复合操作需要是原子操作。 原子操作：要么不执行，要么一次性执行完毕。 java.util.concurrent.atomic 中提供了一些原子变量类。 3. 加锁机制3.1 内置锁每个java对象 都可以用作一个实现同步的锁，这些锁被称为内置锁或者监视器锁。 java的内置锁相当于一种互斥锁。 3.2 重入如果一个锁是可重入的，那么当一个线程试图获得一个已经由他自己持有的锁，这个请求会成功。内置锁是可重入的。 重入，意味着获取锁的操作的粒度是“线程”，而不是“调用”。 重入进一步提升了加锁行为的封装性，简化了面向对象并发代码的开发。 4. 用锁来保护状态可以通过锁来构造一些协议，以实现对共享状态的独占访问。 每个共享的和可变的变量都应该只由一个锁来保护。 5. 活跃性与性能使用两种不同的同步机制不仅会带来混乱，也不会在性能或安全性上带来任何好处。]]></content>
+      <categories>
+        <category>java</category>
+        <category>concurrency</category>
+      </categories>
+      <tags>
+        <tag>java</tag>
+        <tag>concurrency</tag>
+        <tag>线程</tag>
+        <tag>并发</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[【effective java】12:考虑实现Comparable接口]]></title>
+    <url>%2F2017%2F07%2F22%2Feffectivejava%2Feff-java-12%2F</url>
+    <content type="text"><![CDATA[12:考虑实现Comparable接口简介一旦实现了 Comparable 接口，他就可以和许多反省算法以及依赖于该接口的集合实现进行协作。 java 平台类库中的所有值类都实现了 Comparable 接口。如果你正在编写一个值类，它具有非常明显的内在排序关系，比如按字母排序、按数值顺序或者时间排序，那你就应该坚决考虑实现这个接口。 几个建议与约定 1.实现者必须确保所有的 x 和 y 都满足 sgn(x.compareTo(y)) == -sgn(y.compareTo(x))。 2.实现者还必须保证这个比较关系是可传递的：x.compareTo(y) &gt; 0 &amp;&amp; y.compareTo(z) &gt; 0 =&gt; x.compareTo(z) &gt; 0。 3.实现者必须保证 x.compareTo(y) == 0 暗示着所有的 z 都满足 sgn(x.compareTo(z)) == sgn(y.compareTo(z)) 强烈建议： (x.compareTo(y) == 0) == (x.equals(y))，但是这并非绝对必要。一般来说，如果违反了这个条件，都应该予以说明。推荐使用这样的说法：”注意，该类具有内在的排序功能，但是与 equals 不一致“。]]></content>
+      <categories>
+        <category>java</category>
+        <category>effectivejava</category>
+      </categories>
+      <tags>
+        <tag>java</tag>
+        <tag>effectivejava</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[【effective java】11:谨慎的覆盖clone]]></title>
+    <url>%2F2017%2F07%2F21%2Feffectivejava%2Feff-java-11%2F</url>
+    <content type="text"><![CDATA[11:谨慎的覆盖clone略]]></content>
+      <categories>
+        <category>java</category>
+        <category>effectivejava</category>
+      </categories>
+      <tags>
+        <tag>java</tag>
+        <tag>effectivejava</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[【effective java】10:始终要覆盖toString]]></title>
+    <url>%2F2017%2F07%2F20%2Feffectivejava%2Feff-java-10%2F</url>
+    <content type="text"><![CDATA[10:始终要覆盖toString几个要点 1.虽然 toString 的约定并不像 equals 和 hashcode 的约定，但是提供良好的 toString 实现可以使类用起来更加舒适。 2.不管是否覆盖了 toString 方法，程序员都将以这种方式来产生诊断信息，但是如果没有覆盖 toString 方法，那么产生的信息将会难以理解。 3.在实际应用中，toString 方法应该赶回对象中包含的所有值得关注的信息。如果对象太大，toString 应该返回一个摘要信息。 4.在实现 toString 的时候，要决定是否在文档中指定返回值格式。指定格式的好处是，它可以被用作一种标准的、明确的、适合人阅读的对象表示法。不足之处是，如果这个类已经被广泛使用，一旦指定格式，就必须始终如一的坚持这种格式。 5.无论你是否决定使用格式，都应该在文档中明确的表明你的意图。 6.无论是否指定格式，都为 toString 返回值中包含的所有信息，提供一种编程式的访问路径。]]></content>
+      <categories>
+        <category>java</category>
+        <category>effectivejava</category>
+      </categories>
+      <tags>
+        <tag>java</tag>
+        <tag>effectivejava</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[【java 并发】1. 初识java并发]]></title>
+    <url>%2F2017%2F07%2F20%2Fjava%20concurrency%2Fjava-concurrency-1%2F</url>
+    <content type="text"><![CDATA[1. 线程的优势 1.1 发挥多处理器强大的能力 通过提高处理器资源的利用率来提神系统的吞吐率。（充分利用处理器） 有助于在但处理器系统上获得更高的吞吐率。（合理安排处理器；异步） 1.2 建模的简单性 如果程序中只包含一种类型的任务，那么比包含多种不同类型任务的程序要更容易编写，错误更少，也更容易测试。 1.3 异步事件的简化处理 1.4 响应更灵敏的用户界面 传统的gui采用主事件循环（单线程），程序可能会“冻结” 2. 线程带来的风险 2.1 安全性问题 非同步线程会造成脏读，不可重复读等问题。 2.2 活跃性问题 死锁，饥饿，活锁等 2.3 性能问题 服务时间过长；响应不灵敏；吞吐率过低；资源消耗过高；可伸缩性较低等。 3. 线程无处不在 3.1 每个java程序都会使用线程 3.2 Timer 3.3 Servlet 和 jsp servlet 需要满足被多个线程同时调用（servlet需要是线程安全的） 3.4 远程方法调用（RMI） 两个线程安全问题： 正确的协同在多个对象中共享的状态 对远程对象本身状态的访问 3.5 Swing 和 AWT swing 的一些组件并不是线程安全的，如JTable。swing 程序通过将所有对gui组件的访问局限在事件线程中以实现线程安全性]]></content>
+      <categories>
+        <category>java</category>
+        <category>concurrency</category>
+      </categories>
+      <tags>
+        <tag>java</tag>
+        <tag>concurrency</tag>
+        <tag>线程</tag>
+        <tag>并发</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[【effective java】16:复合优先于继承]]></title>
+    <url>%2F2017%2F07%2F20%2Feffectivejava%2Feff-java-16%2F</url>
+    <content type="text"><![CDATA[前言继承是实现代码重用的有力手段，但它并不永远都是最好的选择，使用不当会使软件变得很脆弱。 在包的内部使用继承是非常安全的，在那里，子类和超类都处在同一个程序员的控制之下。对于专门为了继承而设计、并且具有很好文档说明的类来说，使用继承也是非常安全的。 然而，对于普通的具体类进行垮包边界的继承，则是非常危险的。 这里说的继承，不包括实现接口。 ##]]></content>
+      <categories>
+        <category>java</category>
+        <category>effectivejava</category>
+      </categories>
+      <tags>
+        <tag>java</tag>
+        <tag>effectivejava</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[【effective java】9:覆盖equals时总要覆盖hashcode]]></title>
+    <url>%2F2017%2F07%2F19%2Feffectivejava%2Feff-java-9%2F</url>
+    <content type="text"><![CDATA[9:覆盖equals时总要覆盖hashcode1.hashcode 通用约定 1.在应用程序执行期间，只要对象的 equals 方法的比较嘈杂所用到的信息没有被修改，那么对这同一个对象调用多次 hashcode 方法都必须始终如一的返回同一个函数。在同一个应用程序的多次执行过过程中，每次执行所返回的整数可以不一致。 2.如果两个对象根据 equals 方法的毕竟是相等的，那么调用这两个对象中任意一个对象的 hashcode 方法都必须产出同样的整数结果。 3.如果两个对象根据 equals 方法比较是不相等的，那么调用这两个对象中任意一个对象的 hashcode 方法，产生的结果可以相同也可以不同。但是你应该知道，给不相等的对象产生不一样的 hash 值，有可能提高散列表的性能。 2.尽可能给不相等的对象产生不一样的 hash 值的简单方法 1.把某个非零的常数值，比如17，保存在一个名为 result 的 int 类型变量中。 2.对于对象中每个关键域 f（指 equals 方法中涉及的每个域），完成以下步骤： a.为该域计算 int 类型的散列码c： 如果该域是 boolean 类型，计算 （f ? 1 : 0）。 如果该域是 byte、char、short 或者 int 类型，计算 （int）f。 如果该域是 long 类型，计算 (int)(f ^ (f &gt;&gt;&gt; 32))。 如果该域是 float 类型，计算 Float.floatToIntBits(f)。 如果该域是 double 类型，计算 Double.doubleToLongBits(f),然后按照上面第三步，为得到的 long 类型值计算散列值。 如果该域是一个对象引用，并且该类的 equals 方法通过递归的调用 equals 的方式来比较这个域，则同样为这个域递归的调用 hashcode。如果需要更复杂d额比较，则为这个域计算一个”范式“，然后针对这个范式调用 hashcode。如果这个域的值为 null，则返回0。 如果该域s回一个数组，则要吧每一个元素当做单独的域来处理。也就是说，递归地应用上述规则。如果数组中的每个元素都很重要，可以利用 Arrays.hashCode 方法。 b.按照下面的公式，把 a 中计算得到的散列码 c 合并到 result 中： result = 31 * result + c; 3.返回 result。 4.写完 hashcode 方法以后，判断一下是否满足三个条件。 在散列码计算过程中，可以把冗余域排除在外。 3.几点注意 如果一个类是不可变的，并且计算散列码的开销也比较大，就应该考虑把散列码缓存在对象内部，而不是每次请求都重新计算。 不要试图从散列码计算中排除掉一个对象的关键部分来提高性能。]]></content>
+      <categories>
+        <category>java</category>
+        <category>effectivejava</category>
+      </categories>
+      <tags>
+        <tag>java</tag>
+        <tag>effectivejava</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[spring-boot-资料整合]]></title>
+    <url>%2F2017%2F07%2F19%2Fspring-boot%2Fspring-boot-%E8%B5%84%E6%96%99%E6%95%B4%E5%90%88%2F</url>
+    <content type="text"><![CDATA[awesome-spring-bootspringboot 各种资料整理(demo、教程、网站、starter文档等)，持续更新。 请关注：https://github.com/CFshuming/awesome-spring-boot 欢迎pr。 qq交流群 563636006 新建的，就我一个。。。 官方 springboot 源码 spring-boot 教程 Spring Boot教程 - 易百教程 翟永超 springboot 教程 Spring Boot 菜鸟教程（来自csdn） 泥瓦匠BYSocket教程 龙果学院教程 (部分视频收费) 慕课网入门视频 spring-boot-starter官方 待更新 非官方 dubbo mybatis twitter4j jwt rxjava elasticsearch grpc angular2 vuejs web-reactive resteasy dubbo-zipkin netty wicket jade4j spring-boot demo spring-boot-admin SpringBlog 微服务模板（spring cloud） building-microservices spring-boot-samples(demo合集) springboot+mybatis整合 spring-boot-all（demo合集） springboot + security整合 （Spring Boot and Spring Security OAuth ） jwt-spring-security (jwt Spring Boot and Spring Security) springboot react demo1 springboot react demo2 springboot + dubbo demo springboot angular2 demo jwt-angular-spring spring-boot 书籍和文档 官方文档 《Spring Boot参考指南》 Spring Boot 教程 spring-boot 网站 springboot中文网 spring for all 社区 泥瓦匠BYSocket 个人网站 spring-boot cli create-spring-boot-app jhipster:快速搭建 angular+springboot 项目 其他最新资料，请到github获取，不定期更新。 https://github.com/CFshuming/awesome-spring-boot]]></content>
+      <categories>
+        <category>java</category>
+        <category>springboot</category>
+      </categories>
+      <tags>
+        <tag>java</tag>
+        <tag>springboot</tag>
+        <tag>资料整理</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[【effective java】8:覆盖 equals 时请遵守通用规定]]></title>
+    <url>%2F2017%2F07%2F18%2Feffectivejava%2Feff-java-8%2F</url>
+    <content type="text"><![CDATA[8: 覆盖 equals 时请遵守通用规定1.覆盖 equals 后，需要满足的条件 1.类的每个实例本质上都是唯一的 2.不关心是否提供了“逻辑相等”的测试功能 3.超类已经覆盖了 equals，从超类继承过来d额行为对于子类也是合适的 4.类是私有的或者包私有的，可以确定它的 equals 方法永远不会被调用 2.覆盖 equals 方法时要遵守的几个约定 1.自反性 对于任何非 null 的引用值 x，x.euqals(x) 必须返回 true， 2.对称性 对于任何非 null 的引用值 x 和 y，当且仅当 y.equals(x) 返回 true 时，x.equals(y) 必须返回 true。 3.传递性 对于任何非 null 的引用值 x、y 和 z，如果 x.equals(y) 返回 true，y.equals(z) 也返回 true, 那么 x.equals(z) 也必须返回 true。 4.一致性 对于任何非 null 的引用值 x 和 y，只要 equals 的比较操作在对象中多有的信息都没有被修改，多次调用 x.equals(y) 就会一致的返回 true 或者 false。 5.非空性 所有的对象都不能为 null，为了防止抛出空指针异常。 3.高效实现 equals 方法的诀窍 1.使用 == 操作符检查“参数是否为这个对象的引用” 2.使用 instanceof 操作符检查“参数是否为正确的类型“ 3.把参数转换为正确的类型（接2） 4.对于该类中的每个”关键“域，检查参数中的域是否与该对象中对应的域相匹配 5.编写完之后，检查是否是对称的，传递的，一致的 6.覆盖 equals 时，总要覆盖 hashcode 7.不要企图让 equals 方法过于智能 8.不要将 equals 声明中的 Object 对象替换为其他的类型]]></content>
+      <categories>
+        <category>java</category>
+        <category>effectivejava</category>
+      </categories>
+      <tags>
+        <tag>java</tag>
+        <tag>effectivejava</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[【springboot-入门篇】第5篇-数据库访问之JPA(hibernate)]]></title>
+    <url>%2F2017%2F07%2F18%2Fspring-boot%2F%E3%80%90springboot-%E5%85%A5%E9%97%A8%E7%AF%87%E3%80%91%E7%AC%AC5%E7%AF%87-%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BF%E9%97%AE%E4%B9%8BJPA(hibernate)%2F</url>
+    <content type="text"><![CDATA[hibernate是数据访问解决技术的霸主之一，使用了O/R映射技术实现数据访问。随着hibernate的盛行，它主导了EJB3.0的JPA规范。JPA 机java persistence API，JPA是一个基于O/R映射的规范。所谓规范，就是之定义规则，比如注解、接口，但是不提供实现，软件提供商课按照规范来实现。而使用者只需要知道JPA 有哪些接口就可以了，至于是怎么实现的，完全不需要关心。JPA的主要实现由hibernate，eclipselink和openjpa等。当然，我们不需要关心它们的具体实现方式是什么，我们只需要用就可以了。 未完待续]]></content>
+      <categories>
+        <category>java</category>
+        <category>springboot</category>
+      </categories>
+      <tags>
+        <tag>java</tag>
+        <tag>springboot</tag>
+        <tag>jpa</tag>
+        <tag>数据库</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[【effective java】7:避免使用终结方法]]></title>
+    <url>%2F2017%2F07%2F17%2Feffectivejava%2Feff-java-7%2F</url>
+    <content type="text"><![CDATA[7:避免使用终结方法终结方法（finalizer）通常是不可预测的，也是很危险的，一般情况下是不必要的。 为什么要避免使用1终结方法的缺点在于不能保证会被及时的执行。从一个对象变得不可达开始，到它的终结方法被执行，所花费的这段时间是任意长的。 所以，注重时间的任务不应该由终结方法来完成，例如，用终结方法来关闭已打开的文件，这是很严重的错误。 2及时的执行终结方法正是垃圾回收算法的一个主要功能，不同的 jvm 的实现方式有所不同，所以在你自己的电脑上的 jvm 可能运行的很好，但是在其他人的 jvm 下可能差别会很大。 3java 语言规范不保证终结方法会被及时的执行，甚至根本就不保证它们会被执行。当一个程序终结的时候，某些已经无法访问的对象上的终结方法却根本没有执行，这是完全有可能的。 4不要被 System.gc System.runFinalization 这两个所诱惑，它们却是增加了终结方法被执行的机会，但是它们也并不能保证终结方法一定会被执行。唯一可以保证终结方法被执行的方法是 System.runFinalizersOnExit 以及 Runtime.runFinalizersOnExit， 然而它们都有致命的缺陷，已经被废弃了。 5如果未被捕捉的异常在终结过程中被抛出来，那么这种异常可以被忽略，并且该对象的终结过程也会终止。未被捕获的异常会使对象处于破坏的状态，如果另一个线程企图使用这种被破坏的对象，则可能发生任何不确定的行为。 6使用终结方法，会有一个严重的性能损失。 如何正确的终止如果一个类中封装的资源（例如文件或者线程）确实需要终止，应该怎么做才能不用编写终结方法呢？ 只需要提供一个显示的终结方法，并要求客户端在每个实例不再有用的时候显示额调用合格方法。 该类必须记录下自己是否已经被终止了。 比如 javaio 中，各个流的 close() 方法。 显示d额终止方法通常与 try-finally 结构结合起来使用。 终结方法有什么好处1当对象的所有者忘记调用前面段落中建议d 显示终止方法时，终结方法可以充当“安全网” 迟一点释放资源总比不释放好。 2第二个用途与本地对等体有关。 本地对等体是一个本地对象，普通对象通过本地方法委托给一个本地对象，因为本地对等体b㐊一个普通d额对象，所以垃圾回收器不会知道他，当它的 java 对等体被回收的时候，他不会被回收。 在本地对等体并不拥有关键资源的情况下，终结方法是”回收“它的最好选择。如果本地对等体有需要及时回收的资源，那么该类就应该提供合适的显示终止方法。 总结总之，除非是作为安全网，或者是为了终止非关键d额本地资源，不要使用终结方法。]]></content>
+      <categories>
+        <category>java</category>
+        <category>effectivejava</category>
+      </categories>
+      <tags>
+        <tag>java</tag>
+        <tag>effectivejava</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[【springboot-入门篇】第4篇-spring-boot-使用servlet，filter，listener和interceptor]]></title>
+    <url>%2F2017%2F07%2F17%2Fspring-boot%2F%E3%80%90springboot-%E5%85%A5%E9%97%A8%E7%AF%87%E3%80%91%E7%AC%AC4%E7%AF%87-spring-boot-%E4%BD%BF%E7%94%A8servlet%EF%BC%8Cfilter%EF%BC%8Clistener%E5%92%8Cinterceptor%2F</url>
+    <content type="text"><![CDATA[上一篇我们学习了 spring boot 利用Controller响应数据与响应页面。 一般的Web开发使用 Controller 基本上可以完成大部分需求，但是有的时候我们还是会用到 Servlet、Filter、Listener 等等。 在spring boot中添加自己的Servlet、Filter、Listener有两种方法 代码注册: 通过ServletRegistrationBean、 FilterRegistrationBean 和ServletListenerRegistrationBean 获得控制。 注解注册: 在SpringBootApplication 上使用@ServletComponentScan注解后，Servlet、Filter、Listener 可以直接通过 @WebServlet、@WebFilter、@WebListener 注解自动注册，无需其他代码。 spring boot 中注册servlet代码注册 创建Servlet类：AaServlet.java。 123456789101112131415public class AaServlet extends HttpServlet &#123; @Override protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException &#123; System.out.println(&quot;doGet&quot;); doPost(req, resp); &#125; @Override protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException &#123; System.out.println(&quot;doPost()&quot;); resp.setContentType(&quot;text/html&quot;); PrintWriter out = resp.getWriter(); out.println(&quot;&lt;h1&gt;AaServlet&lt;/h1&gt;&quot;); &#125;&#125; 通过ServletRegistrationBean注册。 1234567//Project2Application.java @Bean public ServletRegistrationBean AaServletRegistration() &#123; ServletRegistrationBean registration = new ServletRegistrationBean(new AaServlet()); registration.addUrlMappings(&quot;/a&quot;); return registration; &#125; 运行测试。 访问：http://localhost:8080/a 注解注册 创建Servlet类：BbServlet.java。 1234567891011121314151617@WebServlet(urlPatterns = &quot;/b&quot;)public class BbServlet extends HttpServlet &#123; @Override protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException &#123; System.out.println(&quot;doGet&quot;); doPost(req, resp); &#125; @Override protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException &#123; System.out.println(&quot;doPost()&quot;); resp.setContentType(&quot;text/html&quot;); PrintWriter out = resp.getWriter(); out.println(&quot;&lt;h1&gt;BbServlet&lt;/h1&gt;&quot;); &#125;&#125; 添加注解@ServletComponentScan。 12345678910111213141516@ServletComponentScan@SpringBootApplicationpublic class Project2Application &#123; public static void main(String[] args) &#123; SpringApplication.run(Project2Application.class, args); &#125; @Bean public ServletRegistrationBean AaServletRegistration() &#123; ServletRegistrationBean registration = new ServletRegistrationBean(new AaServlet()); registration.addUrlMappings(&quot;/a&quot;); return registration; &#125;&#125; 运行测试。 访问：http://localhost:8080/b filter 和 listener的注册和servlet一样。这里就不多说了。 接下来说一下拦截器。 自定义拦截器Spring提供了HandlerInterceptor（拦截器）。它的功能跟过滤器类似，但是提供更精细的的控制能力：在request被响应之前、request被响应之后、视图渲染之前以及request全部结束之后。我们不能通过拦截器修改request内容，但是可以通过抛出异常（或者返回false）来暂停request的执行。 spring boot提供了一些拦截器，我们可以直接拿来使用，比如： ConversionServiceExposingInterceptor CorsInterceptor LocaleChangeInterceptor PathExposingHandlerInterceptor ResourceUrlProviderExposingInterceptor ThemeChangeInterceptor UriTemplateVariablesHandlerInterceptor UserRoleAuthorizationInterceptor 我们也可以自己定义拦截器，定义拦截器的步骤大致分为： 1、创建我们自己的拦截器类并实现 HandlerInterceptor 接口。 2、创建一个Java类继承WebMvcConfigurerAdapter，并重写addInterceptors 方法。3、实例化我们自定义的拦截器，然后将对像手动添加到拦截器链中（在addInterceptors方法中添加）。 我们来亲自试一下： 创建我们自己的拦截器 123456789101112131415161718192021222324//MyInterceptor2public class MyInterceptor1 implements HandlerInterceptor &#123; @Override public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception &#123; System.out.println(&quot;MyInterceptor1==========&gt;在请求处理之前进行调用（Controller方法调用之前）&quot;); return true;// 只有返回true才会继续向下执行，返回false取消当前请求 &#125; @Override public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception &#123; System.out.println(&quot;MyInterceptor1==========&gt;请求处理之后进行调用，但是在视图被渲染之前（Controller方法调用之后）&quot;); &#125; @Override public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception &#123; System.out.println(&quot;MyInterceptor1==========&gt;在整个请求结束之后被调用，也就是在DispatcherServlet 渲染了对应的视图之后执行（主要是用于进行资源清理工作）&quot;); &#125;&#125; 123456789101112131415161718192021222324//MyInterceptor2public class MyInterceptor2 implements HandlerInterceptor &#123; @Override public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception &#123; System.out.println(&quot;MyInterceptor2==========&gt;在请求处理之前进行调用（Controller方法调用之前）&quot;); return true;// 只有返回true才会继续向下执行，返回false取消当前请求 &#125; @Override public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception &#123; System.out.println(&quot;MyInterceptor2==========&gt;请求处理之后进行调用，但是在视图被渲染之前（Controller方法调用之后）&quot;); &#125; @Override public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception &#123; System.out.println(&quot;MyInterceptor2==========&gt;在整个请求结束之后被调用，也就是在DispatcherServlet 渲染了对应的视图之后执行（主要是用于进行资源清理工作）&quot;); &#125;&#125; 创建一个Java类继承WebMvcConfigurerAdapter，并重写addInterceptors 方法,添加拦截器。 123456789101112131415//MyWebAppConfigurer@Configurationpublic class MyWebAppConfigurer extends WebMvcConfigurerAdapter &#123; @Override public void addInterceptors(InterceptorRegistry registry) &#123; // 多个拦截器组成一个拦截器链 // addPathPatterns 用于添加拦截规则 // excludePathPatterns 用户排除拦截 registry.addInterceptor(new MyInterceptor1()).addPathPatterns(&quot;/**&quot;); registry.addInterceptor(new MyInterceptor2()).addPathPatterns(&quot;/**&quot;); super.addInterceptors(registry); &#125;&#125; 测试：运行项目，随便访问一个路径，比如http://localhost:8080/test 浏览器会报错，不用管，看控制台。 拦截器已经起作用了。 值得注意的是：只有经过DispatcherServlet 的请求，才会走拦截器链，我们自定义的Servlet 请求是不会被拦截的，比如我们自定义的Servlet地址是不会被拦截器拦截的。 但是过滤器不同。不管是属于哪个Servlet 只要复合过滤器的过滤规则，过滤器都会拦截。 本篇文章就先介绍到这里，如果哪里讲的不明白，请及时与我联系。 参考文章：Spring Boot 拦截器]]></content>
+      <categories>
+        <category>java</category>
+        <category>springboot</category>
+      </categories>
+      <tags>
+        <tag>java</tag>
+        <tag>springboot</tag>
+        <tag>入门</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[【effective java】6:消除过期的对象引用]]></title>
+    <url>%2F2017%2F07%2F16%2Feffectivejava%2Feff-java-6%2F</url>
+    <content type="text"><![CDATA[java 有自己的垃圾回收机制，当你用完一个对象之后，它会被自动回收，这看起来有点不可思议，并且很容易让你觉得你自己再也不需要考虑内存管理的事了。显然，这是一种错误的想法。 1. 过期引用1.1 介绍如果一个栈是先增长，然后再收缩，那么，从栈中弹出来的对象将不会被当做垃圾回收，即使使用栈的程序不再引用这些对象，它们也不会被回收。这是因为，在栈内部维护着对这些对象的过期引用。 所谓的过期引用，是指永远也不会再被解除的引用。 1.2 修复这类问题的修复很简单：一旦对象已经过期，只需要请看这些引用就好了： 123456public Object pop() &#123; if (size == 0) throw new EmptyStackException(); Object result = elements[--size]; elements[size] == null; return result;&#125; 除了释放过期引用，清空过期引用的另一个好处是，如果它们以后又被错误的使用，程序就会立即抛出空指针异常，而不是让错误悄悄的潜下去。 1.3 注意 请空对象引用应该是一种例外而不是一种规范行为。消除过期引用最好的方法是让包含该引用的变量结束其生命周期。 一般而言，只要类是自己管理内存，那么就应该警惕内存泄漏问题。 2. 其他导致内存泄漏的原因2.1 缓存。一旦你把对象引用放到缓存中，他就很容易被遗忘掉，从而使得他不再被使用后的很长一段时间内仍然留在缓存中。 解决方案之一是，可以使用 WeakHashMap 代表缓存 只有当所需要的缓存项的生命周期是由该键的外部引用而不是值决定时，WeakHashMap 才有用处。 2.2 监听器和其回调如果你实现了一个 API，客户端在这个 API 中注册回调，却没有显示的取消回调，那么除非你采取了某些动作，否则他们就会积聚。 确保回调被立即被当做垃圾回收的最佳方法是只把他们保存在弱引用中，例如，只将他们保存成 WeakHashMap 中的键。]]></content>
+      <categories>
+        <category>java</category>
+        <category>effectivejava</category>
+      </categories>
+      <tags>
+        <tag>java</tag>
+        <tag>effectivejava</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[【springboot-入门篇】第3篇--从controller开始学起]]></title>
+    <url>%2F2017%2F07%2F16%2Fspring-boot%2F%E3%80%90springboot-%E5%85%A5%E9%97%A8%E7%AF%87%E3%80%91%E7%AC%AC3%E7%AF%87--%E4%BB%8Econtroller%E5%BC%80%E5%A7%8B%E5%AD%A6%E8%B5%B7%2F</url>
+    <content type="text"><![CDATA[虽然文章标题是“学起”，但是我也不会真的从头开始讲，默认，你是懂springmvc的 o.o 1. 返回数据与返回页面在写web项目的时候，controller里的返回值一般分为两种，一种是返回页面，也就是ModeAndView，另一种是直接返回数据，比如json格式的数据。 返回一个页面，我们需要用到一些模板引擎，比如熟知的jsp，模板引擎后面会详细讲解。 返回数据一般会选择返回json数据，我们之前的demo项目中使用的@RestController就是一个返回数据的注解。 @RestController是一个组合注解，是由@Controller和@ResponseBody组合而成的。@Controller：将返回值渲染为页面。@ResponseBody：将返回值渲染为数据。 2. spring boot支持的模板引擎spring-boot 支持多种模版引擎包括： FreeMarker Groovy Thymeleaf （Spring 官网使用这个） Velocity JSP （不推荐，jsp在内嵌的servlet容器中运行有一些问题。） 我们在讲前后端分离之前，都会使用Thymeleaf模板引擎，先简单的介绍一下它。 2.1 Thymeleaf模板引擎Thymeleaf是一个java类库，它是一个xml/xhtml/html5的模板引擎，可以作为mvc的web应用的view层。 Thymeleaf还提供了额外的木块与spring mvc集成，所以使用ssm框架的也可以使用这个模板引擎。 本来想列一下Thymeleaf的用法的，但是感觉有点多，以后哪里用到哪里讲好了。 3. 实战接下来，我们通过一个项目，来实践一下两种不同的返回结果。 先看一下最终的目录结构： 3.1 创建项目project_1 选择依赖：web Thymeleaf 3.2 新建一个person类，用来封装数据12345678910111213141516171819202122232425262728293031package com.example.model;public class Person &#123; private String name; private Integer age; public Person() &#123; &#125; public Person(String name, Integer age) &#123; this.name = name; this.age = age; &#125; public void setName(String name) &#123; this.name = name; &#125; public void setAge(Integer age) &#123; this.age = age; &#125; public String getName() &#123; return name; &#125; public Integer getAge() &#123; return age; &#125;&#125; 3.3 新建一个ViewController，用来返回一个视图1234567891011121314151617181920212223242526272829package com.example.controller;import com.example.model.Person;import org.springframework.stereotype.Controller;import org.springframework.ui.Model;import org.springframework.web.bind.annotation.RequestMapping;import java.util.ArrayList;import java.util.List;@Controllerpublic class ViewController &#123; @RequestMapping(&quot;/view&quot;) public String view(Model model)&#123; Person person = new Person(&quot;x&quot;, 22); List&lt;Person&gt; list = new ArrayList&lt;&gt;(); list.add(new Person(&quot;a&quot;, 11)); list.add(new Person(&quot;b&quot;, 12)); list.add(new Person(&quot;c&quot;, 13)); model.addAttribute(&quot;onePerson&quot;, person); model.addAttribute(&quot;manyPerson&quot;, list); return &quot;index&quot;; &#125;&#125; 3.4 创建index.html，用来接收数据123456789101112131415161718192021222324252627282930313233343536&lt;html xmlns:th=&quot;http://www.thymeleaf.org&quot;&gt;&lt;head&gt; &lt;meta charset=&quot;UTF-8&quot;/&gt; &lt;title&gt;test&lt;/title&gt; &lt;link href=&quot;https://cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css&quot; rel=&quot;stylesheet&quot;/&gt; &lt;link href=&quot;https://cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap-theme.min.css&quot; rel=&quot;stylesheet&quot;/&gt;&lt;/head&gt;&lt;body&gt; &lt;div class=&quot;panel panel-primary&quot;&gt; &lt;div class=&quot;panel-heading&quot;&gt; &lt;h3 class=&quot;panel-title&quot;&gt;访问model&lt;/h3&gt; &lt;/div&gt; &lt;div class=&quot;panel-body&quot;&gt; &lt;span th:text=&quot;$&#123;onePerson.name&#125;&quot;&gt;&lt;/span&gt; &lt;/div&gt; &lt;/div&gt; &lt;div th:if=&quot;$&#123;not #lists.isEmpty(manyPerson)&#125;&quot;&gt; &lt;div class=&quot;panel panel-primary&quot;&gt; &lt;div class=&quot;panel-heading&quot;&gt; &lt;h3 class=&quot;panel-title&quot;&gt;列表&lt;/h3&gt; &lt;/div&gt; &lt;div class=&quot;panel-body&quot;&gt; &lt;ul class=&quot;list-group&quot;&gt; &lt;li class=&quot;list-group-item&quot; th:each=&quot;person:$&#123;manyPerson&#125;&quot;&gt; &lt;span th:text=&quot;$&#123;person.name&#125;&quot;&gt;&lt;/span&gt; &lt;span th:text=&quot;$&#123;person.age&#125;&quot;&gt;&lt;/span&gt; &lt;/li&gt; &lt;/ul&gt; &lt;/div&gt; &lt;/div&gt; &lt;/div&gt;&lt;/body&gt;&lt;/html&gt; 这里我们使用了Thymeleaf模板引擎来获得后台传来的数据并解析，使用bootstrap框架显示数据。可以看到，Thymeleaf的用法和jsp还是有点像的。可以直接通过${}的形式来获得attribute中的数据。 在 spring boot 中，模板引擎默认是开启缓存的，如果修改了页面内容，刷新页面是得不到修改后的内容的。我们可以在application.yml中关闭模板引擎缓存：123spring: thymeleaf: cache: false 如果需要详细的Thymeleaf模板的使用方式教程，可以给我留言，我看情况来决定是否要写一篇。因为我用的也不是很多，大部分情况我都是前后端分离的。 3.5 运行项目，浏览器访问http://localhost:8080/view 可以看到，我们成功的在前端获取到了数据。方式就是将数据保存在attribute中，然后再前端页面获取。 3.6 修改ViewController中的@Controller为@RestController，重新运行 我们修改了注解，发现结果变了，直接显示了“index”,是因为@RestController会直接返回数据，而不是渲染页面，所以直接返回了index(这个index，是return语句中的) 3.7 创建DataController，用来直接返回数据12345678910111213141516171819202122package com.example.controller;import com.example.model.Person;import org.springframework.web.bind.annotation.RequestMapping;import org.springframework.web.bind.annotation.RestController;import java.util.Arrays;import java.util.List;@RestController // 使用RestController注解public class DataController &#123; @RequestMapping("/person") public Person person()&#123; return new Person("aa", 10); &#125; @RequestMapping("persons") public List&lt;Person&gt; persons()&#123; return Arrays.asList(new Person("bb", 11), new Person("cc", 12)); &#125;&#125; 3.8 重新运行项目访问http://localhost:8080/person 获得了json格式的数据 访问http://localhost:8080/persons 列表也可以直接渲染为json。 这里需要注意，如果我们方法的返回值是String（参考上面的index），那么返回的结果就是你return的字符串，如果方法的返回值是一个对象（person）或者一个集合（list，map等），那么得到的结果就是一个json字符串。spring boot默认使用jackson来进行解析。 jackson也是可以修改为gson或者fastjson的，我们下篇再讲。 3.9 修改DataController中的@RestController为@Controller，重新运行访问http://localhost:8080/person 访问http://localhost:8080/persons 会发现这两个都报错了，因为@Controller注解是渲染视图的，而我们返回的是对象或者集合，不能完成正常的渲染。 4. 小结本文主要讲解了spring boot 如何渲染视图和数据，讲解了@Controller和@RestController的区别与用法。如果有什么疑问，请及时联系我。 我之前写过一个重新认识java系类（还没写完，会写完的。。），篇幅很长，每一篇文章多的有7、8千字，和多人抱怨说看到一半就不想看了，因为太长了，所以 spring boot 这个系类会尽量的短小精悍，每篇文章只讲一个知识点，这样看着不累~]]></content>
+      <categories>
+        <category>java</category>
+        <category>springboot</category>
+      </categories>
+      <tags>
+        <tag>java</tag>
+        <tag>springboot</tag>
+        <tag>controller</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[【springboot-入门篇】第2篇--springboot的各种配置]]></title>
+    <url>%2F2017%2F07%2F15%2Fspring-boot%2F%E3%80%90springboot-%E5%85%A5%E9%97%A8%E7%AF%87%E3%80%91%E7%AC%AC2%E7%AF%87--springboot%E7%9A%84%E5%90%84%E7%A7%8D%E9%85%8D%E7%BD%AE%2F</url>
+    <content type="text"><![CDATA[1. 配置文件简介spring boot使用一个全局配置文件：application.properties或者application.yml，放置在src/main/resources目录下或者类路径的/config目录下。 application.properties是我们熟知的键值对配置文件： application.yml是yaml语言的配置文件，yaml是一种以数据为中心的语言，在配置数据的时候具有面向对象的特征。我们以后的代码都会使用yml格式的配置文件。： spring boot 的全局配置文件的作用是对一些默认配置的配置进行修改。后面我们会详细的讲解。 2. pom配置文件（starter） pom，是maven的配置文件，gradel也差不多，因为我一直在用maven，所以就讲maven了。 为了解决大型项目以及一些常用组件jar包过多的问题，spring boot 为我们提供了许多starter pom，每一个pom都已经添加好了对应的依赖，以往我们需要写茫茫多的dependence，但是现在只需要一个starter就可以了，并且spring boot 还为它们提供了默认的配置和自动配置的bean。 2.1 官方starter 2.1.1 应用程序的starters 名称 描述 spring-boot-starter 核心Spring Boot starter，包括自动配置支持，日志和YAML spring-boot-starter-actuator 生产准备的特性，用于帮我们监控和管理应用 spring-boot-starter-amqp 对”高级消息队列协议”的支持，通过spring-rabbit实现 spring-boot-starter-aop 对面向切面编程的支持，包括spring-aop和AspectJ spring-boot-starter-batch 对Spring Batch的支持，包括HSQLDB数据库 spring-boot-starter-cloud-connectors 对Spring Cloud Connectors的支持，简化在云平台下（例如，Cloud Foundry 和Heroku）服务的连接 spring-boot-starter-data-elasticsearch 对Elasticsearch搜索和分析引擎的支持，包括spring-data-elasticsearch spring-boot-starter-data-gemfire 对GemFire分布式数据存储的支持，包括spring-data-gemfire spring-boot-starter-data-jpa 对”Java持久化API”的支持，包括spring-data-jpa，spring-orm和Hibernate spring-boot-starter-data-mongodb 对MongoDB NOSQL数据库的支持，包括spring-data-mongodb spring-boot-starter-data-rest 对通过REST暴露Spring Data仓库的支持，通过spring-data-rest-webmvc实现 spring-boot-starter-data-solr 对Apache Solr搜索平台的支持，包括spring-data-solr spring-boot-starter-freemarker 对FreeMarker模板引擎的支持 spring-boot-starter-groovy-templates 对Groovy模板引擎的支持 spring-boot-starter-hateoas 对基于HATEOAS的RESTful服务的支持，通过spring-hateoas实现 spring-boot-starter-hornetq 对”Java消息服务API”的支持，通过HornetQ实现 spring-boot-starter-integration 对普通spring-integration模块的支持 spring-boot-starter-jdbc 对JDBC数据库的支持 spring-boot-starter-jersey 对Jersey RESTful Web服务框架的支持 spring-boot-starter-jta-atomikos 对JTA分布式事务的支持，通过Atomikos实现 spring-boot-starter-jta-bitronix 对JTA分布式事务的支持，通过Bitronix实现 spring-boot-starter-mail 对javax.mail的支持 spring-boot-starter-mobile 对spring-mobile的支持 spring-boot-starter-mustache 对Mustache模板引擎的支持 spring-boot-starter-redis 对REDIS键值数据存储的支持，包括spring-redis spring-boot-starter-security 对spring-security的支持 spring-boot-starter-social-facebook 对spring-social-facebook的支持 spring-boot-starter-social-linkedin 对spring-social-linkedin的支持 spring-boot-starter-social-twitter 对spring-social-twitter的支持 spring-boot-starter-test 对常用测试依赖的支持，包括JUnit, Hamcrest和Mockito，还有spring-test模块 spring-boot-starter-thymeleaf 对Thymeleaf模板引擎的支持，包括和Spring的集成 spring-boot-starter-velocity 对Velocity模板引擎的支持 spring-boot-starter-web 对全栈web开发的支持， 包括Tomcat和spring-webmvc spring-boot-starter-websocket 对WebSocket开发的支持 spring-boot-starter-ws 对Spring Web服务的支持 2.1.2 spring boot生产准备的starters： 名称 描述 spring-boot-starter-actuator 添加生产准备特性，比如指标和监控 spring-boot-starter-remote-shell 添加远程ssh shell支持 2.1.3 排除或交换具体技术方面的starters 名称 描述 spring-boot-starter-jetty 导入Jetty HTTP引擎（作为Tomcat的替代） spring-boot-starter-log4j 对Log4J日志系统的支持 spring-boot-starter-logging 导入Spring Boot的默认日志系统 spring-boot-starter-tomcat 导入Spring Boot的默认HTTP引擎 spring-boot-starter-undertow 导入Undertow HTTP引擎（作为Tomcat的替代） 2.2 非官方starter也有一些第三方为spring boot 提供了starter： Handlebars Vaadin Apache Camel WRO4J Spring Batch（高级用法） HDIV Jade Templates(Jade4J) Actitivi 这些都可以在github上找到，感兴趣的可以去搜一下。 3. xml配置文件spring boot 提倡零配置，也就是无xml配置，但是在实际项目中，可能有一些要求必须使用xml配置，这时我们可以使用spring提供的@ImportResource 来加载xml配置，比如： 1@ImportResource(&#123;&quot;classpath:some-context.xml&quot;,&quot;classpath:other-context.xml&quot;&#125;) 4. 命令行参数配置上一篇文章中也有提到，spring boot 项目是可以打成jar包的，然后通过java -jar xxx.jar 来执行，我们都知道，main函数是可以接受参数的，同样，spring boot的main函数也可以。 我们可以通过下面的命令来修改Tomcat的端口号：1java -jar xxx.jar --server.port=9090 5. 自定义属性配置5.1 普通配置在写spring项目的时候，我们可以在properties文件中定义一个变量，然后再代码中通过 @PropertySource 指明 properties 文件的位置，然后通过@Value注入相应的值。 在spring boot 中我们同样可以自定义一个变量，因为spring boot中的全局配置文件默认在一个目录下，所以我们可以直接用@Value注入值。 比如，在上一篇文章的demo项目中，我们可以在application.yml文件中这样定义： 12key: hello: hello world 修改DemoApplication.java代码为： 12345678910111213141516@SpringBootApplication(exclude=&#123;DataSourceAutoConfiguration.class,HibernateJpaAutoConfiguration.class&#125;)@RestControllerpublic class DemoApplication &#123; @Value("$&#123;key.hello&#125;") private String hello; public static void main(String[] args) &#123; SpringApplication.run(DemoApplication.class, args); &#125; @RequestMapping("/hello") public String hello()&#123; return hello; &#125;&#125; 运行项目，在浏览器中访问http://localhost:8080/hello： 值被正常的注入进去了。 5.2 类型安全的配置上面的例子中，使用@Value注入每个配置在实际的应用中会显得格外的麻烦，因为配置一般会有很多，用上面的方式就要写好多@Value，并且如果在多个类文件中都使用这个值的话，工作量会更大。所以，需要一种更好的方式。并且，这种方式是有安全隐患的，比如我需要的是一个long类型，但是注入的却是String，这个时候就报错了： 1Failed to convert value of type &apos;java.lang.String&apos; to required type &apos;long&apos;; spring boot 提供了基于类型安全的配置方式，通过@ConfigurationProperties将properties属性和一个bean及其属性关联，从而实现类型安全的配置。 我们来看一下： application.yml:123key: name: cleverfan sex: man 在demo项目中创建一个class： Person.java 12345678910111213141516171819202122@Component@ConfigurationProperties(prefix = &quot;key&quot;)public class Person &#123; private String name; private String sex; public void setName(String name) &#123; this.name = name; &#125; public void setSex(String sex) &#123; this.sex = sex; &#125; public String getName() &#123; return name; &#125; public String getSex() &#123; return sex; &#125;&#125; 修改DemoApplication.java ： 12345678910111213141516@SpringBootApplication(exclude=&#123;DataSourceAutoConfiguration.class,HibernateJpaAutoConfiguration.class&#125;)@RestControllerpublic class DemoApplication &#123; @Autowired private Person person; public static void main(String[] args) &#123; SpringApplication.run(DemoApplication.class, args); &#125; @RequestMapping(&quot;/hello&quot;) public String hello()&#123; return person.getName() + &quot;: &quot; + person.getSex(); &#125;&#125; 启动项目，访问http://localhost:8080/hello： 回到刚刚的问题，如果这个时候我需要的是long，但是给的是String怎么办呢？这里给出一个很简单的处理方式： Person.java123456789101112131415161718192021222324252627@Component@ConfigurationProperties(prefix = &quot;key&quot;)public class Person &#123; private String name; private long sex; public void setName(String name) &#123; this.name = name; &#125; public void setSex(String sex) &#123; try&#123; this.sex = Long.valueOf(sex); &#125;catch (Exception e)&#123; this.sex = 0L; &#125; &#125; public String getName() &#123; return name; &#125; public long getSex() &#123; return sex; &#125;&#125; yml配置文件不变，我们传递的是字符串，这次重启项目，访问http://localhost:8080/hello： 这样就可以简单的保证数据的安全了。 6. 日志配置spring boot 支持Java Util Loggin、Log4J、Log4J2和LogBack作为日志框架，无论使用哪种日志框架，spring boot已为当前使用日志框架的控制台输出及文件输出做好了配置。 默认情况下，spring boot 使用 Logback作为日志框架。可以在配置文件中（yml）修改默认配置文件的配置： 配置日志级别： 12logging: level: debug 配置日志文件 1234logging: org: springframework: web: debug 7. Profile配置Profile 是 spring 用来针对不同的环境对不同的配置提供支持的，比如生成环境，测试环境和开发环境。全局 Profile 使用application-{profile}.yml(例如application-prod.yml)命名。 下面我们做一个演示，我们把demo项目分为生产（prod）和开发（dev）环境，生产环境下端口号为8000，开发环境下为8888。 我们在demo项目的application.yml文件的同级目录下创建两个文件：application-prod.yml: 12server: port: 8000 application-dev.yml: 12server: port: 8888 目录结构是这样的： application.yml1234567891011key: name: cleverfan sex: manlogging: level: debugspring: profiles: active: dev 启动项目： 端口号是8888 修改application.yml： 123spring: profiles: active: prod 重新启动项目： 端口号的8000 证明我们的配置生效了。 配置就先讲到这里，如果有疑问或者错误，请及时与我联系。如果有需要补充的地方，也可以私戳我~]]></content>
+      <categories>
+        <category>java</category>
+        <category>springboot</category>
+      </categories>
+      <tags>
+        <tag>java</tag>
+        <tag>springboot</tag>
+        <tag>配置</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[【effective java】5:避免创建不必要的对象]]></title>
+    <url>%2F2017%2F07%2F15%2Feffectivejava%2Feff-java-5%2F</url>
+    <content type="text"><![CDATA[5:避免创建不必要的对象1. 总览一般来说，最好能重用对象，而不是在每次需要的时候就创建一个相同功能的新对象。 比如，我们不应该这样写：String s = new String(&quot;string&quot;);，而应该这样写：String s = &quot;string&quot;;。 2.几个好的思想 1.静态工厂方法总是优于构造器。 对于同时提供了静态工厂方法和构造器的不可变类，通常可以使用静态工厂方法而不是构造器，以避免创建不必要的对象。例如，静态工厂方法Boolean.valueOf(String)几乎总是优先于构造器Boolean(String)。 2.除了重用不可变的对象之外，也可以重用那些已知的不会被修改的可变对象。 3.要优先使用基本数据类型，而不是他们的包装类，要当心无意识的自动装箱。 4.通过创建附加对象，提升程序的清晰性、简洁性和功能性，这通常是件好事。 小对象的创建和回收动作是十分廉价的，特别是在现代jvm上更是如此。 5.通过维护自己的对象池来避免创建对象并不是一种好的做法，除非池中的对象是非常重量级的。 6.在提倡使用保护性拷贝的时候，因重用对象而付出的代价要远远大于因重复创建对象而付出的代价。]]></content>
+      <categories>
+        <category>java</category>
+        <category>effectivejava</category>
+      </categories>
+      <tags>
+        <tag>java</tag>
+        <tag>effectivejava</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[【effective java】4:通过私有构造器强化不可实例化的能力]]></title>
+    <url>%2F2017%2F07%2F14%2Feffectivejava%2Feff-java-4%2F</url>
+    <content type="text"><![CDATA[4:通过私有构造器强化不可实例化的能力1.背景有的时候，你可能需要只包含静态方法和静态域的类。这些类的名声很不好，因为有些人在面向对象的语言中滥用这样的类来编写过程化的程序，尽管如此，他们也确实有他们特有的用处。 2.方案我们可以利用用这种类，以java.lang.Math 或者 java.util.Arrays 的方式，把基本类型的值或者数组类型上的相关方法组织起来。 我们也可以通过 java.util.Collections 的方式，把实现特定接口的对象上的静态方法（包括工厂方法）组织起来。 最后还可以利用这种类，吧 final 类上的方法组织起来，以取代扩展该类的做法。 3.问题这样的工具类不希望被实例化，实例对它没有任何意义。然而，在缺少显示构造器的情况下，编译器会自动提供一个公有的、无参的缺省构造器。用户可以利用这个构造器创建出工具类的实例。这种被无意识实例化的类是不应该的。 4.解决解决方案很简单，就是手动将无参构造器私有化： 12345public class Test &#123; private Test() &#123; throw new AcertionError(); &#125;&#125; 5.副作用这种做法会使得他的子类不能被实例化。因为子类的所有构造器都会显示或者隐式的调用父类的构造器，这种情况下，子类就没有可用的父类构造器了。]]></content>
+      <categories>
+        <category>java</category>
+        <category>effectivejava</category>
+      </categories>
+      <tags>
+        <tag>java</tag>
+        <tag>effectivejava</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[【springboot-入门篇】第1篇--第一个spring-boot程序（多种搭建方式）]]></title>
+    <url>%2F2017%2F07%2F14%2Fspring-boot%2F%E3%80%90springboot-%E5%85%A5%E9%97%A8%E7%AF%87%E3%80%91%E7%AC%AC1%E7%AF%87--%E7%AC%AC%E4%B8%80%E4%B8%AAspring-boot%E7%A8%8B%E5%BA%8F%EF%BC%88%E5%A4%9A%E7%A7%8D%E6%90%AD%E5%BB%BA%E6%96%B9%E5%BC%8F%EF%BC%89%2F</url>
+    <content type="text"><![CDATA[学习一个新技术，先别管他的原理啊，流程啊，怎么组织代码啊什么的。直接从官网或者博客抄一个小demo，自己亲自跑一遍，然后再去看那一堆让人头皮发麻的讲解，就能相对容易的看懂了。 初学者的态度应该是：不要问我为什么，反正我就是可以这样运行！ 1. 创建一个spring boot项目可以使用哪些工具1.1 使用start.spring.io这是一个网站，可以在这个网站选择你需要的组件，然后会自动生成一个项目文件，你可以将它下载到本地，然后使用你常用的编译器打开就好。（它是下面三种方法的基础） 1.2 使用Spring Tool Suite(STS)STS是eclipse的一个插件，可以方便eclipse用户进行spring boot的开发。 1.3 使用Intellij IDEAIDEA 集成了spring boot（也是一个插件），idea对新技术的支持比较快，而且是最好用的java编译器（我认为的）。推荐大家使用它进行开发，教程可以参考我写的文章。 1.4 使用Spring boot CLISpring boot的命令行工具，可以很方便的操作spring项目。 接下来会逐一演示这四种方法。 2. 实战：创建第一个spring boot项目2.1 使用start.spring.io 打开这个网站，设置你的项目，选择需要的dependencies。然后点击生成项目。就可以把项目下载到本地了。 下载下来的就是一个maven项目，你可以使用你熟悉的ide打开它，然后进行代码的编写。 2.2 使用Spring Tool Suite(STS)首先，你需要安装这个插件。 安装好后，选择创建一个spring stater项目： 项目设置： 看到了么，start.spring.io O.O 版本和依赖选择： 完成 2.3 使用Intellij IDEA 选择spring initializr，然后选择jdk版本，点next。可以发现，idea的这个插件其实用的也是start.spring.io。 接下来配置你的项目： 选择你需要的依赖和版本： 设置项目名和位置： 完成： 2.4 使用Spring boot CLI2.4.1 下载安装：(当前最新版1.5.3) 方法1，手动安装，下载下面的压缩包，提供两种压缩格式。 spring-boot-cli-1.5.3.RELEASE-bin.zipspring-boot-cli-1.5.3.RELEASE-bin.tar.gz 下载完成后，遵循解压后的存档里的INSTALL.txt操作指南进行安装。一般而言，在.zip文件的bin/目录下存在一个spring脚本（Windows下是spring.bat），或者使用java -jar来运行一个.jar文件（该脚本会帮你确定classpath被正确设置）。 方法2，使用SDKMAN安装SDKMAN! (The Software Development Kit Manager) 可以用来管理多种有许多版本的sdk，包括groovy和spring boot cli。可以通过 sdkman.io来获得sdkman，然后通过它来安装cli。：123$ sdk install springboot$ spring --versionSpring Boot v1.5.3.RELEASE 你也可以通过配置，来获取其他版本的CLI:1234$ sdk install springboot dev /path/to/spring-boot/spring-boot-cli/target/spring-boot-cli-1.5.3.RELEASE-bin/spring-1.5.3.RELEASE/$ sdk default springboot dev$ spring --versionSpring CLI v1.5.3.RELEASE 方法3，如果你是mac用户，可以使用Homebrew： 123$ brew tap pivotal/tap$ brew install springboot// 会安装到/usr/local/bin 方法4，mac用户也可以使用MacPorts安装： 1$ sudo port install spring-boot-cli 命令行实现： Spring Boot CLI启动脚本为BASH和zsh shells提供完整的命令行实现。你可以在任何shell中source脚本（名称也是spring），或将它放到你个人或系统范围的bash实现初始化中。在一个Debian系统里，系统范围的脚本位于/shell-completion/bash下，当一个新的shell启动时该目录下的所有脚本都被执行。想要手动运行该脚本，例如，你已经使用GVM进行安装了： 123$ . ~/.gvm/springboot/current/shell-completion/bash/spring$ spring grab help jar run test version 如果你使用Homebrew或MacPorts安装Spring Boot CLI，命令行实现脚本会自动注册到你的shell。 恩，上面撤了一堆，都是安装CLI的方式，翻译自官网，选一种方式安装就好了。安装成功后： 2.4.2 创建一个项目： 输入命令： 123$ mkdir demo$ cd demo$ spring init -d=web -g=com.example -a=demo --package-name=com.example --name=demo -x -d（dependencies 依赖包）-g（Group Id）-a（Artifact Id）–package-name（Package name）–name（Project name）-x（Extract compatible archives） 更多详情可以输入spring help init查看。 查看结果： 和之前的创建方式得到的是一样的。 无论哪种创建方式都是要访问https://start.spring.io来获取模板工程代码。所以甚至可以使用CURL或HTTPie这些第三方工具来创建。当然。。创建个工程而已，没必要这么麻烦，直接idea不就好了？ 3. 编写代码及代码核心部分的分析创建好工程了，接下来，我们简单的写一个小demo。 3.1 简单的小demo。打开DemoApplication.java 修改代码为： 12345678910111213@SpringBootApplication(exclude=&#123;DataSourceAutoConfiguration.class,HibernateJpaAutoConfiguration.class&#125;) //移除自动注入数据源@RestController // 添加了一个注解public class DemoApplication &#123; public static void main(String[] args) &#123; SpringApplication.run(DemoApplication.class, args); &#125; //添加了一个方法 @RequestMapping(&quot;/hello&quot;) public String hello()&#123; return &quot;no hello world&quot;; &#125;&#125; 直接运行这个main方法： 浏览器访问http://localhost:8080/hello： 大功告成。第一个spring boot项目完成。 3.2 代码简单讲解12@SpringBootApplication(exclude=&#123;DataSourceAutoConfiguration.class,HibernateJpaAutoConfiguration.class&#125;) //移除自动注入数据源 现在新版本的springboot会自动注入数据源，所以需要在application配置文件里写你的数据库信息，但是我们暂时用不到它，所以先把这个功能移除，不然会报错。 1@RestController 这个一个组合注解，相当于@ResponseBody和@Controller，controller大家都知道，ResponseBody注解将内容或对象作为 HTTP 响应正文返回。 123public static void main(String[] args) &#123; SpringApplication.run(DemoApplication.class, args);&#125; 这个就是spring boot的入口。关于这个方法，我们以后会详细讲解。 1234@RequestMapping(&quot;/hello&quot;)public String hello()&#123; return &quot;no hello world&quot;;&#125; 写过springmvc的应该都懂吧，我就不多说了。由于只是演示，所以我就把它放在入口类中了，规范点应该自己写controller类的。 4. 小结创建一个spring boot的项目是非常方便的，由于start.spring.io的存在，你可以使用任何你喜欢的ide来快速开发spring boot项目。 从创建到运行，你会发现，我们没有创建任何一个xml，也没有多余的配置。创建好项目以后，写一个controller就可以运行了，非常的方便。 后面和数据库对接，做安全验证的时候你会发现，原来一切都可以这么简单。 本篇文章到这里就结束了。如果文章内容有错误，请及时与我联系。]]></content>
+      <categories>
+        <category>java</category>
+        <category>springboot</category>
+      </categories>
+      <tags>
+        <tag>java</tag>
+        <tag>springboot</tag>
+        <tag>项目搭建</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[3:用私有构造器或者枚举类型强化Singleton属性]]></title>
+    <url>%2F2017%2F07%2F13%2Feffectivejava%2Feff-java-3%2F</url>
+    <content type="text"><![CDATA[3:用私有构造器或者枚举类型强化Singleton属性1.简介Singleton 指仅仅被实例化一次的类（单例）。Singleton 通常被用来代表那些本质上唯一的系统组件，比如窗口管理器或者文件系统。 2.旧式实现方式在 JDK1.5 发行之前，实现 Singleton 有两种方法： 方法一： 1234class Singletonone &#123; public static final Singletonone SINGLETONONE = new Singletonone(); private Singletonone()&#123;&#125;;&#125; 利用构造器仅被调用一次，用来实例化公有的静态 final 域 Singletonone.SINGLETONONE;可以保证该类对象的全局唯一性。 这种写法可以通过反射来生成第二个实例，如果想要抵御这种攻击，可以修改构造器，在创建第二个对象的时候抛出异常。 方法二： 1234567class Singletontwo &#123; private static final Singletontwo SINGLETONTWO = new Singletontwo(); private Singletontwo()&#123;&#125;; public Singletontwo getInstance()&#123; return SINGLETONTWO; &#125;&#125; 这种叫恶汉式，还有一种懒汉式的方式。但是多线程会有问题。 3.新的方式jdk1.5 以后加入了枚举，我们可以通过枚举来实现。 123enum Singletonthree &#123; SINGLETONTHREE&#125; 写完了。]]></content>
+      <categories>
+        <category>java</category>
+        <category>effectivejava</category>
+      </categories>
+      <tags>
+        <tag>java</tag>
+        <tag>effectivejava</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[【springboot-入门篇】第0篇--spring-boot是什么]]></title>
+    <url>%2F2017%2F07%2F13%2Fspring-boot%2F%E3%80%90springboot-%E5%85%A5%E9%97%A8%E7%AF%87%E3%80%91%E7%AC%AC0%E7%AF%87--spring-boot%E6%98%AF%E4%BB%80%E4%B9%88%2F</url>
+    <content type="text"><![CDATA[作为一个java程序员，如果你还不知道springboot，那你一定是落后了。 1. 什么是springbootSpring Boot是由Pivotal团队提供的全新框架，其设计目的是用来简化新Spring应用的初始搭建以及开发过程。该框架使用了特定的方式来进行配置，从而使开发人员不再需要定义样板化的配置。通过这种方式，Spring Boot致力于在蓬勃发展的快速应用开发领域（rapid application development）成为领导者。 spring大家都知道，boot是启动的意思。所以，spring boot其实就是一个启动spring项目的一个工具而已。从最根本上来讲，Spring Boot就是一些库的集合，它能够被任意项目的构建系统所使用。 2. 为什么会出现以前在写spring项目的时候，要配置各种xml文件，还记得曾经被ssh框架支配的恐惧。随着spring3，spring4的相继推出，约定大于配置逐渐成为了开发者的共识，大家也渐渐的从写xml转为写各种注解，在spring4的项目里，你甚至可以一行xml都不写。 虽然spring4已经可以做到无xml，但写一个大项目需要茫茫多的包，maven配置要写几百行，也是一件很可怕的事。 现在，快速开发一个网站的平台层出不穷，nodejs，php等虎视眈眈，并且脚本语言渐渐流行了起来（Node JS，Ruby，Groovy，Scala等），spring的开发模式越来越显得笨重。 在这种环境下，spring boot伴随着spring4一起出现了。 3. 可以做什么那么，spring boot可以做什么呢？ spring boot并不是一个全新的框架，它不是spring解决方案的一个替代品，而是spring的一个封装。所以，你以前可以用spring做的事情，现在用spring boot都可以做。 现在流行微服务与分布式系统，springboot就是一个非常好的微服务开发框架，你可以使用它快速的搭建起一个系统。同时，你也可以使用spring cloud（Spring Cloud是一个基于Spring Boot实现的云应用开发工具）来搭建一个分布式的网站。 4. 优点4.1 使编码变得简单 spring boot采用java config的方式，对spring进行配置，并且提供了大量的注解，极大地提高了工作效率。 4.2 使配置变得简单 spring boot提供许多默认配置，当然也提供自定义配置。但是所有spring boot的项目都只有一个配置文件：application.properties/application.yml。用了spring boot，再也不用担心配置出错找不到问题所在了。 4.3 使部署变得简单spring boot内置了三种servlet容器：tomcat，jetty，undertow。 所以，你只需要一个java的运行环境就可以跑spring boot的项目了。spring boot的项目可以打成一个jar包，然后通过java -jar xxx.jar来运行。（spring boot项目的入口是一个main方法，运行该方法即可。 ） 4.4 使监控变得简单spring boot提供了actuator包，可以使用它来对你的应用进行监控。它主要提供了以下功能： 我们将在后续文章中学习它。 5. 相关技术5.1 微服务架构微服务是一种架构风格，一个大型复杂软件应用由一个或多个微服务组成。系统中的各个微服务可被独立部署，各个微服务之间是松耦合的。每个微服务仅关注于完成一件任务并很好地完成该任务。在所有情况下，每个任务代表着一个小的业务能力。 比如我要开发一个购票系统。就可以简单的拆分为用户管理微服务和售票系统微服务。两个服务都可以独立运行，都有自己的数据库，他们之间通过restapi 进行通信。 而spring boot就是搭建微服务的一个很好的选择。 5.2 restfulrestful 是一种api的风格，后面的文章里，会着重讲解。spring boot可以很方便的提供restful 风格的api。 5.3 spring cloud微服务有很多优点，当然也有一些挑战。可以参考这篇文章：微服务实战（一）：微服务架构的优势与不足。 微服务一般都是运行在分布式环境中的，这可不是简单的写一个ssm框架的小程序就可以解决的，其中需要用到很多技术，比如负载均衡，反向代理，服务治理，配置管理，消息总线等，spring cloud提供了这些技术。并且，spring cloud全家桶是基于spring boot的。 之后会专门开一个spring cloud的专题。 6. 总结来总结一下spring boot的特点。 独立运行的Spring项目Spring Boot可以以jar包的形式进行独立的运行，使用：java -jar xx.jar 就可以成功的运行项目，或者在应用项目的主程序中运行main函数即可； 内嵌的Servlet容器我们上面已经讲过。 提供starter简化Manen配置spring boot提供各种starter，其实就是一些spring bao的集合，只不过spring boot帮我们整合起来了而已。 上图只是其中的一部分，还有很多其他的。通过这些starter也可以看得出来，spring boot可以和其他主流的框架无缝集成，比如mybatis等。所以，你不需要担心你想用的技术spring boot不支持。 自动配置Spring，无xml文件Spring Boot会根据我们项目中类路径的jar包/类，为jar包的类进行自动配置Bean，这样一来就大大的简化了我们的配置。当然，这只是Spring考虑到的大多数的使用场景，在一些特殊情况，我们还需要自定义自动配置（就在那唯一的配置文件里，而且它不是xml文件！）。 应用监控Spring Boot提供了基于http、ssh、telnet对运行时的项目进行监控。 springboot 入门篇将会从头开始，介绍spring boot的一些技术及应用，每周至少两篇，欢迎关注。同时，由于我也是一个初学者，文章中难免有一些不正确的地方，希望各位批评指正，共同进步。 spring boot 官网：http://projects.spring.io/spring-boot/spring boot 中文网：https://springcloud.cc/ 参考文章：http://www.csdn.net/article/a/2016-05-12/15838098Spring Boot_百度百科]]></content>
+      <categories>
+        <category>java</category>
+        <category>springboot</category>
+      </categories>
+      <tags>
+        <tag>java</tag>
+        <tag>springboot</tag>
+        <tag>入门</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[【effective java】2:遇到多个构造器参数时要考虑用构建器]]></title>
+    <url>%2F2017%2F07%2F12%2Feffectivejava%2Feff-java-2%2F</url>
+    <content type="text"><![CDATA[2: 遇到多个构造器参数时要考虑用构建器静态工厂和构造器都有一个局限性它们都不能很好的扩展到大量的可选参数。 1.场景假设我们要用一个java类表示包装食品外面显示营养成分的那个标签。这里有几个必选的域：没分的含量、卡路里含量，除此之外还有20多个可选的域，比如：饱和脂肪量、胆固醇、脂肪含量等等。为了简单起见，我们只选择4个来示范。 1234567891011121314151617181920212223242526272829class NutritionFactsOne &#123; private int servingSize; //require private int servings; //require private int calorries; private int fat; private int sodium; private int carbohydrate; public NutritionFactsOne(int servingSize, int servings) &#123; this.servingSize = servingSize; this.servings = servings; &#125; public NutritionFactsOne(int servingSize, int servings, int calorries) &#123; this(servingSize, servings); this.calorries = calorries; &#125; public NutritionFactsOne(int servingSize, int servings, int calorries, int fat) &#123; this(servingSize, servings, calorries); this.fat = fat; &#125; public NutritionFactsOne(int servingSize, int servings, int calorries, int fat, int sodium) &#123; this(servingSize, servings,calorries, fat); this.sodium = sodium; &#125; &#125; 这个时候，你可以这样来创建一个对象： 1new NutritionFactsOne(240, 8, 100, 0, 35, 27); 你自己读着费劲，别人读起来更费劲，不是么。 所以，这么写你肯定会被打死的，机智的你想到了 javabean 的方式： 1234567891011121314151617181920212223242526272829303132class NutritionFactsTwo &#123; private int servingSize; //require private int servings; //require private int calorries; private int fat; private int sodium; private int carbohydrate; public void setServingSize(int servingSize) &#123; this.servingSize = servingSize; &#125; public void setServings(int servings) &#123; this.servings = servings; &#125; public void setCalorries(int calorries) &#123; this.calorries = calorries; &#125; public void setFat(int fat) &#123; this.fat = fat; &#125; public void setSodium(int sodium) &#123; this.sodium = sodium; &#125; public void setCarbohydrate(int carbohydrate) &#123; this.carbohydrate = carbohydrate; &#125;&#125; 创建对象的时候你可以这样： 12345NutritionFactsTwo n = new NutritionFactsTwo();n.setServingSize(240);n.setServings(8);n.setCalorries(100);n.setFat(35); 但是这样的写法是有着很严重的缺点的。因为初始化的过程被分配到了几个不同的调用中，在构造过程中可能会存在不一致的状况。同时，这样的类无法设计为不可变类，当程序处于多线程状态时，需要付出额外的努力来保证线程安全性。 铺垫了这么多，我们来看看【构建器】是一种什么样的形式： 123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051class NutritionFactsThree &#123; private final int servingSize; //require private final int servings; //require private final int calorries; private final int fat; private final int sodium; private final int carbohydrate; public static class Builder &#123; private final int servingSize; //require private final int servings; //require private int calorries = 0; private int fat = 0; private int sodium = 0; private int carbohydrate = 0; public Builder(int servingSize, int servings) &#123; this.servingSize = servingSize; this.servings = servings; &#125; public Builder calorries(int calorries)&#123; this.calorries = calorries; return this; &#125; public Builder fat(int fat)&#123; this.fat = fat; return this; &#125; public Builder sodium(int sodium)&#123; this.sodium = sodium; return this; &#125; public Builder carbohydrate(int carbohydrate)&#123; this.carbohydrate = carbohydrate; return this; &#125; public NutritionFactsThree build()&#123; return new NutritionFactsThree(this); &#125; &#125; private NutritionFactsThree(Builder builder)&#123; servingSize = builder.servingSize; servings = builder.servings; calorries = builder.calorries; fat = builder.fat; sodium = builder.sodium; carbohydrate = builder.carbohydrate; &#125;&#125; 现在，初始化一个对象，你可以这样：1234NutritionFactsThree n = new NutritionFactsThree.Builder(240, 8).calorries(0).sodium(35).build(); 这样，客户端代码就很容易编写，并且容易阅读。 2.优点 2.1 客户端代码很容易编写，并且容易阅读 2.2 Builder想一个构造器一样，可以对参数强加约束条件。 2.3 builder可以有多个可变参数。 2.4 设置了参数的builder生成了一个很好的抽象工厂。 2.5 可以通过有限制的通配符类型来约束构建器的类型参数。 2.6 构建器比javabean更安全 3.不足 3.1 为了创建对象，必须先创建构建器，有性能开销。 3.2 生成一个对象的代码冗长，因此只有当参数很多的时候才使用。 4.总结简而言之，如果类的构造器或者静态工厂中具有多个参数，就可以考虑使用构建器模式。特别是大部分参数都是可选参数的时候。]]></content>
+      <categories>
+        <category>java</category>
+        <category>effectivejava</category>
+      </categories>
+      <tags>
+        <tag>java</tag>
+        <tag>effectivejava</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[【effective java】1:考虑用静态工厂方法代替构造器]]></title>
+    <url>%2F2017%2F07%2F11%2Feffectivejava%2Feff-java-1%2F</url>
+    <content type="text"><![CDATA[1. 概述让类提供一个公有的静态工厂方法来产生该类的实例。 2. 举例123public static Boolean valueOf(boolean b)&#123; return b ? Boolean.TRUE : Boolean.FALSE;&#125; 注意：静态工厂方法与设计模式中的工厂模式不同。 3. 优势3.1 主要优势介绍 1.静态工厂方法与构造器第一大不同时，它们有名称。 2.第二大优势在于，不必每次调用他们的时候都创建一个新对象。 3.第三大优势在于，它们可以返回原类型的任何子类型对象。 4.第四大优势在于，在创建参数化类型实例的时候，它们使代码变得简洁。 3.2 优势详解 优势一：它们有名称 如果构造器的参数本身并没有确切的描述正被返回的对象，那么具有适当名称的静态工厂方法会更容易使用，产生的客户端代码也更容易阅读。 比如：构造器BigInteger(int, int, Random)返回的BigInteger可能是素数，如果用名为BigInteger.probablePrime的静态工厂方法来表示显然更为清楚（jdk1.4后加入了这个方法）。 优势二：不必每次调用他们的时候都创建一个新对象 对于不可变类，可以通过使用静态工厂方法预先构件好的实例，或者将构建好的实例缓存起来，进行重复利用，从而避免创建不必要的重复对象。 比如Boolean.valueOf(boolean)方法：这个方法从来不创建对象（看开头的代码），这种方式类似于Flyweight模式。如果程序经常请求创建相同的对象，并且创建对象的代价很高，这项技术可以极大地提升性能。 优势三：它们可以返回原类型的任何子类型对象 这种灵活性的一种应用是：API可以返回对象，同时又不会使对象的类变成公有的。以这种方式隐藏实现类会使API变得非常简洁。 比如，java collections framework 的集合接口中有32个便利实现，分别提供了不可修改的集合、同步集合等。几乎所有的实现都通过静态工厂方法在一个不可实例化的类（java.util.Collections）中导出。所有返回对象的类都是非公有的。 现在已经改了，改的更优雅了，后面补充。 优势四：在创建参数化类型实例的时候，它们使代码变得简洁 这里主要是指类型推导。比如，我们创建一个HashMap需要这样： 1Map&lt;String, List&lt;String&gt;&gt; map = new HashMap&lt;String, List&lt;String&gt;&gt;(); 烦的不行，但是，如果你的HashMap里有这样一个方法： 123public static HashMap&lt;K, V&gt; newInstance() &#123; return new HashMap&lt;K, V&gt;();&#125; 这样，你创建一个Hashmap只需要： 1Map&lt;String, List&lt;String&gt;&gt; map = HashMap.newInstance(); jdk1.7开始已经开始支持类型推导了。effective java这本书的作者在写书的时候，jdk还停留在1.6，当时并没有类型推导这种功能。作者在书里是这样写的：“总有一天，java能在构造器调用以及方法调用中执行这种推导”。事实证明，他是对的，膜拜一下。 4. 缺点 1.第一个缺点是：类如果不含公有的或者受保护的构造器，就不能被子类化。 例如，要想将 java collections framework 中的任何方便的实现子类化，是做不到的。当然，这也可能因祸得福，因为好的设计鼓励使用组合（复合）而不是继承。 2.第二个缺点是：它与其他的静态方法实际上没有任何区别。 在 javadoc 文档中，它没有像构造器那样被特殊的标识出来。作者书中说：“总有一天，javadoc工具会注意到静态工厂方法”。因为我也没用过javadoc ，所以现在有没有支持我也不清楚，有时间去瞅瞅。 5. 总结简而言之，静态工厂方法和公有构造器都各有用处。静态工厂方法通常更加合适，因此，切记第一反应就是提供公有构造器而不优先考虑静态工厂。]]></content>
+      <categories>
+        <category>java</category>
+        <category>effectivejava</category>
+      </categories>
+      <tags>
+        <tag>java</tag>
+        <tag>effectivejava</tag>
+      </tags>
+  </entry>
+</search>
