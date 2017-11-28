@@ -1,6 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[【React】React 生命周期]]></title>
+    <url>%2F2017%2F11%2F28%2FReact%2F%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%2F</url>
+    <content type="text"><![CDATA[React 组件的生命周期有三个主要场景： 装载（Mounting）：组件被插入到 DOM 中； 更新（Updating）：组件重新渲染以更新 DOM； 卸载（Unmounting）：组件从 DOM 中移除。 每个场景调用的生命周期方法是不同的。 先看一下 React 都有哪些生命周期函数 getDefaultProps: 该方法在组件创建时（createClass）执行一次并缓存返回值。如果组件使用时未设置属性，就从缓存中读取默认属性。注意：getDefaultProps() 返回的缓存数据会在所有实例间共享。 getDefaultProps 在任何实例创建之前执行，不在装载阶段执行，放在这里只是为了方便理解 React 组件初始化流程。使用 ES6 语法时，也不可以使用该方法。 getInitialState: 组件装载之前执行一次，返回值用作 this.state 的初始值。 当使用 ES6 语法创建 React 组件时，直接在构造函数里初始化 state 即可，不需要也不可以调用该函数。 当用 ES6 的时候，上述两个方法要这样用： 123456789101112131415161718// getInitialState 这样写：constructor(props) &#123; super(props); this.state = &#123; //state &#125;&#125;//getDefaultProps 有两种写法：//1 在组件内部的使用staticstatic defaultProps = &#123; //props&#125;//2 在组件外部Hello.defaultProps = &#123; //props&#125; componentWillMount: 在渲染前调用,在客户端也在服务端。 componentDidMount: 在第一次渲染后调用，只在客户端。之后组件已经生成了对应的DOM结构，可以通过 this.getDOMNode() 来进行访问。 如果你想和其他JavaScript框架一起使用，可以在这个方法中调用 setTimeout, setInterval 或者发送 AJAX 请求等操作(防止异部操作阻塞 UI )。 componentWillReceiveProps 在组件接收到一个新的prop时被调用。这个方法在初始化 render 时不会被调用。 shouldComponentUpdate: 返回一个布尔值。在组件接收到新的props或者state时被调用。在初始化时或者使用 forceUpdate 时不被调用。 react 性能优化的主要方法。 componentWillUpdate: 在组件接收到新的props或者state但还没有render时被调用。在初始化时不会被调用。 componentDidUpdate: 在组件完成更新后立即调用。在初始化时不会被调用。 componentWillUnmount: 在组件从 DOM 中移除的时候立刻被调用。 下面来看一下每个不同的场景会调用哪个生命周期函数：1.创建阶段 该阶段主要发生在创建组件类的时候，即调用React.createClass的时候。这个阶段只会触发一个 getDefaultProps 方法，该方法返回一个对象，并且缓存下来。然后与父组件指定的props对象合并，最后赋值给this.props作为该组件的默认属性。对于那些没有被父辈组件指定的props属性的新建实例来说，这个方法返回的对象可用于为实例设置默认的props值。 props属性又是什么呢，它是一个对象，是组件用来接收外面传来的参数的，组件内部是不允许修改自己的props属性的，只能通过父组件来修改。在getDefaultProps方法中，是可以设定props默认值的。 2.实例化阶段 该阶段主要发生在实例化组件类的时候，也就是该组件类被调用的时候： 运行阶段 此时组件已经渲染好并且用户可以与它进行交互，通常是通过一次鼠标点击、手指点按或者键盘事件来触发一个事件处理器。随着用户改变了组件或者整个应用的 state，便会有新的 state 流入组件结构树 属性（props）改变造成的更新 状态（state）改变造成的更新 生命周期之销毁&amp;清理 每当react使用完一个组件，这个组件就必须从DOM中卸载随后被销毁。此时，仅有的一个钩子函数会做出响应，完成所有的清理与销毁工作，这很必要。 最后，随着一个组件从它的层级结构中移除，这个组件的生命也就走到了尽头。该方法会在组件被移出之前调被调用。在 componentDidMount 方法中添加的所有任务都需要在该方法中撤销，比如说创建的定时器或者添加的事件监听等。 整体的流程图: 总结1、 组件被创建后，如果不被调用，将只调用getDefaultProps（）方法。2、 componentWillMount（）和componentWillUpdate（）方法，是render调用之前最后一个方法，可以用来处理this.state赋值操作及业务逻辑。2、 因为this.state状态的改变，会重新渲染组件，render（）方法会执行，所以不要在render做this.state值改变操作，只用来展示。负责很有可能造成循环渲染，导致程序崩溃。]]></content>
+      <categories>
+        <category>React</category>
+        <category>生命周期</category>
+      </categories>
+      <tags>
+        <tag>React</tag>
+        <tag>生命周期</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[【算法-剑指offer】3. 从尾到头打印链表]]></title>
     <url>%2F2017%2F11%2F28%2Falgorithm%2F%E5%89%91%E6%8C%87offer%2F%E4%BB%8E%E5%B0%BE%E5%88%B0%E5%A4%B4%E6%89%93%E5%8D%B0%E9%93%BE%E8%A1%A8%2F</url>
     <content type="text"><![CDATA[题目描述： 输入一个链表，从尾到头打印链表每个节点的值。 分析： 这道题一般有两种方案： 不允许用其他数据结构的话：递归。 可以用其他数据结构：遍历链表放到栈里，然后从栈里取值。 答案： 123456789101112131415161718192021222324252627282930// 递归import java.util.ArrayList;public class Solution &#123; ArrayList&lt;Integer&gt; arrayList = new ArrayList&lt;Integer&gt;(); public ArrayList&lt;Integer&gt; printListFromTailToHead(ListNode listNode) &#123; if(listNode != null)&#123; printListFromTailToHead(listNode.next); arrayList.add(listNode.val); &#125; return arrayList; &#125;&#125;// 用栈import java.util.Stack;import java.util.ArrayList;public class Solution &#123; public ArrayList&lt;Integer&gt; printListFromTailToHead(ListNode listNode) &#123; Stack&lt;Integer&gt; stack = new Stack&lt;&gt;(); while (listNode != null) &#123; stack.push(listNode.val); listNode = listNode.next; &#125; ArrayList&lt;Integer&gt; list = new ArrayList&lt;&gt;(); while (!stack.isEmpty()) &#123; list.add(stack.pop()); &#125; return list; &#125;&#125;]]></content>
@@ -110,6 +123,19 @@
       </tags>
   </entry>
   <entry>
+    <title><![CDATA[【effective java】14:在公有类中使用访问方法而非公有域]]></title>
+    <url>%2F2017%2F07%2F23%2Feffectivejava%2Feff-java-14%2F</url>
+    <content type="text"><![CDATA[14:在公有类中使用访问方法而非公有域就是提供 get set 方法]]></content>
+      <categories>
+        <category>java</category>
+        <category>effectivejava</category>
+      </categories>
+      <tags>
+        <tag>java</tag>
+        <tag>effectivejava</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[【java 并发】 3. 对象的共享（1）]]></title>
     <url>%2F2017%2F07%2F23%2Fjava%20concurrency%2Fjava-concurrency-3%2F</url>
     <content type="text"><![CDATA[同步的另一个重要的方面是：内存可见性。我们不仅希望放置某个现场正在使用对象状态而另一个线程在同时修改该状态，而且希望确保当一个线程修改了对象状态后，其他线程能够看到发生的状态变化。 1.可见性多线程环境中，如果没有使用同步机制，编译器、处理器以及运行时等都可能对操作的执行顺序进行一些意想不到的调整，这就导致一个线程修改了一个变量，另一个线程不能及时的得知该变量的更新，最终导致意外错误。 1.1 失效数据当一个数据被一个线程改变，而另一个线程读取到了修改前的值，就出现了失效数据。 1.2 非原子的64位操作java 内存模型要求，变量的读取操作和写入操作都必须是原子操作。对于 java 中的 double 和 long 来说，他们都是64位的。jvm 允许将64位的读操作或者写操作分解为两个32位操作。当读取一个非 volatite 类型的 long 变量时，如果对该变量的读操作和写操作是在两个不同的线程中执行的，那么很可能会读到某个值的高32位和另一个值的低32位。 因此，除非用 volatile 来声明或者用锁来保护，否则在多线程环境中，long 和 double 都是不安全的。 1.3 加锁与可见性内置锁可以用于确保某个线程以一种可预测的方式来查看另一个线程的执行结果。这样可以确保某个线程写入该变量的值对于其他线程来说都是可见的。 加锁的行为不仅仅局限于互斥行为，还包括内存可见性。 1.4 volatile 变量java 语言提供了一种稍弱的同步机制，即 volatile 变量，用来确保将变量的更新操作通知到其他线程。 volatile 变量不会被缓存在寄存器或者对其他处理器不可见的地方，因此在读取 volatile 类型的变量时总会返回最新写入的值。 从内存的角度看，写入 volatile 变量相当于退出同步代码块，而读取 volatile 变量就相当于读取同步代码块。 并不建议过度依赖 volatile 变量提供可见性。因为这样的代码相对于加锁来说更脆弱，也更难理解。]]></content>
@@ -122,19 +148,6 @@
         <tag>concurrency</tag>
         <tag>线程</tag>
         <tag>并发</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[【effective java】14:在公有类中使用访问方法而非公有域]]></title>
-    <url>%2F2017%2F07%2F23%2Feffectivejava%2Feff-java-14%2F</url>
-    <content type="text"><![CDATA[14:在公有类中使用访问方法而非公有域就是提供 get set 方法]]></content>
-      <categories>
-        <category>java</category>
-        <category>effectivejava</category>
-      </categories>
-      <tags>
-        <tag>java</tag>
-        <tag>effectivejava</tag>
       </tags>
   </entry>
   <entry>
@@ -205,6 +218,19 @@
       </tags>
   </entry>
   <entry>
+    <title><![CDATA[【effective java】10:始终要覆盖toString]]></title>
+    <url>%2F2017%2F07%2F20%2Feffectivejava%2Feff-java-10%2F</url>
+    <content type="text"><![CDATA[10:始终要覆盖toString几个要点 1.虽然 toString 的约定并不像 equals 和 hashcode 的约定，但是提供良好的 toString 实现可以使类用起来更加舒适。 2.不管是否覆盖了 toString 方法，程序员都将以这种方式来产生诊断信息，但是如果没有覆盖 toString 方法，那么产生的信息将会难以理解。 3.在实际应用中，toString 方法应该赶回对象中包含的所有值得关注的信息。如果对象太大，toString 应该返回一个摘要信息。 4.在实现 toString 的时候，要决定是否在文档中指定返回值格式。指定格式的好处是，它可以被用作一种标准的、明确的、适合人阅读的对象表示法。不足之处是，如果这个类已经被广泛使用，一旦指定格式，就必须始终如一的坚持这种格式。 5.无论你是否决定使用格式，都应该在文档中明确的表明你的意图。 6.无论是否指定格式，都为 toString 返回值中包含的所有信息，提供一种编程式的访问路径。]]></content>
+      <categories>
+        <category>java</category>
+        <category>effectivejava</category>
+      </categories>
+      <tags>
+        <tag>java</tag>
+        <tag>effectivejava</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[【effective java】16:复合优先于继承]]></title>
     <url>%2F2017%2F07%2F20%2Feffectivejava%2Feff-java-16%2F</url>
     <content type="text"><![CDATA[前言继承是实现代码重用的有力手段，但它并不永远都是最好的选择，使用不当会使软件变得很脆弱。 在包的内部使用继承是非常安全的，在那里，子类和超类都处在同一个程序员的控制之下。对于专门为了继承而设计、并且具有很好文档说明的类来说，使用继承也是非常安全的。 然而，对于普通的具体类进行垮包边界的继承，则是非常危险的。 这里说的继承，不包括实现接口。 ##]]></content>
@@ -230,19 +256,6 @@
         <tag>concurrency</tag>
         <tag>线程</tag>
         <tag>并发</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[【effective java】10:始终要覆盖toString]]></title>
-    <url>%2F2017%2F07%2F20%2Feffectivejava%2Feff-java-10%2F</url>
-    <content type="text"><![CDATA[10:始终要覆盖toString几个要点 1.虽然 toString 的约定并不像 equals 和 hashcode 的约定，但是提供良好的 toString 实现可以使类用起来更加舒适。 2.不管是否覆盖了 toString 方法，程序员都将以这种方式来产生诊断信息，但是如果没有覆盖 toString 方法，那么产生的信息将会难以理解。 3.在实际应用中，toString 方法应该赶回对象中包含的所有值得关注的信息。如果对象太大，toString 应该返回一个摘要信息。 4.在实现 toString 的时候，要决定是否在文档中指定返回值格式。指定格式的好处是，它可以被用作一种标准的、明确的、适合人阅读的对象表示法。不足之处是，如果这个类已经被广泛使用，一旦指定格式，就必须始终如一的坚持这种格式。 5.无论你是否决定使用格式，都应该在文档中明确的表明你的意图。 6.无论是否指定格式，都为 toString 返回值中包含的所有信息，提供一种编程式的访问路径。]]></content>
-      <categories>
-        <category>java</category>
-        <category>effectivejava</category>
-      </categories>
-      <tags>
-        <tag>java</tag>
-        <tag>effectivejava</tag>
       </tags>
   </entry>
   <entry>
@@ -273,6 +286,21 @@
       </tags>
   </entry>
   <entry>
+    <title><![CDATA[【springboot-入门篇】第5篇-数据库访问之JPA(hibernate)]]></title>
+    <url>%2F2017%2F07%2F18%2Fspring-boot%2F%E3%80%90springboot-%E5%85%A5%E9%97%A8%E7%AF%87%E3%80%91%E7%AC%AC5%E7%AF%87-%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BF%E9%97%AE%E4%B9%8BJPA(hibernate)%2F</url>
+    <content type="text"><![CDATA[hibernate是数据访问解决技术的霸主之一，使用了O/R映射技术实现数据访问。随着hibernate的盛行，它主导了EJB3.0的JPA规范。JPA 机java persistence API，JPA是一个基于O/R映射的规范。所谓规范，就是之定义规则，比如注解、接口，但是不提供实现，软件提供商课按照规范来实现。而使用者只需要知道JPA 有哪些接口就可以了，至于是怎么实现的，完全不需要关心。JPA的主要实现由hibernate，eclipselink和openjpa等。当然，我们不需要关心它们的具体实现方式是什么，我们只需要用就可以了。 未完待续]]></content>
+      <categories>
+        <category>java</category>
+        <category>springboot</category>
+      </categories>
+      <tags>
+        <tag>java</tag>
+        <tag>springboot</tag>
+        <tag>jpa</tag>
+        <tag>数据库</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[【effective java】8:覆盖 equals 时请遵守通用规定]]></title>
     <url>%2F2017%2F07%2F18%2Feffectivejava%2Feff-java-8%2F</url>
     <content type="text"><![CDATA[8: 覆盖 equals 时请遵守通用规定1.覆盖 equals 后，需要满足的条件 1.类的每个实例本质上都是唯一的 2.不关心是否提供了“逻辑相等”的测试功能 3.超类已经覆盖了 equals，从超类继承过来d额行为对于子类也是合适的 4.类是私有的或者包私有的，可以确定它的 equals 方法永远不会被调用 2.覆盖 equals 方法时要遵守的几个约定 1.自反性 对于任何非 null 的引用值 x，x.euqals(x) 必须返回 true， 2.对称性 对于任何非 null 的引用值 x 和 y，当且仅当 y.equals(x) 返回 true 时，x.equals(y) 必须返回 true。 3.传递性 对于任何非 null 的引用值 x、y 和 z，如果 x.equals(y) 返回 true，y.equals(z) 也返回 true, 那么 x.equals(z) 也必须返回 true。 4.一致性 对于任何非 null 的引用值 x 和 y，只要 equals 的比较操作在对象中多有的信息都没有被修改，多次调用 x.equals(y) 就会一致的返回 true 或者 false。 5.非空性 所有的对象都不能为 null，为了防止抛出空指针异常。 3.高效实现 equals 方法的诀窍 1.使用 == 操作符检查“参数是否为这个对象的引用” 2.使用 instanceof 操作符检查“参数是否为正确的类型“ 3.把参数转换为正确的类型（接2） 4.对于该类中的每个”关键“域，检查参数中的域是否与该对象中对应的域相匹配 5.编写完之后，检查是否是对称的，传递的，一致的 6.覆盖 equals 时，总要覆盖 hashcode 7.不要企图让 equals 方法过于智能 8.不要将 equals 声明中的 Object 对象替换为其他的类型]]></content>
@@ -286,18 +314,16 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[【springboot-入门篇】第5篇-数据库访问之JPA(hibernate)]]></title>
-    <url>%2F2017%2F07%2F18%2Fspring-boot%2F%E3%80%90springboot-%E5%85%A5%E9%97%A8%E7%AF%87%E3%80%91%E7%AC%AC5%E7%AF%87-%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BF%E9%97%AE%E4%B9%8BJPA(hibernate)%2F</url>
-    <content type="text"><![CDATA[hibernate是数据访问解决技术的霸主之一，使用了O/R映射技术实现数据访问。随着hibernate的盛行，它主导了EJB3.0的JPA规范。JPA 机java persistence API，JPA是一个基于O/R映射的规范。所谓规范，就是之定义规则，比如注解、接口，但是不提供实现，软件提供商课按照规范来实现。而使用者只需要知道JPA 有哪些接口就可以了，至于是怎么实现的，完全不需要关心。JPA的主要实现由hibernate，eclipselink和openjpa等。当然，我们不需要关心它们的具体实现方式是什么，我们只需要用就可以了。 未完待续]]></content>
+    <title><![CDATA[【effective java】7:避免使用终结方法]]></title>
+    <url>%2F2017%2F07%2F17%2Feffectivejava%2Feff-java-7%2F</url>
+    <content type="text"><![CDATA[7:避免使用终结方法终结方法（finalizer）通常是不可预测的，也是很危险的，一般情况下是不必要的。 为什么要避免使用1终结方法的缺点在于不能保证会被及时的执行。从一个对象变得不可达开始，到它的终结方法被执行，所花费的这段时间是任意长的。 所以，注重时间的任务不应该由终结方法来完成，例如，用终结方法来关闭已打开的文件，这是很严重的错误。 2及时的执行终结方法正是垃圾回收算法的一个主要功能，不同的 jvm 的实现方式有所不同，所以在你自己的电脑上的 jvm 可能运行的很好，但是在其他人的 jvm 下可能差别会很大。 3java 语言规范不保证终结方法会被及时的执行，甚至根本就不保证它们会被执行。当一个程序终结的时候，某些已经无法访问的对象上的终结方法却根本没有执行，这是完全有可能的。 4不要被 System.gc System.runFinalization 这两个所诱惑，它们却是增加了终结方法被执行的机会，但是它们也并不能保证终结方法一定会被执行。唯一可以保证终结方法被执行的方法是 System.runFinalizersOnExit 以及 Runtime.runFinalizersOnExit， 然而它们都有致命的缺陷，已经被废弃了。 5如果未被捕捉的异常在终结过程中被抛出来，那么这种异常可以被忽略，并且该对象的终结过程也会终止。未被捕获的异常会使对象处于破坏的状态，如果另一个线程企图使用这种被破坏的对象，则可能发生任何不确定的行为。 6使用终结方法，会有一个严重的性能损失。 如何正确的终止如果一个类中封装的资源（例如文件或者线程）确实需要终止，应该怎么做才能不用编写终结方法呢？ 只需要提供一个显示的终结方法，并要求客户端在每个实例不再有用的时候显示额调用合格方法。 该类必须记录下自己是否已经被终止了。 比如 javaio 中，各个流的 close() 方法。 显示d额终止方法通常与 try-finally 结构结合起来使用。 终结方法有什么好处1当对象的所有者忘记调用前面段落中建议d 显示终止方法时，终结方法可以充当“安全网” 迟一点释放资源总比不释放好。 2第二个用途与本地对等体有关。 本地对等体是一个本地对象，普通对象通过本地方法委托给一个本地对象，因为本地对等体b㐊一个普通d额对象，所以垃圾回收器不会知道他，当它的 java 对等体被回收的时候，他不会被回收。 在本地对等体并不拥有关键资源的情况下，终结方法是”回收“它的最好选择。如果本地对等体有需要及时回收的资源，那么该类就应该提供合适的显示终止方法。 总结总之，除非是作为安全网，或者是为了终止非关键d额本地资源，不要使用终结方法。]]></content>
       <categories>
         <category>java</category>
-        <category>springboot</category>
+        <category>effectivejava</category>
       </categories>
       <tags>
         <tag>java</tag>
-        <tag>springboot</tag>
-        <tag>jpa</tag>
-        <tag>数据库</tag>
+        <tag>effectivejava</tag>
       </tags>
   </entry>
   <entry>
@@ -315,9 +341,9 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[【effective java】7:避免使用终结方法]]></title>
-    <url>%2F2017%2F07%2F17%2Feffectivejava%2Feff-java-7%2F</url>
-    <content type="text"><![CDATA[7:避免使用终结方法终结方法（finalizer）通常是不可预测的，也是很危险的，一般情况下是不必要的。 为什么要避免使用1终结方法的缺点在于不能保证会被及时的执行。从一个对象变得不可达开始，到它的终结方法被执行，所花费的这段时间是任意长的。 所以，注重时间的任务不应该由终结方法来完成，例如，用终结方法来关闭已打开的文件，这是很严重的错误。 2及时的执行终结方法正是垃圾回收算法的一个主要功能，不同的 jvm 的实现方式有所不同，所以在你自己的电脑上的 jvm 可能运行的很好，但是在其他人的 jvm 下可能差别会很大。 3java 语言规范不保证终结方法会被及时的执行，甚至根本就不保证它们会被执行。当一个程序终结的时候，某些已经无法访问的对象上的终结方法却根本没有执行，这是完全有可能的。 4不要被 System.gc System.runFinalization 这两个所诱惑，它们却是增加了终结方法被执行的机会，但是它们也并不能保证终结方法一定会被执行。唯一可以保证终结方法被执行的方法是 System.runFinalizersOnExit 以及 Runtime.runFinalizersOnExit， 然而它们都有致命的缺陷，已经被废弃了。 5如果未被捕捉的异常在终结过程中被抛出来，那么这种异常可以被忽略，并且该对象的终结过程也会终止。未被捕获的异常会使对象处于破坏的状态，如果另一个线程企图使用这种被破坏的对象，则可能发生任何不确定的行为。 6使用终结方法，会有一个严重的性能损失。 如何正确的终止如果一个类中封装的资源（例如文件或者线程）确实需要终止，应该怎么做才能不用编写终结方法呢？ 只需要提供一个显示的终结方法，并要求客户端在每个实例不再有用的时候显示额调用合格方法。 该类必须记录下自己是否已经被终止了。 比如 javaio 中，各个流的 close() 方法。 显示d额终止方法通常与 try-finally 结构结合起来使用。 终结方法有什么好处1当对象的所有者忘记调用前面段落中建议d 显示终止方法时，终结方法可以充当“安全网” 迟一点释放资源总比不释放好。 2第二个用途与本地对等体有关。 本地对等体是一个本地对象，普通对象通过本地方法委托给一个本地对象，因为本地对等体b㐊一个普通d额对象，所以垃圾回收器不会知道他，当它的 java 对等体被回收的时候，他不会被回收。 在本地对等体并不拥有关键资源的情况下，终结方法是”回收“它的最好选择。如果本地对等体有需要及时回收的资源，那么该类就应该提供合适的显示终止方法。 总结总之，除非是作为安全网，或者是为了终止非关键d额本地资源，不要使用终结方法。]]></content>
+    <title><![CDATA[【effective java】6:消除过期的对象引用]]></title>
+    <url>%2F2017%2F07%2F16%2Feffectivejava%2Feff-java-6%2F</url>
+    <content type="text"><![CDATA[java 有自己的垃圾回收机制，当你用完一个对象之后，它会被自动回收，这看起来有点不可思议，并且很容易让你觉得你自己再也不需要考虑内存管理的事了。显然，这是一种错误的想法。 1. 过期引用1.1 介绍如果一个栈是先增长，然后再收缩，那么，从栈中弹出来的对象将不会被当做垃圾回收，即使使用栈的程序不再引用这些对象，它们也不会被回收。这是因为，在栈内部维护着对这些对象的过期引用。 所谓的过期引用，是指永远也不会再被解除的引用。 1.2 修复这类问题的修复很简单：一旦对象已经过期，只需要请看这些引用就好了： 123456public Object pop() &#123; if (size == 0) throw new EmptyStackException(); Object result = elements[--size]; elements[size] == null; return result;&#125; 除了释放过期引用，清空过期引用的另一个好处是，如果它们以后又被错误的使用，程序就会立即抛出空指针异常，而不是让错误悄悄的潜下去。 1.3 注意 请空对象引用应该是一种例外而不是一种规范行为。消除过期引用最好的方法是让包含该引用的变量结束其生命周期。 一般而言，只要类是自己管理内存，那么就应该警惕内存泄漏问题。 2. 其他导致内存泄漏的原因2.1 缓存。一旦你把对象引用放到缓存中，他就很容易被遗忘掉，从而使得他不再被使用后的很长一段时间内仍然留在缓存中。 解决方案之一是，可以使用 WeakHashMap 代表缓存 只有当所需要的缓存项的生命周期是由该键的外部引用而不是值决定时，WeakHashMap 才有用处。 2.2 监听器和其回调如果你实现了一个 API，客户端在这个 API 中注册回调，却没有显示的取消回调，那么除非你采取了某些动作，否则他们就会积聚。 确保回调被立即被当做垃圾回收的最佳方法是只把他们保存在弱引用中，例如，只将他们保存成 WeakHashMap 中的键。]]></content>
       <categories>
         <category>java</category>
         <category>effectivejava</category>
@@ -339,19 +365,6 @@
         <tag>java</tag>
         <tag>springboot</tag>
         <tag>controller</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[【effective java】6:消除过期的对象引用]]></title>
-    <url>%2F2017%2F07%2F16%2Feffectivejava%2Feff-java-6%2F</url>
-    <content type="text"><![CDATA[java 有自己的垃圾回收机制，当你用完一个对象之后，它会被自动回收，这看起来有点不可思议，并且很容易让你觉得你自己再也不需要考虑内存管理的事了。显然，这是一种错误的想法。 1. 过期引用1.1 介绍如果一个栈是先增长，然后再收缩，那么，从栈中弹出来的对象将不会被当做垃圾回收，即使使用栈的程序不再引用这些对象，它们也不会被回收。这是因为，在栈内部维护着对这些对象的过期引用。 所谓的过期引用，是指永远也不会再被解除的引用。 1.2 修复这类问题的修复很简单：一旦对象已经过期，只需要请看这些引用就好了： 123456public Object pop() &#123; if (size == 0) throw new EmptyStackException(); Object result = elements[--size]; elements[size] == null; return result;&#125; 除了释放过期引用，清空过期引用的另一个好处是，如果它们以后又被错误的使用，程序就会立即抛出空指针异常，而不是让错误悄悄的潜下去。 1.3 注意 请空对象引用应该是一种例外而不是一种规范行为。消除过期引用最好的方法是让包含该引用的变量结束其生命周期。 一般而言，只要类是自己管理内存，那么就应该警惕内存泄漏问题。 2. 其他导致内存泄漏的原因2.1 缓存。一旦你把对象引用放到缓存中，他就很容易被遗忘掉，从而使得他不再被使用后的很长一段时间内仍然留在缓存中。 解决方案之一是，可以使用 WeakHashMap 代表缓存 只有当所需要的缓存项的生命周期是由该键的外部引用而不是值决定时，WeakHashMap 才有用处。 2.2 监听器和其回调如果你实现了一个 API，客户端在这个 API 中注册回调，却没有显示的取消回调，那么除非你采取了某些动作，否则他们就会积聚。 确保回调被立即被当做垃圾回收的最佳方法是只把他们保存在弱引用中，例如，只将他们保存成 WeakHashMap 中的键。]]></content>
-      <categories>
-        <category>java</category>
-        <category>effectivejava</category>
-      </categories>
-      <tags>
-        <tag>java</tag>
-        <tag>effectivejava</tag>
       </tags>
   </entry>
   <entry>
