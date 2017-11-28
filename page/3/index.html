@@ -997,7 +997,7 @@ java 平台类库中的所有值类都实现了 Comparable 接口。如果你正
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/07/20/java concurrency/java-concurrency-1/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/07/20/effectivejava/eff-java-16/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="CFshuming">
@@ -1016,7 +1016,7 @@ java 平台类库中的所有值类都实现了 Comparable 接口。如果你正
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/07/20/java concurrency/java-concurrency-1/" itemprop="url">【java 并发】1. 初识java并发</a></h1>
+                <a class="post-title-link" href="/2017/07/20/effectivejava/eff-java-16/" itemprop="url">【effective java】16:复合优先于继承</a></h1>
         
 
         <div class="post-meta">
@@ -1062,8 +1062,8 @@ java 平台类库中的所有值类都实现了 Comparable 接口。如果你正
                 
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/java/concurrency/" itemprop="url" rel="index">
-                    <span itemprop="name">concurrency</span>
+                  <a href="/categories/java/effectivejava/" itemprop="url" rel="index">
+                    <span itemprop="name">effectivejava</span>
                   </a>
                 </span>
 
@@ -1081,8 +1081,8 @@ java 平台类库中的所有值类都实现了 Comparable 接口。如果你正
                 <i class="fa fa-comment-o"></i>
               </span>
               
-                <a href="/2017/07/20/java concurrency/java-concurrency-1/#SOHUCS" itemprop="discussionUrl">
-                  <span id="url::http://yoursite.com/2017/07/20/java concurrency/java-concurrency-1/" class="cy_cmt_count" data-xid="2017/07/20/java concurrency/java-concurrency-1/" itemprop="commentsCount" ></span>
+                <a href="/2017/07/20/effectivejava/eff-java-16/#SOHUCS" itemprop="discussionUrl">
+                  <span id="url::http://yoursite.com/2017/07/20/effectivejava/eff-java-16/" class="cy_cmt_count" data-xid="2017/07/20/effectivejava/eff-java-16/" itemprop="commentsCount" ></span>
                 </a>
               
             
@@ -1112,24 +1112,13 @@ java 平台类库中的所有值类都实现了 Comparable 接口。如果你正
       
         
           
-          1. 线程的优势
-1.1 发挥多处理器强大的能力
-
-
-
-通过提高处理器资源的利用率来提神系统的吞吐率。（充分利用处理器）
-有助于在但处理器系统上获得更高的吞吐率。（合理安排处理器；异步）
-
-
-
-1.2 建模的简单性
-
-
-如果程序中只包含一种类型的任务，那么比包含多种不同类型任务的程序要更容易编写，错
+          前言继承是实现代码重用的有力手段，但它并不永远都是最好的选择，使用不当会使软件变得很脆弱。
+在包的内部使用继承是非常安全的，在那里，子类和超类都处在同一个程序员的控制之下。对于专门为了继承而设计、并且具有很好文档说明的类来说，使用继承也是非常安全的。
+然而，对于普通的具体类进行垮包边界的继承，则是非
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2017/07/20/java concurrency/java-concurrency-1/#more" rel="contents">
+            <a class="btn" href="/2017/07/20/effectivejava/eff-java-16/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1832,31 +1821,6 @@ java 平台类库中的所有值类都实现了 Comparable 接口。如果你正
   
 
   
-  
-  
-  <link rel="stylesheet" href="/lib/needsharebutton/needsharebutton.css">
-
-  
-  
-  <script src="/lib/needsharebutton/needsharebutton.js"></script>
-
-  <script>
-    
-      pbOptions = {};
-      
-          pbOptions.iconStyle = "box";
-      
-          pbOptions.boxForm = "horizontal";
-      
-          pbOptions.position = "bottomCenter";
-      
-          pbOptions.networks = "Weibo,Wechat,Douban,QQZone,Twitter,Facebook,Evernote,Tumblr";
-      
-      new needShareButton('#needsharebutton-postbottom', pbOptions);
-    
-    
-  </script>
-
   
 
   

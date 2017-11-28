@@ -110,19 +110,6 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[【effective java】14:在公有类中使用访问方法而非公有域]]></title>
-    <url>%2F2017%2F07%2F23%2Feffectivejava%2Feff-java-14%2F</url>
-    <content type="text"><![CDATA[14:在公有类中使用访问方法而非公有域就是提供 get set 方法]]></content>
-      <categories>
-        <category>java</category>
-        <category>effectivejava</category>
-      </categories>
-      <tags>
-        <tag>java</tag>
-        <tag>effectivejava</tag>
-      </tags>
-  </entry>
-  <entry>
     <title><![CDATA[【java 并发】 3. 对象的共享（1）]]></title>
     <url>%2F2017%2F07%2F23%2Fjava%20concurrency%2Fjava-concurrency-3%2F</url>
     <content type="text"><![CDATA[同步的另一个重要的方面是：内存可见性。我们不仅希望放置某个现场正在使用对象状态而另一个线程在同时修改该状态，而且希望确保当一个线程修改了对象状态后，其他线程能够看到发生的状态变化。 1.可见性多线程环境中，如果没有使用同步机制，编译器、处理器以及运行时等都可能对操作的执行顺序进行一些意想不到的调整，这就导致一个线程修改了一个变量，另一个线程不能及时的得知该变量的更新，最终导致意外错误。 1.1 失效数据当一个数据被一个线程改变，而另一个线程读取到了修改前的值，就出现了失效数据。 1.2 非原子的64位操作java 内存模型要求，变量的读取操作和写入操作都必须是原子操作。对于 java 中的 double 和 long 来说，他们都是64位的。jvm 允许将64位的读操作或者写操作分解为两个32位操作。当读取一个非 volatite 类型的 long 变量时，如果对该变量的读操作和写操作是在两个不同的线程中执行的，那么很可能会读到某个值的高32位和另一个值的低32位。 因此，除非用 volatile 来声明或者用锁来保护，否则在多线程环境中，long 和 double 都是不安全的。 1.3 加锁与可见性内置锁可以用于确保某个线程以一种可预测的方式来查看另一个线程的执行结果。这样可以确保某个线程写入该变量的值对于其他线程来说都是可见的。 加锁的行为不仅仅局限于互斥行为，还包括内存可见性。 1.4 volatile 变量java 语言提供了一种稍弱的同步机制，即 volatile 变量，用来确保将变量的更新操作通知到其他线程。 volatile 变量不会被缓存在寄存器或者对其他处理器不可见的地方，因此在读取 volatile 类型的变量时总会返回最新写入的值。 从内存的角度看，写入 volatile 变量相当于退出同步代码块，而读取 volatile 变量就相当于读取同步代码块。 并不建议过度依赖 volatile 变量提供可见性。因为这样的代码相对于加锁来说更脆弱，也更难理解。]]></content>
@@ -135,6 +122,19 @@
         <tag>concurrency</tag>
         <tag>线程</tag>
         <tag>并发</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[【effective java】14:在公有类中使用访问方法而非公有域]]></title>
+    <url>%2F2017%2F07%2F23%2Feffectivejava%2Feff-java-14%2F</url>
+    <content type="text"><![CDATA[14:在公有类中使用访问方法而非公有域就是提供 get set 方法]]></content>
+      <categories>
+        <category>java</category>
+        <category>effectivejava</category>
+      </categories>
+      <tags>
+        <tag>java</tag>
+        <tag>effectivejava</tag>
       </tags>
   </entry>
   <entry>
@@ -205,6 +205,19 @@
       </tags>
   </entry>
   <entry>
+    <title><![CDATA[【effective java】16:复合优先于继承]]></title>
+    <url>%2F2017%2F07%2F20%2Feffectivejava%2Feff-java-16%2F</url>
+    <content type="text"><![CDATA[前言继承是实现代码重用的有力手段，但它并不永远都是最好的选择，使用不当会使软件变得很脆弱。 在包的内部使用继承是非常安全的，在那里，子类和超类都处在同一个程序员的控制之下。对于专门为了继承而设计、并且具有很好文档说明的类来说，使用继承也是非常安全的。 然而，对于普通的具体类进行垮包边界的继承，则是非常危险的。 这里说的继承，不包括实现接口。 ##]]></content>
+      <categories>
+        <category>java</category>
+        <category>effectivejava</category>
+      </categories>
+      <tags>
+        <tag>java</tag>
+        <tag>effectivejava</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[【java 并发】1. 初识java并发]]></title>
     <url>%2F2017%2F07%2F20%2Fjava%20concurrency%2Fjava-concurrency-1%2F</url>
     <content type="text"><![CDATA[1. 线程的优势 1.1 发挥多处理器强大的能力 通过提高处理器资源的利用率来提神系统的吞吐率。（充分利用处理器） 有助于在但处理器系统上获得更高的吞吐率。（合理安排处理器；异步） 1.2 建模的简单性 如果程序中只包含一种类型的任务，那么比包含多种不同类型任务的程序要更容易编写，错误更少，也更容易测试。 1.3 异步事件的简化处理 1.4 响应更灵敏的用户界面 传统的gui采用主事件循环（单线程），程序可能会“冻结” 2. 线程带来的风险 2.1 安全性问题 非同步线程会造成脏读，不可重复读等问题。 2.2 活跃性问题 死锁，饥饿，活锁等 2.3 性能问题 服务时间过长；响应不灵敏；吞吐率过低；资源消耗过高；可伸缩性较低等。 3. 线程无处不在 3.1 每个java程序都会使用线程 3.2 Timer 3.3 Servlet 和 jsp servlet 需要满足被多个线程同时调用（servlet需要是线程安全的） 3.4 远程方法调用（RMI） 两个线程安全问题： 正确的协同在多个对象中共享的状态 对远程对象本身状态的访问 3.5 Swing 和 AWT swing 的一些组件并不是线程安全的，如JTable。swing 程序通过将所有对gui组件的访问局限在事件线程中以实现线程安全性]]></content>
@@ -233,9 +246,9 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[【effective java】16:复合优先于继承]]></title>
-    <url>%2F2017%2F07%2F20%2Feffectivejava%2Feff-java-16%2F</url>
-    <content type="text"><![CDATA[前言继承是实现代码重用的有力手段，但它并不永远都是最好的选择，使用不当会使软件变得很脆弱。 在包的内部使用继承是非常安全的，在那里，子类和超类都处在同一个程序员的控制之下。对于专门为了继承而设计、并且具有很好文档说明的类来说，使用继承也是非常安全的。 然而，对于普通的具体类进行垮包边界的继承，则是非常危险的。 这里说的继承，不包括实现接口。 ##]]></content>
+    <title><![CDATA[【effective java】9:覆盖equals时总要覆盖hashcode]]></title>
+    <url>%2F2017%2F07%2F19%2Feffectivejava%2Feff-java-9%2F</url>
+    <content type="text"><![CDATA[9:覆盖equals时总要覆盖hashcode1.hashcode 通用约定 1.在应用程序执行期间，只要对象的 equals 方法的比较嘈杂所用到的信息没有被修改，那么对这同一个对象调用多次 hashcode 方法都必须始终如一的返回同一个函数。在同一个应用程序的多次执行过过程中，每次执行所返回的整数可以不一致。 2.如果两个对象根据 equals 方法的毕竟是相等的，那么调用这两个对象中任意一个对象的 hashcode 方法都必须产出同样的整数结果。 3.如果两个对象根据 equals 方法比较是不相等的，那么调用这两个对象中任意一个对象的 hashcode 方法，产生的结果可以相同也可以不同。但是你应该知道，给不相等的对象产生不一样的 hash 值，有可能提高散列表的性能。 2.尽可能给不相等的对象产生不一样的 hash 值的简单方法 1.把某个非零的常数值，比如17，保存在一个名为 result 的 int 类型变量中。 2.对于对象中每个关键域 f（指 equals 方法中涉及的每个域），完成以下步骤： a.为该域计算 int 类型的散列码c： 如果该域是 boolean 类型，计算 （f ? 1 : 0）。 如果该域是 byte、char、short 或者 int 类型，计算 （int）f。 如果该域是 long 类型，计算 (int)(f ^ (f &gt;&gt;&gt; 32))。 如果该域是 float 类型，计算 Float.floatToIntBits(f)。 如果该域是 double 类型，计算 Double.doubleToLongBits(f),然后按照上面第三步，为得到的 long 类型值计算散列值。 如果该域是一个对象引用，并且该类的 equals 方法通过递归的调用 equals 的方式来比较这个域，则同样为这个域递归的调用 hashcode。如果需要更复杂d额比较，则为这个域计算一个”范式“，然后针对这个范式调用 hashcode。如果这个域的值为 null，则返回0。 如果该域s回一个数组，则要吧每一个元素当做单独的域来处理。也就是说，递归地应用上述规则。如果数组中的每个元素都很重要，可以利用 Arrays.hashCode 方法。 b.按照下面的公式，把 a 中计算得到的散列码 c 合并到 result 中： result = 31 * result + c; 3.返回 result。 4.写完 hashcode 方法以后，判断一下是否满足三个条件。 在散列码计算过程中，可以把冗余域排除在外。 3.几点注意 如果一个类是不可变的，并且计算散列码的开销也比较大，就应该考虑把散列码缓存在对象内部，而不是每次请求都重新计算。 不要试图从散列码计算中排除掉一个对象的关键部分来提高性能。]]></content>
       <categories>
         <category>java</category>
         <category>effectivejava</category>
@@ -257,19 +270,6 @@
         <tag>java</tag>
         <tag>springboot</tag>
         <tag>资料整理</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[【effective java】9:覆盖equals时总要覆盖hashcode]]></title>
-    <url>%2F2017%2F07%2F19%2Feffectivejava%2Feff-java-9%2F</url>
-    <content type="text"><![CDATA[9:覆盖equals时总要覆盖hashcode1.hashcode 通用约定 1.在应用程序执行期间，只要对象的 equals 方法的比较嘈杂所用到的信息没有被修改，那么对这同一个对象调用多次 hashcode 方法都必须始终如一的返回同一个函数。在同一个应用程序的多次执行过过程中，每次执行所返回的整数可以不一致。 2.如果两个对象根据 equals 方法的毕竟是相等的，那么调用这两个对象中任意一个对象的 hashcode 方法都必须产出同样的整数结果。 3.如果两个对象根据 equals 方法比较是不相等的，那么调用这两个对象中任意一个对象的 hashcode 方法，产生的结果可以相同也可以不同。但是你应该知道，给不相等的对象产生不一样的 hash 值，有可能提高散列表的性能。 2.尽可能给不相等的对象产生不一样的 hash 值的简单方法 1.把某个非零的常数值，比如17，保存在一个名为 result 的 int 类型变量中。 2.对于对象中每个关键域 f（指 equals 方法中涉及的每个域），完成以下步骤： a.为该域计算 int 类型的散列码c： 如果该域是 boolean 类型，计算 （f ? 1 : 0）。 如果该域是 byte、char、short 或者 int 类型，计算 （int）f。 如果该域是 long 类型，计算 (int)(f ^ (f &gt;&gt;&gt; 32))。 如果该域是 float 类型，计算 Float.floatToIntBits(f)。 如果该域是 double 类型，计算 Double.doubleToLongBits(f),然后按照上面第三步，为得到的 long 类型值计算散列值。 如果该域是一个对象引用，并且该类的 equals 方法通过递归的调用 equals 的方式来比较这个域，则同样为这个域递归的调用 hashcode。如果需要更复杂d额比较，则为这个域计算一个”范式“，然后针对这个范式调用 hashcode。如果这个域的值为 null，则返回0。 如果该域s回一个数组，则要吧每一个元素当做单独的域来处理。也就是说，递归地应用上述规则。如果数组中的每个元素都很重要，可以利用 Arrays.hashCode 方法。 b.按照下面的公式，把 a 中计算得到的散列码 c 合并到 result 中： result = 31 * result + c; 3.返回 result。 4.写完 hashcode 方法以后，判断一下是否满足三个条件。 在散列码计算过程中，可以把冗余域排除在外。 3.几点注意 如果一个类是不可变的，并且计算散列码的开销也比较大，就应该考虑把散列码缓存在对象内部，而不是每次请求都重新计算。 不要试图从散列码计算中排除掉一个对象的关键部分来提高性能。]]></content>
-      <categories>
-        <category>java</category>
-        <category>effectivejava</category>
-      </categories>
-      <tags>
-        <tag>java</tag>
-        <tag>effectivejava</tag>
       </tags>
   </entry>
   <entry>
@@ -301,19 +301,6 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[【effective java】7:避免使用终结方法]]></title>
-    <url>%2F2017%2F07%2F17%2Feffectivejava%2Feff-java-7%2F</url>
-    <content type="text"><![CDATA[7:避免使用终结方法终结方法（finalizer）通常是不可预测的，也是很危险的，一般情况下是不必要的。 为什么要避免使用1终结方法的缺点在于不能保证会被及时的执行。从一个对象变得不可达开始，到它的终结方法被执行，所花费的这段时间是任意长的。 所以，注重时间的任务不应该由终结方法来完成，例如，用终结方法来关闭已打开的文件，这是很严重的错误。 2及时的执行终结方法正是垃圾回收算法的一个主要功能，不同的 jvm 的实现方式有所不同，所以在你自己的电脑上的 jvm 可能运行的很好，但是在其他人的 jvm 下可能差别会很大。 3java 语言规范不保证终结方法会被及时的执行，甚至根本就不保证它们会被执行。当一个程序终结的时候，某些已经无法访问的对象上的终结方法却根本没有执行，这是完全有可能的。 4不要被 System.gc System.runFinalization 这两个所诱惑，它们却是增加了终结方法被执行的机会，但是它们也并不能保证终结方法一定会被执行。唯一可以保证终结方法被执行的方法是 System.runFinalizersOnExit 以及 Runtime.runFinalizersOnExit， 然而它们都有致命的缺陷，已经被废弃了。 5如果未被捕捉的异常在终结过程中被抛出来，那么这种异常可以被忽略，并且该对象的终结过程也会终止。未被捕获的异常会使对象处于破坏的状态，如果另一个线程企图使用这种被破坏的对象，则可能发生任何不确定的行为。 6使用终结方法，会有一个严重的性能损失。 如何正确的终止如果一个类中封装的资源（例如文件或者线程）确实需要终止，应该怎么做才能不用编写终结方法呢？ 只需要提供一个显示的终结方法，并要求客户端在每个实例不再有用的时候显示额调用合格方法。 该类必须记录下自己是否已经被终止了。 比如 javaio 中，各个流的 close() 方法。 显示d额终止方法通常与 try-finally 结构结合起来使用。 终结方法有什么好处1当对象的所有者忘记调用前面段落中建议d 显示终止方法时，终结方法可以充当“安全网” 迟一点释放资源总比不释放好。 2第二个用途与本地对等体有关。 本地对等体是一个本地对象，普通对象通过本地方法委托给一个本地对象，因为本地对等体b㐊一个普通d额对象，所以垃圾回收器不会知道他，当它的 java 对等体被回收的时候，他不会被回收。 在本地对等体并不拥有关键资源的情况下，终结方法是”回收“它的最好选择。如果本地对等体有需要及时回收的资源，那么该类就应该提供合适的显示终止方法。 总结总之，除非是作为安全网，或者是为了终止非关键d额本地资源，不要使用终结方法。]]></content>
-      <categories>
-        <category>java</category>
-        <category>effectivejava</category>
-      </categories>
-      <tags>
-        <tag>java</tag>
-        <tag>effectivejava</tag>
-      </tags>
-  </entry>
-  <entry>
     <title><![CDATA[【springboot-入门篇】第4篇-spring-boot-使用servlet，filter，listener和interceptor]]></title>
     <url>%2F2017%2F07%2F17%2Fspring-boot%2F%E3%80%90springboot-%E5%85%A5%E9%97%A8%E7%AF%87%E3%80%91%E7%AC%AC4%E7%AF%87-spring-boot-%E4%BD%BF%E7%94%A8servlet%EF%BC%8Cfilter%EF%BC%8Clistener%E5%92%8Cinterceptor%2F</url>
     <content type="text"><![CDATA[上一篇我们学习了 spring boot 利用Controller响应数据与响应页面。 一般的Web开发使用 Controller 基本上可以完成大部分需求，但是有的时候我们还是会用到 Servlet、Filter、Listener 等等。 在spring boot中添加自己的Servlet、Filter、Listener有两种方法 代码注册: 通过ServletRegistrationBean、 FilterRegistrationBean 和ServletListenerRegistrationBean 获得控制。 注解注册: 在SpringBootApplication 上使用@ServletComponentScan注解后，Servlet、Filter、Listener 可以直接通过 @WebServlet、@WebFilter、@WebListener 注解自动注册，无需其他代码。 spring boot 中注册servlet代码注册 创建Servlet类：AaServlet.java。 123456789101112131415public class AaServlet extends HttpServlet &#123; @Override protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException &#123; System.out.println(&quot;doGet&quot;); doPost(req, resp); &#125; @Override protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException &#123; System.out.println(&quot;doPost()&quot;); resp.setContentType(&quot;text/html&quot;); PrintWriter out = resp.getWriter(); out.println(&quot;&lt;h1&gt;AaServlet&lt;/h1&gt;&quot;); &#125;&#125; 通过ServletRegistrationBean注册。 1234567//Project2Application.java @Bean public ServletRegistrationBean AaServletRegistration() &#123; ServletRegistrationBean registration = new ServletRegistrationBean(new AaServlet()); registration.addUrlMappings(&quot;/a&quot;); return registration; &#125; 运行测试。 访问：http://localhost:8080/a 注解注册 创建Servlet类：BbServlet.java。 1234567891011121314151617@WebServlet(urlPatterns = &quot;/b&quot;)public class BbServlet extends HttpServlet &#123; @Override protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException &#123; System.out.println(&quot;doGet&quot;); doPost(req, resp); &#125; @Override protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException &#123; System.out.println(&quot;doPost()&quot;); resp.setContentType(&quot;text/html&quot;); PrintWriter out = resp.getWriter(); out.println(&quot;&lt;h1&gt;BbServlet&lt;/h1&gt;&quot;); &#125;&#125; 添加注解@ServletComponentScan。 12345678910111213141516@ServletComponentScan@SpringBootApplicationpublic class Project2Application &#123; public static void main(String[] args) &#123; SpringApplication.run(Project2Application.class, args); &#125; @Bean public ServletRegistrationBean AaServletRegistration() &#123; ServletRegistrationBean registration = new ServletRegistrationBean(new AaServlet()); registration.addUrlMappings(&quot;/a&quot;); return registration; &#125;&#125; 运行测试。 访问：http://localhost:8080/b filter 和 listener的注册和servlet一样。这里就不多说了。 接下来说一下拦截器。 自定义拦截器Spring提供了HandlerInterceptor（拦截器）。它的功能跟过滤器类似，但是提供更精细的的控制能力：在request被响应之前、request被响应之后、视图渲染之前以及request全部结束之后。我们不能通过拦截器修改request内容，但是可以通过抛出异常（或者返回false）来暂停request的执行。 spring boot提供了一些拦截器，我们可以直接拿来使用，比如： ConversionServiceExposingInterceptor CorsInterceptor LocaleChangeInterceptor PathExposingHandlerInterceptor ResourceUrlProviderExposingInterceptor ThemeChangeInterceptor UriTemplateVariablesHandlerInterceptor UserRoleAuthorizationInterceptor 我们也可以自己定义拦截器，定义拦截器的步骤大致分为： 1、创建我们自己的拦截器类并实现 HandlerInterceptor 接口。 2、创建一个Java类继承WebMvcConfigurerAdapter，并重写addInterceptors 方法。3、实例化我们自定义的拦截器，然后将对像手动添加到拦截器链中（在addInterceptors方法中添加）。 我们来亲自试一下： 创建我们自己的拦截器 123456789101112131415161718192021222324//MyInterceptor2public class MyInterceptor1 implements HandlerInterceptor &#123; @Override public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception &#123; System.out.println(&quot;MyInterceptor1==========&gt;在请求处理之前进行调用（Controller方法调用之前）&quot;); return true;// 只有返回true才会继续向下执行，返回false取消当前请求 &#125; @Override public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception &#123; System.out.println(&quot;MyInterceptor1==========&gt;请求处理之后进行调用，但是在视图被渲染之前（Controller方法调用之后）&quot;); &#125; @Override public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception &#123; System.out.println(&quot;MyInterceptor1==========&gt;在整个请求结束之后被调用，也就是在DispatcherServlet 渲染了对应的视图之后执行（主要是用于进行资源清理工作）&quot;); &#125;&#125; 123456789101112131415161718192021222324//MyInterceptor2public class MyInterceptor2 implements HandlerInterceptor &#123; @Override public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception &#123; System.out.println(&quot;MyInterceptor2==========&gt;在请求处理之前进行调用（Controller方法调用之前）&quot;); return true;// 只有返回true才会继续向下执行，返回false取消当前请求 &#125; @Override public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception &#123; System.out.println(&quot;MyInterceptor2==========&gt;请求处理之后进行调用，但是在视图被渲染之前（Controller方法调用之后）&quot;); &#125; @Override public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception &#123; System.out.println(&quot;MyInterceptor2==========&gt;在整个请求结束之后被调用，也就是在DispatcherServlet 渲染了对应的视图之后执行（主要是用于进行资源清理工作）&quot;); &#125;&#125; 创建一个Java类继承WebMvcConfigurerAdapter，并重写addInterceptors 方法,添加拦截器。 123456789101112131415//MyWebAppConfigurer@Configurationpublic class MyWebAppConfigurer extends WebMvcConfigurerAdapter &#123; @Override public void addInterceptors(InterceptorRegistry registry) &#123; // 多个拦截器组成一个拦截器链 // addPathPatterns 用于添加拦截规则 // excludePathPatterns 用户排除拦截 registry.addInterceptor(new MyInterceptor1()).addPathPatterns(&quot;/**&quot;); registry.addInterceptor(new MyInterceptor2()).addPathPatterns(&quot;/**&quot;); super.addInterceptors(registry); &#125;&#125; 测试：运行项目，随便访问一个路径，比如http://localhost:8080/test 浏览器会报错，不用管，看控制台。 拦截器已经起作用了。 值得注意的是：只有经过DispatcherServlet 的请求，才会走拦截器链，我们自定义的Servlet 请求是不会被拦截的，比如我们自定义的Servlet地址是不会被拦截器拦截的。 但是过滤器不同。不管是属于哪个Servlet 只要复合过滤器的过滤规则，过滤器都会拦截。 本篇文章就先介绍到这里，如果哪里讲的不明白，请及时与我联系。 参考文章：Spring Boot 拦截器]]></content>
@@ -325,6 +312,19 @@
         <tag>java</tag>
         <tag>springboot</tag>
         <tag>入门</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[【effective java】7:避免使用终结方法]]></title>
+    <url>%2F2017%2F07%2F17%2Feffectivejava%2Feff-java-7%2F</url>
+    <content type="text"><![CDATA[7:避免使用终结方法终结方法（finalizer）通常是不可预测的，也是很危险的，一般情况下是不必要的。 为什么要避免使用1终结方法的缺点在于不能保证会被及时的执行。从一个对象变得不可达开始，到它的终结方法被执行，所花费的这段时间是任意长的。 所以，注重时间的任务不应该由终结方法来完成，例如，用终结方法来关闭已打开的文件，这是很严重的错误。 2及时的执行终结方法正是垃圾回收算法的一个主要功能，不同的 jvm 的实现方式有所不同，所以在你自己的电脑上的 jvm 可能运行的很好，但是在其他人的 jvm 下可能差别会很大。 3java 语言规范不保证终结方法会被及时的执行，甚至根本就不保证它们会被执行。当一个程序终结的时候，某些已经无法访问的对象上的终结方法却根本没有执行，这是完全有可能的。 4不要被 System.gc System.runFinalization 这两个所诱惑，它们却是增加了终结方法被执行的机会，但是它们也并不能保证终结方法一定会被执行。唯一可以保证终结方法被执行的方法是 System.runFinalizersOnExit 以及 Runtime.runFinalizersOnExit， 然而它们都有致命的缺陷，已经被废弃了。 5如果未被捕捉的异常在终结过程中被抛出来，那么这种异常可以被忽略，并且该对象的终结过程也会终止。未被捕获的异常会使对象处于破坏的状态，如果另一个线程企图使用这种被破坏的对象，则可能发生任何不确定的行为。 6使用终结方法，会有一个严重的性能损失。 如何正确的终止如果一个类中封装的资源（例如文件或者线程）确实需要终止，应该怎么做才能不用编写终结方法呢？ 只需要提供一个显示的终结方法，并要求客户端在每个实例不再有用的时候显示额调用合格方法。 该类必须记录下自己是否已经被终止了。 比如 javaio 中，各个流的 close() 方法。 显示d额终止方法通常与 try-finally 结构结合起来使用。 终结方法有什么好处1当对象的所有者忘记调用前面段落中建议d 显示终止方法时，终结方法可以充当“安全网” 迟一点释放资源总比不释放好。 2第二个用途与本地对等体有关。 本地对等体是一个本地对象，普通对象通过本地方法委托给一个本地对象，因为本地对等体b㐊一个普通d额对象，所以垃圾回收器不会知道他，当它的 java 对等体被回收的时候，他不会被回收。 在本地对等体并不拥有关键资源的情况下，终结方法是”回收“它的最好选择。如果本地对等体有需要及时回收的资源，那么该类就应该提供合适的显示终止方法。 总结总之，除非是作为安全网，或者是为了终止非关键d额本地资源，不要使用终结方法。]]></content>
+      <categories>
+        <category>java</category>
+        <category>effectivejava</category>
+      </categories>
+      <tags>
+        <tag>java</tag>
+        <tag>effectivejava</tag>
       </tags>
   </entry>
   <entry>
