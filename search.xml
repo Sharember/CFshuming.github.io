@@ -1,6 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[【算法-剑指offer】3. 从尾到头打印链表]]></title>
+    <url>%2F2017%2F11%2F28%2Falgorithm%2F%E5%89%91%E6%8C%87offer%2F%E4%BB%8E%E5%B0%BE%E5%88%B0%E5%A4%B4%E6%89%93%E5%8D%B0%E9%93%BE%E8%A1%A8%2F</url>
+    <content type="text"><![CDATA[题目描述： 输入一个链表，从尾到头打印链表每个节点的值。 分析： 这道题一般有两种方案： 不允许用其他数据结构的话：递归。 可以用其他数据结构：遍历链表放到栈里，然后从栈里取值。 答案： 123456789101112131415161718192021222324252627282930// 递归import java.util.ArrayList;public class Solution &#123; ArrayList&lt;Integer&gt; arrayList = new ArrayList&lt;Integer&gt;(); public ArrayList&lt;Integer&gt; printListFromTailToHead(ListNode listNode) &#123; if(listNode != null)&#123; printListFromTailToHead(listNode.next); arrayList.add(listNode.val); &#125; return arrayList; &#125;&#125;// 用栈import java.util.Stack;import java.util.ArrayList;public class Solution &#123; public ArrayList&lt;Integer&gt; printListFromTailToHead(ListNode listNode) &#123; Stack&lt;Integer&gt; stack = new Stack&lt;&gt;(); while (listNode != null) &#123; stack.push(listNode.val); listNode = listNode.next; &#125; ArrayList&lt;Integer&gt; list = new ArrayList&lt;&gt;(); while (!stack.isEmpty()) &#123; list.add(stack.pop()); &#125; return list; &#125;&#125;]]></content>
+      <categories>
+        <category>算法</category>
+        <category>剑指offer</category>
+        <category>链表</category>
+      </categories>
+      <tags>
+        <tag>算法</tag>
+        <tag>剑指offer</tag>
+        <tag>链表</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[【计算机网络-概论】2. 协议分层]]></title>
     <url>%2F2017%2F11%2F27%2Fnetwork%2F%E6%A6%82%E8%AE%BA%2F%E5%8D%8F%E8%AE%AE%E5%88%86%E5%B1%82%2F</url>
     <content type="text"><![CDATA[协议定义了发送者、接收 者和所有中间设备为了高效通信需要遵循的规则。当通信简单时，我们可能只是需要一个简单的协 议;当通信复杂时，我们可能需要把任务划分到不同层，每层需要一个协议，也就是说需要协议分层(protocol layering)。 2.1 场景为了更好地理解为什么需要协议分层，我们来看两种简单的场景。 场景一在第一个场景中，通信如此简单以至于它能够在一层中实现。假设 Maria 和 Ann 是拥有很多 共同想法的邻居。Maria 和 Ann 之间的通信发生在一个层次中，她们面对面并使用相同的语言，如图： 即使在这个简单的场景中也需要遵循一系列的规则。 Maria 和 Ann 了解当她们相遇时应该互相问候。 她们明白她们应该限制使用的词汇在她们友谊的层次上。 一方知道当另一方讲话时，她应该抑制自己讲话。 每一方都知道应该是对话而不是独角戏: 双方都应该有机会对某一问题发表看法。 当她们分别时，应该交换一些祝福语。 但是 Maria 和 Ann 使用的协议与课堂上老师和学生的通信不同。上课的时候，大部分情况下是老师的独角戏，除非学生有问题，否则老师的谈话会占用大部分时间。在这种情况下，协议应该规定：学生只有举手并被允许说话后才可以发言。 场景二在第二个场景中，我们假设公司提拔了 Ann，但是她需要到距离 Maria 很远的城市上班。由于 这两位朋友着手进行一个新的项目以便退休后启动新生意，因此她们希望继续她们的通信、交换她 们的想法。她们决定定期通过邮局使用信件继续交换她们的想法。但是，即使信件被拦截，她们也 不希望她们的想法被其他人知道。她们一致同意采用一种加密/解密技术。信件的发送者对信件加 密，使之对入侵者不可读;信件的接收者对信件解密，从而得到原始的信件。我们将在第 10 章讨 论加密/解密方法，但是现在我们假设 Maria 和 Ann 采用了一种技术，该技术在一个人不拥有密钥 的情况下很难解密信件。现在我们可以说 Maria 和 Ann 之间的通信在 3 个层次上进行，如图 1-10 所示。我们假设 Ann 和 Maria 每个人拥有 3 台机器(机器人)，这 3 台机器分别在每一层执行任务。 我们假设 Maria 向 Ann 发送第一封邮件。Maria 在第 3 层对机器谈话，仿佛这台机器就是 Ann， 并且在听她谈话。第 3 层机器聆听 Maria 所说的内容并形成了明文(用英文书写的邮件)，传递给 第 2 层机器。第 2 层机器接收明文，对它进行加密并形成密文，传递给第 1 层机器。第 1 层机器， 大概是个机器人，接收密文，把它放入一个信封中，添加发送者和接收者地址，然后进行邮寄。 在 Ann 的一端，第 1 层机器从 Ann 的信箱中取出邮件，通过发送者的地址得知该邮件来自于 Maria。机器从信封中取出密文并将它投递给第 2 层机器。第 2 层机器解密这个信息，形成明文并 将明文传递给第 3 层机器。第 3 层机器接收明文并仿佛 Maria 正在说话一样将它读出来。 协议分层允许我们将一个复杂的任务分解成几个较小的、简单的任务。例如，我们可以只使用一台机器完成所有 3 台机器的工作。可是，如果 Maria 和 Ann 判定这台机器所做 的加密/解密不足以保护她们的秘密，那么她们需要更换整台机器。在现在的情况下，她们只需要更换第 2 层的机器，另外两台机器能够保持不变。这种方法称为模块化(modularity)。 在这个示例中，模块化意味着独立的层次。一层(一个模块)可以定义为一个具有输入和输出的黑盒子，我们不必关心输入如何变成输出。如果给定相同的输入，两台机器提供相同的输出，那么它们可以相互 替换。例如，Ann 和 Maria 可以从两个不同的厂商购买第 2 层机器。只要这两台机器能把相同的明文变成相同的密文，相同的密文变成相同的明文，那么它们就可以相互替换。 协议分层优点 它允许我们将服务从实现中分离出来 一层需要能够接收较低层的一系列服务，同时向较高层提供服务，而我们不关心这一层是如何实现的。 协议分层后，中间系统可以只提供一部分功能而不需要实现所有的功能。 如果不使用协议分层，形成的中间系统就不得不像端系统一样复杂，这样就会提高整个系统的造价。 协议分层原则 如果想要双向通信，那么我们需要每一层能够 实现两个相反的任务，每个方向上一个。 例如，第 3 层的任务就是听(在一个方向上)和说(在另 一个方向上)，第 2 层需要能够加密和解密，第 1 层需要发送和接收邮件。 两端每一层中的两个对象应该相同。 例如，两端第 3 层的对象应该为明文信件。两端第 2 层的对象应该为密文信件。两端第 1 层的对象应该为一封邮件。 2.2 TCP/IP 协议簇TCP/IP(Transmission Control Protocol/Internet Protocol，传输控制协议/互联网协议)。TCP/IP 是目前 Internet 使用的一个协议簇(按不同层次组织的协议集)。它是由相互交互的模块组成的一个层次结构协议，每一个模块提供特定的功能。层次意味着较上层次的协议需要得到一个或多个较下层次协议提供的服务支 持。初始的 TCP/IP 协议簇在硬件基础上定义了 4 个软件层次。但是，目前 TCP/IP 通常是一个 5 层模型。 2.2.1 层次化结构为了展示如何利用 TCP/IP 协议簇的层次在两台主机之间进行通信，我们假设将协议簇用于一个由 3 个局域网(链接)组成的小型互联网，每个局域网拥有一个链路层交换机。同时我们假设局 域网连接到一个路由器，如图： 我们假设计算机 A 与计算机 B 进行通信。正像图中显示的那样，这个通信中涉及 5 个 通信设备:源主机(计算机 A)、链路 1 的链路层交换机、路由器、链路 2 的链路层交换机和目的主机(计算机 B)。 按照设备在互联网中扮演的角色不同，每一台设备包含了几个层次。两台主机包含了所有 5 个层次，源主机需要在应用层创建一个信息并把它发送到下层，以便把该信息物理上 发送到目的主机。目的主机需要在物理层接收这个信息，然后通过其他层投递到应用层。 路由器只涉及 3 层，只要路由器仅仅作为路由选择，在路由器中就没有传输层或应用层。一个路由器包括一个网络层、n 个数据链路层和物理层的组合(其中 n 为路由器连接的链路的数目)。其主要原因是每一个链路可以使用它自己的数据链路或物理层。例如在图中，路由器拥有 3 条链接，但是从源 A 发送到目的地 B 的消息涉及两条链接。每一条链接可以使用不同的链路层和物理层协议;路由器需要从基于一对协议的链路 1 接收分组并将它投递到基于另一对协议的链路 2。 和路由器不同在一条链路上的链路层交换机只涉及两个层次：数据链路层和物理层。尽管交换机拥有两个不同的连接，但是这两个连接在同一链路上，它们只使用一个协议集。这意味着交换机只涉及一个数据链路层和一个物理层。 2.2.2 TCP/IP 协议簇中的层次为了更好地理解每一层的任务，我们首先需要知道在层次间存在的逻辑连接。 采用逻辑连接使我们考虑每一层的任务变得比较容易。如上图所示，应用层、传输层和网络层的任务是端到端的(end-to-end)。但是，数据链路层和物理层的任务是点到点的(hop-to-hop)， 其中一个跳步是一个主机或路由器。也就是说，高三层的任务范围是互联网，低两层的任务范围是链路。 另一种理解逻辑连接的方法是考虑每一层创建的数据单元。在高三层，数据单元(分组)不应该被任何路由器或链路层交换机改变。在低两层，主机创建的分组仅仅被路由器改变，链路层交换机不改变它们。 注意，尽管网络层的逻辑连接在两个主机之间，但是由于一个路由器在网络层对分组进行分片， 并且发送的分组比接收的多，因此在这种情况下，对等体只存在于两个跳步之间。 2.2.3 TCP/IP 各层描述 应用层 两个应用层之间的逻辑连接是端到端的。两个应用层之间仿佛存在一座桥梁 一样相互交换消息。可是，我们应该明白通信需要通过所有层次完成。 应用层的通信处于两个进程(该层正在运行的两个程序)之间。为了进行通信，一个进程向另一个进程发送请求，并且接收另一个进程的响应。进程到进程的通信就是应用层的任务。虽然 Internet 的应用层包含了很多预定义的协议，但是也可以在两台主机上运行用户创建的一对进程。 下面是一些应用层常用协议。 超级文本传输协议(Hypertext Transfer Protocol，HTTP)是访问万维网(World Wide Web， WWW)的载体。 简单邮件传输协议(Simple Mail Transfer Protocol，SMTP)是电子邮件(e-mail) 服务的主要协议。 文件传输协议(File Transfer Protocol，FTP)用于将文件从一台主机传输到另一 台主机。 远程登录(Terminal Network，TELNET)和安全外壳(Secure Shell，SSH)用于访问远端的站点。 管理员使用简单网络管理协议(Simple Network Management Protocol，SNMP)对 Internet 全局或局部进行管理。 域名系统(Domain Name System，DNS)使其他的协议能够查询一台计算 机的网络层地址。 因特网组管理协议(Internet Group Management Protocol，IGMP)用于管理一个 组的成员资格。 传输层 传输层的逻辑连接也是端到端的。源主机的传输层从应用层得到消息，封装成传输层的分组(称 为段或用户数据报，不同协议叫法不同)，然后进行发送。通过逻辑(想象的)连接，分组到达目的主机的传输层。 也就是说，传输层负责向应用层提供服务:从运行于应用层的程序得到信息，并 将它投递到目的主机相应的应用程序。 下面是一些传输层常用协议。 传输控制协议(Transmission Control Protocol，TCP)是一个面向连接的协议，它在传输 数据之前，首先在两台主机的传输层之间建立一条逻辑连接。TCP 协议在两个 TCP 层之间创建一个管道，以便传输字节流。TCP 协议提供流量控制差错控制、拥塞控制。 用户数据报协议(User Datagram Protocol，UDP)。UDP 是一种无连接协议，它传输用户数据报之前不需要创建逻辑 连接。在 UDP 中，每个用户数据报是一个独立的实体，它和前一个或后一个用户数据报没有关系。UDP 是一种比较简单的协议，它不提供流量控制、差错控制或拥塞控制。 它的简单性对某些应用程序具有吸引力，这些应用程序发送较短的消息且不能容忍 TCP 在分组损坏或丢失时使用重发机制。 流控制传输协议(Stream Control Transmission Protocol，SCTP)是一种新协议，它是为多媒体出现的新应用设计的。 网络层 网络层负责在源计算机和目的计算机之间创建一个连接。网络层的通信是主机到主机的。可是， 由于从源主机到目的主机可能存在多个路由器，因此路径上的路由器负责为每个分组选择最好的路径。我们可以说网络层负责主机到主机的通信，并且指挥分组通过合适的路由器。 下面是一些网络层常用协议。 因特网协议(Internet Protocol，IP)，因特网协议定义了在 网络层称为数据报的分组格式。IP 同时定义了在这一层使用的地址格式和结构。与此同时，IP 负 责从源主机把一个分组路由到目的主机。这种功能主要是通过每个路由器都将数据报转发到路径上的下一个路由器而实现的。IP 是一个无连接的协议，不提供流量控制、差错控制和拥塞控制服务。 因特网控制报文协议(Internet Control Message Protocol，ICMP)帮助 IP 报告遇到的问题。 因特网组管理协议 (Internet Group Management Protocol，IGMP)协助 IP 进行多任务处理。 动态主机配置协议(Dynamic Host Configuration Protocol，DHCP)帮助 IP 获取一台主机的网络层地址。 地址解析协议(Address Resolution Protocol，ARP)帮助 IP 寻找一台主机或一台路由器的链路层地址。 数据链路层 我们已经知道一个互联网是多个链路(LAN 和 WAN)通过路由器连接而构成的。从主机传输数据报到目的地可能存在多个交叠的链路集。路由器负责选择最好的链路进行传输。当路由器定好需要传输的下一条链路后，数据链路层接管这个数据报并使它穿过这条链路。这条链路可以是一个具有链路层交换机的有线局域网、一个无线局域网、一个有线广域网或者一个无线广域网。 对于不同链路类型也存在不同的协议。无论哪种情况，数据链路层都要负责通过链路传输分组。 TCP/IP 没有为数据链路层定义任何特定的协议。它支持所有标准的和私有的协议。能够接管 数据报并携带它穿过链路的任何协议都能满足网络层的要求。数据链路层接管一个数据报并将它封 装在一个称为帧(frame)的分组中。 每个链路层协议可能提供不同的服务。有些链路层协议提供完整的检查和纠错，有些只提供纠错。 物理层 我们可以说物理层负责携带一个帧中单独的比特穿过链路。尽管物理层位于 TCP/IP 协议簇的最底层，但是由于在物理层之下存在另外一个隐藏的传输介质层，因此两个设备物理层之间的通信仍然是逻辑通信。两个设备通过一种传输介质(电缆或大气)连接。我们需要知道传输介质不携带比特，它携带电或光信号。所以，从数据链路层接收的一个帧的比特需要被变换，然后通过传输介质传输。但是我们可以认为两个设备物理层之间的逻辑单元是一个比特(bit)。将一个比特变换成一个信号存在多种协议。 2.2.4 封装和解封装 由于在链路层交换机中没有封装/解封装发生，因此没有显示链路层交换机的层次。 源主机的封装 在源主机端只进行封装。 在应用层，交换的数据称为消息(message)。消息通常不包含任何头部和尾部，但是即使 包含了这些，我们也将其整体称为消息。消息会被传递到传输层。 传输层把这个消息作为有效载荷，该载荷是传输层应该关注的负载。传输层在有效载荷基础上增加传输层头部，其中包括了希望进行通信的源和目的应用程序的标识符和一些投递该消息需要的更多信息，例如进行流量控制、差错控制和拥塞控制需要的信息。其结果为一个传输层分组。 该分组在 TCP 中称为段(segment)，在 UDP 中称为用户数据报(user datagram)。然后传输层传递该分组到网络层。 网络层把传输层分组作为数据或有效载荷，并且在该有效载荷上添加自己的头部。头部包含源和目的主机的地址，以及用于头部差错检查、分片的信息等其他一些信息。其结果为一个称为 数据报(datagram)的网络层分组。然后，网络层传递这个分组到数据链路层。 数据链路层把网络层分组作为数据或有效载荷，并且添加上自己的头部。该头部包含主机 或下一跳步(路由器)的链路层地址。其结果为一个称为帧(frame)的链路层分组。该帧被传递 到物理层进行传输。 路由器的解封装与封装 由于路由器连接两个或多个链路，因此在路由器中我们既需要进行解封装也需要进行封装。 在比特集被投递到数据链路层后，这一层从帧中解封装出数据报并将它投递到网络层。 网络层只检查数据报头部的源地址和目的地址，查阅它的转发表以寻找该数据报将被投递 到的下一跳步。除非数据报太大以至于不能通过下一链路时需要对其进行分片，数据报的内容不应 该被网络层改变。然后，数据报被传递到下一链路的数据链路层。 下一链路的数据链路层将数据报封装成一个帧，将其传递到物理层进行传输。 目的主机的解封装 在目的主机端，每层都只解封装接收到的分组，移出有效载荷，并将有效载荷传递至较高一层，直到消息到达应用层。需要说明的是主机中的解封装包含差错检查。 2.2.5 地址在 Internet 中，与协议分层相关的另一个概念是地址。正像以前讨论的那样，在这种模型中一 对层次之间存在逻辑通信。包含两方的任意通信都需要两个地址:源地址和目的地址。尽管看起来我们似乎需要 5 对地址(每层一对)，但是由于物理层不需要地址，我们通常只需要 4 对，物理层的数据交换单元是一个比特，它没有地址。 在应用层，我们通常使用一个像 someorg.com 的名字定义提供服务的站点，或者使用像 somebody@coldmail.com 一样的电子邮件地 址。在传输层，地址称为端口号，这些端口号指 定源和目的地的应用层程序。端口号是本地地址， 用于区分同一时间运行的几个程序。网络层地址是全局的，其范围涵盖了整 Internet。链路层地址有时叫做 MAC 地址(MAC address)，是本地定义的地址。每个链路层地址用于在网络(LAN 或 WAN)中定义一个特定的主机或路由器。 2.2.6 多路复用与多路分解由于 TCP/IP 协议簇在一些层次使用多个协议，因此我们在源端需要进行多路复用 (multiplexing)，在目的端需要进行多路分解(demultiplexing)。 多路复用的意思是一个协议能够封装来自多个上层协议的分组(一次一个);多路分解的意思是一个协议能够进行解封装， 并且将分组投递到多个上层协议(一次一个)。 为了进行多路复用和多路分解，协议需要一个用于标识被封装的分组属于哪种协议的头部字 段。在传输层，无论 UDP 还是 TCP 都可以接收多个应用层协议的消息。在网络层，IP 既可以接收来自 TCP 的段也可以接收来自 UDP 的用户数据报。同时，IP 也可以接收来自其他协议的分组，如ICMP 协议、IGMP 协议等等。在数据链路层，数据帧可以携带来自 IP 或 ARP 等协议的有效载荷。 2.2.7 OSI 模型]]></content>
@@ -123,19 +138,6 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[DNS域名解析过程（不考虑负载均衡等复杂情况）]]></title>
-    <url>%2F2017%2F07%2F22%2Fweb%2Fweb-dns%2F</url>
-    <content type="text"><![CDATA[DNS域名解析过程（不考虑负载均衡等复杂情况）在浏览器中输入：www.abc.com 会发生哪些事情呢？ 1.浏览器检查缓存中有没有该域名对应的解析过的ip地址，如果有，解析过程结束。 浏览器缓存域名是有限制的，不仅缓存的大小有限制，缓存的时间也有限制。缓存时间可以通过TTL属性来控制。这个缓存时间太长或者太短都不好，如果缓存时间太长，一旦域名对应的ip地址变化了，会导致客户端无法正常访问到相应的服务。如果设置的时间太短，会导致用户要频繁的进行域名解析。现在大部分域名解析服务中，默认的TTL时间是10分钟。 2.浏览器会查找本地操作系统的缓存中有没有这个域名对应的DNS解析结果。 操作系统也会有一个域名解析的过程，也就是我们熟知的host文件。例如，我们在测试的时候，可以将一个域名解析到一台测试服务器上，这样不用修改仍和代码就能测试到单独服务器上的代码。 正是因为有这种本地DNS解析的过程，所以黑客就有可能通过修改你的host文件来把特定的域名解析到他指定的ip地址上，导致这些域名被劫持。 3.浏览器会把这个域名发送给LDNS（本地区域名服务器），看看该服务器的缓存有没有结果。 怎么知道LDNS的地址呢？我们自己电脑的网络配置中都会有“DNS服务器”地址这一项（可能不止一个），这个就是LDNS，即本地域名服务器。 这个DNS通常都是提供给你本地互联网接入的一个DNS服务，如果你在学校接入的互联网，那这个DNS服务器肯定在你的学校，如果你是在小区里接入的互联网，那DNS就是共给你接入互联网的服务提供商，即电信或者联通。当然，你也可以自己设置LDNS域名，比如114.114.114.114. 这个专门的域名解析服务器性能都会很好，一般都会缓存域名解析的结果，大约80%的域名解析打这里就已经完成了。 4.LNDS依旧没有命中，直接到ROOT Server域名服务器请求解析。 5.根域名服务器返回给本地域名服务器一个所查寻域的主域名服务器（gTLD Server）地址。 gTLD 是国际顶级域名服务器，如.com、.cn、.org等 6.本地域名服务器（LDNS）再向上一步中的gTLD服务器发送请求。 7.接受请求的gTLD服务器查找并返回此域名对应的Name Server域名服务器的地址。 这个Name Server通常是你注册的域名服务器，比如你在阿里云买了一个域名，那么这个域名解析的热舞就由阿里云提供的服务器来完成。 8.Name Server域名服务器会查询存储的域名和IP的映射关系表,返回给gTLD Server。 正常情况下，会返回IP地址和TTL. 9.gTLD Server返回该域名的IP地址和TTL值给LDNS。 LDNS会将得到的信息进行缓存。 10.LDNS把解析的结果返回给用户（浏览器），用户根据TTL值缓存在本地缓存系统中，域名解析结束。]]></content>
-      <categories>
-        <category>web</category>
-        <category>dns</category>
-      </categories>
-      <tags>
-        <tag>web</tag>
-        <tag>dns</tag>
-      </tags>
-  </entry>
-  <entry>
     <title><![CDATA[【effective java】13:使类和成员的可访问性最小化]]></title>
     <url>%2F2017%2F07%2F22%2Feffectivejava%2Feff-java-13%2F</url>
     <content type="text"><![CDATA[13:使类和成员的可访问性最小化1. 简介要区别设计良好的模块与设计不好的模块，最重要的因素在于，这个模块对于外部的其他模块而言，是否隐藏其内部数据和其他实现细节。 设计良好的模块会隐藏所有的实现细节，把它的 API 与它的实现清晰的隔离开来。然后模块之间只通过它们的 API 进行通信，一个模块不需要知道其他模块的内部工作情况。 这个概念被称为信息隐藏。 2. 尽可能的使每个类或者成员不被外界访问 对于顶层的类和接口，只有两种肯的访问级别：包私有的和公有的。 如果一个包级私有的顶层类只是在某一个类的内部被用到，就应该考虑使它成为唯一使用它的那个类的私有嵌套类。 不能为了测试而将类、接口或者成员变成包的导出的 API 的一部分。当然，一般以没必要这么做，因为可以让测试作为被测试的包的一部分来运行。 实例域绝对不能是公有的。静态域也一样。 长度非零的数组总是可变的，所以，类具有公有的静态 final 数组域，或者返回这种数组域的方法，这几乎总是错误的。]]></content>
@@ -146,6 +148,19 @@
       <tags>
         <tag>java</tag>
         <tag>effectivejava</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[DNS域名解析过程（不考虑负载均衡等复杂情况）]]></title>
+    <url>%2F2017%2F07%2F22%2Fweb%2Fweb-dns%2F</url>
+    <content type="text"><![CDATA[DNS域名解析过程（不考虑负载均衡等复杂情况）在浏览器中输入：www.abc.com 会发生哪些事情呢？ 1.浏览器检查缓存中有没有该域名对应的解析过的ip地址，如果有，解析过程结束。 浏览器缓存域名是有限制的，不仅缓存的大小有限制，缓存的时间也有限制。缓存时间可以通过TTL属性来控制。这个缓存时间太长或者太短都不好，如果缓存时间太长，一旦域名对应的ip地址变化了，会导致客户端无法正常访问到相应的服务。如果设置的时间太短，会导致用户要频繁的进行域名解析。现在大部分域名解析服务中，默认的TTL时间是10分钟。 2.浏览器会查找本地操作系统的缓存中有没有这个域名对应的DNS解析结果。 操作系统也会有一个域名解析的过程，也就是我们熟知的host文件。例如，我们在测试的时候，可以将一个域名解析到一台测试服务器上，这样不用修改仍和代码就能测试到单独服务器上的代码。 正是因为有这种本地DNS解析的过程，所以黑客就有可能通过修改你的host文件来把特定的域名解析到他指定的ip地址上，导致这些域名被劫持。 3.浏览器会把这个域名发送给LDNS（本地区域名服务器），看看该服务器的缓存有没有结果。 怎么知道LDNS的地址呢？我们自己电脑的网络配置中都会有“DNS服务器”地址这一项（可能不止一个），这个就是LDNS，即本地域名服务器。 这个DNS通常都是提供给你本地互联网接入的一个DNS服务，如果你在学校接入的互联网，那这个DNS服务器肯定在你的学校，如果你是在小区里接入的互联网，那DNS就是共给你接入互联网的服务提供商，即电信或者联通。当然，你也可以自己设置LDNS域名，比如114.114.114.114. 这个专门的域名解析服务器性能都会很好，一般都会缓存域名解析的结果，大约80%的域名解析打这里就已经完成了。 4.LNDS依旧没有命中，直接到ROOT Server域名服务器请求解析。 5.根域名服务器返回给本地域名服务器一个所查寻域的主域名服务器（gTLD Server）地址。 gTLD 是国际顶级域名服务器，如.com、.cn、.org等 6.本地域名服务器（LDNS）再向上一步中的gTLD服务器发送请求。 7.接受请求的gTLD服务器查找并返回此域名对应的Name Server域名服务器的地址。 这个Name Server通常是你注册的域名服务器，比如你在阿里云买了一个域名，那么这个域名解析的热舞就由阿里云提供的服务器来完成。 8.Name Server域名服务器会查询存储的域名和IP的映射关系表,返回给gTLD Server。 正常情况下，会返回IP地址和TTL. 9.gTLD Server返回该域名的IP地址和TTL值给LDNS。 LDNS会将得到的信息进行缓存。 10.LDNS把解析的结果返回给用户（浏览器），用户根据TTL值缓存在本地缓存系统中，域名解析结束。]]></content>
+      <categories>
+        <category>web</category>
+        <category>dns</category>
+      </categories>
+      <tags>
+        <tag>web</tag>
+        <tag>dns</tag>
       </tags>
   </entry>
   <entry>
@@ -190,19 +205,6 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[【effective java】10:始终要覆盖toString]]></title>
-    <url>%2F2017%2F07%2F20%2Feffectivejava%2Feff-java-10%2F</url>
-    <content type="text"><![CDATA[10:始终要覆盖toString几个要点 1.虽然 toString 的约定并不像 equals 和 hashcode 的约定，但是提供良好的 toString 实现可以使类用起来更加舒适。 2.不管是否覆盖了 toString 方法，程序员都将以这种方式来产生诊断信息，但是如果没有覆盖 toString 方法，那么产生的信息将会难以理解。 3.在实际应用中，toString 方法应该赶回对象中包含的所有值得关注的信息。如果对象太大，toString 应该返回一个摘要信息。 4.在实现 toString 的时候，要决定是否在文档中指定返回值格式。指定格式的好处是，它可以被用作一种标准的、明确的、适合人阅读的对象表示法。不足之处是，如果这个类已经被广泛使用，一旦指定格式，就必须始终如一的坚持这种格式。 5.无论你是否决定使用格式，都应该在文档中明确的表明你的意图。 6.无论是否指定格式，都为 toString 返回值中包含的所有信息，提供一种编程式的访问路径。]]></content>
-      <categories>
-        <category>java</category>
-        <category>effectivejava</category>
-      </categories>
-      <tags>
-        <tag>java</tag>
-        <tag>effectivejava</tag>
-      </tags>
-  </entry>
-  <entry>
     <title><![CDATA[【java 并发】1. 初识java并发]]></title>
     <url>%2F2017%2F07%2F20%2Fjava%20concurrency%2Fjava-concurrency-1%2F</url>
     <content type="text"><![CDATA[1. 线程的优势 1.1 发挥多处理器强大的能力 通过提高处理器资源的利用率来提神系统的吞吐率。（充分利用处理器） 有助于在但处理器系统上获得更高的吞吐率。（合理安排处理器；异步） 1.2 建模的简单性 如果程序中只包含一种类型的任务，那么比包含多种不同类型任务的程序要更容易编写，错误更少，也更容易测试。 1.3 异步事件的简化处理 1.4 响应更灵敏的用户界面 传统的gui采用主事件循环（单线程），程序可能会“冻结” 2. 线程带来的风险 2.1 安全性问题 非同步线程会造成脏读，不可重复读等问题。 2.2 活跃性问题 死锁，饥饿，活锁等 2.3 性能问题 服务时间过长；响应不灵敏；吞吐率过低；资源消耗过高；可伸缩性较低等。 3. 线程无处不在 3.1 每个java程序都会使用线程 3.2 Timer 3.3 Servlet 和 jsp servlet 需要满足被多个线程同时调用（servlet需要是线程安全的） 3.4 远程方法调用（RMI） 两个线程安全问题： 正确的协同在多个对象中共享的状态 对远程对象本身状态的访问 3.5 Swing 和 AWT swing 的一些组件并不是线程安全的，如JTable。swing 程序通过将所有对gui组件的访问局限在事件线程中以实现线程安全性]]></content>
@@ -218,9 +220,9 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[【effective java】16:复合优先于继承]]></title>
-    <url>%2F2017%2F07%2F20%2Feffectivejava%2Feff-java-16%2F</url>
-    <content type="text"><![CDATA[前言继承是实现代码重用的有力手段，但它并不永远都是最好的选择，使用不当会使软件变得很脆弱。 在包的内部使用继承是非常安全的，在那里，子类和超类都处在同一个程序员的控制之下。对于专门为了继承而设计、并且具有很好文档说明的类来说，使用继承也是非常安全的。 然而，对于普通的具体类进行垮包边界的继承，则是非常危险的。 这里说的继承，不包括实现接口。 ##]]></content>
+    <title><![CDATA[【effective java】10:始终要覆盖toString]]></title>
+    <url>%2F2017%2F07%2F20%2Feffectivejava%2Feff-java-10%2F</url>
+    <content type="text"><![CDATA[10:始终要覆盖toString几个要点 1.虽然 toString 的约定并不像 equals 和 hashcode 的约定，但是提供良好的 toString 实现可以使类用起来更加舒适。 2.不管是否覆盖了 toString 方法，程序员都将以这种方式来产生诊断信息，但是如果没有覆盖 toString 方法，那么产生的信息将会难以理解。 3.在实际应用中，toString 方法应该赶回对象中包含的所有值得关注的信息。如果对象太大，toString 应该返回一个摘要信息。 4.在实现 toString 的时候，要决定是否在文档中指定返回值格式。指定格式的好处是，它可以被用作一种标准的、明确的、适合人阅读的对象表示法。不足之处是，如果这个类已经被广泛使用，一旦指定格式，就必须始终如一的坚持这种格式。 5.无论你是否决定使用格式，都应该在文档中明确的表明你的意图。 6.无论是否指定格式，都为 toString 返回值中包含的所有信息，提供一种编程式的访问路径。]]></content>
       <categories>
         <category>java</category>
         <category>effectivejava</category>
@@ -231,9 +233,9 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[【effective java】9:覆盖equals时总要覆盖hashcode]]></title>
-    <url>%2F2017%2F07%2F19%2Feffectivejava%2Feff-java-9%2F</url>
-    <content type="text"><![CDATA[9:覆盖equals时总要覆盖hashcode1.hashcode 通用约定 1.在应用程序执行期间，只要对象的 equals 方法的比较嘈杂所用到的信息没有被修改，那么对这同一个对象调用多次 hashcode 方法都必须始终如一的返回同一个函数。在同一个应用程序的多次执行过过程中，每次执行所返回的整数可以不一致。 2.如果两个对象根据 equals 方法的毕竟是相等的，那么调用这两个对象中任意一个对象的 hashcode 方法都必须产出同样的整数结果。 3.如果两个对象根据 equals 方法比较是不相等的，那么调用这两个对象中任意一个对象的 hashcode 方法，产生的结果可以相同也可以不同。但是你应该知道，给不相等的对象产生不一样的 hash 值，有可能提高散列表的性能。 2.尽可能给不相等的对象产生不一样的 hash 值的简单方法 1.把某个非零的常数值，比如17，保存在一个名为 result 的 int 类型变量中。 2.对于对象中每个关键域 f（指 equals 方法中涉及的每个域），完成以下步骤： a.为该域计算 int 类型的散列码c： 如果该域是 boolean 类型，计算 （f ? 1 : 0）。 如果该域是 byte、char、short 或者 int 类型，计算 （int）f。 如果该域是 long 类型，计算 (int)(f ^ (f &gt;&gt;&gt; 32))。 如果该域是 float 类型，计算 Float.floatToIntBits(f)。 如果该域是 double 类型，计算 Double.doubleToLongBits(f),然后按照上面第三步，为得到的 long 类型值计算散列值。 如果该域是一个对象引用，并且该类的 equals 方法通过递归的调用 equals 的方式来比较这个域，则同样为这个域递归的调用 hashcode。如果需要更复杂d额比较，则为这个域计算一个”范式“，然后针对这个范式调用 hashcode。如果这个域的值为 null，则返回0。 如果该域s回一个数组，则要吧每一个元素当做单独的域来处理。也就是说，递归地应用上述规则。如果数组中的每个元素都很重要，可以利用 Arrays.hashCode 方法。 b.按照下面的公式，把 a 中计算得到的散列码 c 合并到 result 中： result = 31 * result + c; 3.返回 result。 4.写完 hashcode 方法以后，判断一下是否满足三个条件。 在散列码计算过程中，可以把冗余域排除在外。 3.几点注意 如果一个类是不可变的，并且计算散列码的开销也比较大，就应该考虑把散列码缓存在对象内部，而不是每次请求都重新计算。 不要试图从散列码计算中排除掉一个对象的关键部分来提高性能。]]></content>
+    <title><![CDATA[【effective java】16:复合优先于继承]]></title>
+    <url>%2F2017%2F07%2F20%2Feffectivejava%2Feff-java-16%2F</url>
+    <content type="text"><![CDATA[前言继承是实现代码重用的有力手段，但它并不永远都是最好的选择，使用不当会使软件变得很脆弱。 在包的内部使用继承是非常安全的，在那里，子类和超类都处在同一个程序员的控制之下。对于专门为了继承而设计、并且具有很好文档说明的类来说，使用继承也是非常安全的。 然而，对于普通的具体类进行垮包边界的继承，则是非常危险的。 这里说的继承，不包括实现接口。 ##]]></content>
       <categories>
         <category>java</category>
         <category>effectivejava</category>
@@ -255,6 +257,19 @@
         <tag>java</tag>
         <tag>springboot</tag>
         <tag>资料整理</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[【effective java】9:覆盖equals时总要覆盖hashcode]]></title>
+    <url>%2F2017%2F07%2F19%2Feffectivejava%2Feff-java-9%2F</url>
+    <content type="text"><![CDATA[9:覆盖equals时总要覆盖hashcode1.hashcode 通用约定 1.在应用程序执行期间，只要对象的 equals 方法的比较嘈杂所用到的信息没有被修改，那么对这同一个对象调用多次 hashcode 方法都必须始终如一的返回同一个函数。在同一个应用程序的多次执行过过程中，每次执行所返回的整数可以不一致。 2.如果两个对象根据 equals 方法的毕竟是相等的，那么调用这两个对象中任意一个对象的 hashcode 方法都必须产出同样的整数结果。 3.如果两个对象根据 equals 方法比较是不相等的，那么调用这两个对象中任意一个对象的 hashcode 方法，产生的结果可以相同也可以不同。但是你应该知道，给不相等的对象产生不一样的 hash 值，有可能提高散列表的性能。 2.尽可能给不相等的对象产生不一样的 hash 值的简单方法 1.把某个非零的常数值，比如17，保存在一个名为 result 的 int 类型变量中。 2.对于对象中每个关键域 f（指 equals 方法中涉及的每个域），完成以下步骤： a.为该域计算 int 类型的散列码c： 如果该域是 boolean 类型，计算 （f ? 1 : 0）。 如果该域是 byte、char、short 或者 int 类型，计算 （int）f。 如果该域是 long 类型，计算 (int)(f ^ (f &gt;&gt;&gt; 32))。 如果该域是 float 类型，计算 Float.floatToIntBits(f)。 如果该域是 double 类型，计算 Double.doubleToLongBits(f),然后按照上面第三步，为得到的 long 类型值计算散列值。 如果该域是一个对象引用，并且该类的 equals 方法通过递归的调用 equals 的方式来比较这个域，则同样为这个域递归的调用 hashcode。如果需要更复杂d额比较，则为这个域计算一个”范式“，然后针对这个范式调用 hashcode。如果这个域的值为 null，则返回0。 如果该域s回一个数组，则要吧每一个元素当做单独的域来处理。也就是说，递归地应用上述规则。如果数组中的每个元素都很重要，可以利用 Arrays.hashCode 方法。 b.按照下面的公式，把 a 中计算得到的散列码 c 合并到 result 中： result = 31 * result + c; 3.返回 result。 4.写完 hashcode 方法以后，判断一下是否满足三个条件。 在散列码计算过程中，可以把冗余域排除在外。 3.几点注意 如果一个类是不可变的，并且计算散列码的开销也比较大，就应该考虑把散列码缓存在对象内部，而不是每次请求都重新计算。 不要试图从散列码计算中排除掉一个对象的关键部分来提高性能。]]></content>
+      <categories>
+        <category>java</category>
+        <category>effectivejava</category>
+      </categories>
+      <tags>
+        <tag>java</tag>
+        <tag>effectivejava</tag>
       </tags>
   </entry>
   <entry>
@@ -313,19 +328,6 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[【effective java】6:消除过期的对象引用]]></title>
-    <url>%2F2017%2F07%2F16%2Feffectivejava%2Feff-java-6%2F</url>
-    <content type="text"><![CDATA[java 有自己的垃圾回收机制，当你用完一个对象之后，它会被自动回收，这看起来有点不可思议，并且很容易让你觉得你自己再也不需要考虑内存管理的事了。显然，这是一种错误的想法。 1. 过期引用1.1 介绍如果一个栈是先增长，然后再收缩，那么，从栈中弹出来的对象将不会被当做垃圾回收，即使使用栈的程序不再引用这些对象，它们也不会被回收。这是因为，在栈内部维护着对这些对象的过期引用。 所谓的过期引用，是指永远也不会再被解除的引用。 1.2 修复这类问题的修复很简单：一旦对象已经过期，只需要请看这些引用就好了： 123456public Object pop() &#123; if (size == 0) throw new EmptyStackException(); Object result = elements[--size]; elements[size] == null; return result;&#125; 除了释放过期引用，清空过期引用的另一个好处是，如果它们以后又被错误的使用，程序就会立即抛出空指针异常，而不是让错误悄悄的潜下去。 1.3 注意 请空对象引用应该是一种例外而不是一种规范行为。消除过期引用最好的方法是让包含该引用的变量结束其生命周期。 一般而言，只要类是自己管理内存，那么就应该警惕内存泄漏问题。 2. 其他导致内存泄漏的原因2.1 缓存。一旦你把对象引用放到缓存中，他就很容易被遗忘掉，从而使得他不再被使用后的很长一段时间内仍然留在缓存中。 解决方案之一是，可以使用 WeakHashMap 代表缓存 只有当所需要的缓存项的生命周期是由该键的外部引用而不是值决定时，WeakHashMap 才有用处。 2.2 监听器和其回调如果你实现了一个 API，客户端在这个 API 中注册回调，却没有显示的取消回调，那么除非你采取了某些动作，否则他们就会积聚。 确保回调被立即被当做垃圾回收的最佳方法是只把他们保存在弱引用中，例如，只将他们保存成 WeakHashMap 中的键。]]></content>
-      <categories>
-        <category>java</category>
-        <category>effectivejava</category>
-      </categories>
-      <tags>
-        <tag>java</tag>
-        <tag>effectivejava</tag>
-      </tags>
-  </entry>
-  <entry>
     <title><![CDATA[【springboot-入门篇】第3篇--从controller开始学起]]></title>
     <url>%2F2017%2F07%2F16%2Fspring-boot%2F%E3%80%90springboot-%E5%85%A5%E9%97%A8%E7%AF%87%E3%80%91%E7%AC%AC3%E7%AF%87--%E4%BB%8Econtroller%E5%BC%80%E5%A7%8B%E5%AD%A6%E8%B5%B7%2F</url>
     <content type="text"><![CDATA[虽然文章标题是“学起”，但是我也不会真的从头开始讲，默认，你是懂springmvc的 o.o 1. 返回数据与返回页面在写web项目的时候，controller里的返回值一般分为两种，一种是返回页面，也就是ModeAndView，另一种是直接返回数据，比如json格式的数据。 返回一个页面，我们需要用到一些模板引擎，比如熟知的jsp，模板引擎后面会详细讲解。 返回数据一般会选择返回json数据，我们之前的demo项目中使用的@RestController就是一个返回数据的注解。 @RestController是一个组合注解，是由@Controller和@ResponseBody组合而成的。@Controller：将返回值渲染为页面。@ResponseBody：将返回值渲染为数据。 2. spring boot支持的模板引擎spring-boot 支持多种模版引擎包括： FreeMarker Groovy Thymeleaf （Spring 官网使用这个） Velocity JSP （不推荐，jsp在内嵌的servlet容器中运行有一些问题。） 我们在讲前后端分离之前，都会使用Thymeleaf模板引擎，先简单的介绍一下它。 2.1 Thymeleaf模板引擎Thymeleaf是一个java类库，它是一个xml/xhtml/html5的模板引擎，可以作为mvc的web应用的view层。 Thymeleaf还提供了额外的木块与spring mvc集成，所以使用ssm框架的也可以使用这个模板引擎。 本来想列一下Thymeleaf的用法的，但是感觉有点多，以后哪里用到哪里讲好了。 3. 实战接下来，我们通过一个项目，来实践一下两种不同的返回结果。 先看一下最终的目录结构： 3.1 创建项目project_1 选择依赖：web Thymeleaf 3.2 新建一个person类，用来封装数据12345678910111213141516171819202122232425262728293031package com.example.model;public class Person &#123; private String name; private Integer age; public Person() &#123; &#125; public Person(String name, Integer age) &#123; this.name = name; this.age = age; &#125; public void setName(String name) &#123; this.name = name; &#125; public void setAge(Integer age) &#123; this.age = age; &#125; public String getName() &#123; return name; &#125; public Integer getAge() &#123; return age; &#125;&#125; 3.3 新建一个ViewController，用来返回一个视图1234567891011121314151617181920212223242526272829package com.example.controller;import com.example.model.Person;import org.springframework.stereotype.Controller;import org.springframework.ui.Model;import org.springframework.web.bind.annotation.RequestMapping;import java.util.ArrayList;import java.util.List;@Controllerpublic class ViewController &#123; @RequestMapping(&quot;/view&quot;) public String view(Model model)&#123; Person person = new Person(&quot;x&quot;, 22); List&lt;Person&gt; list = new ArrayList&lt;&gt;(); list.add(new Person(&quot;a&quot;, 11)); list.add(new Person(&quot;b&quot;, 12)); list.add(new Person(&quot;c&quot;, 13)); model.addAttribute(&quot;onePerson&quot;, person); model.addAttribute(&quot;manyPerson&quot;, list); return &quot;index&quot;; &#125;&#125; 3.4 创建index.html，用来接收数据123456789101112131415161718192021222324252627282930313233343536&lt;html xmlns:th=&quot;http://www.thymeleaf.org&quot;&gt;&lt;head&gt; &lt;meta charset=&quot;UTF-8&quot;/&gt; &lt;title&gt;test&lt;/title&gt; &lt;link href=&quot;https://cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css&quot; rel=&quot;stylesheet&quot;/&gt; &lt;link href=&quot;https://cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap-theme.min.css&quot; rel=&quot;stylesheet&quot;/&gt;&lt;/head&gt;&lt;body&gt; &lt;div class=&quot;panel panel-primary&quot;&gt; &lt;div class=&quot;panel-heading&quot;&gt; &lt;h3 class=&quot;panel-title&quot;&gt;访问model&lt;/h3&gt; &lt;/div&gt; &lt;div class=&quot;panel-body&quot;&gt; &lt;span th:text=&quot;$&#123;onePerson.name&#125;&quot;&gt;&lt;/span&gt; &lt;/div&gt; &lt;/div&gt; &lt;div th:if=&quot;$&#123;not #lists.isEmpty(manyPerson)&#125;&quot;&gt; &lt;div class=&quot;panel panel-primary&quot;&gt; &lt;div class=&quot;panel-heading&quot;&gt; &lt;h3 class=&quot;panel-title&quot;&gt;列表&lt;/h3&gt; &lt;/div&gt; &lt;div class=&quot;panel-body&quot;&gt; &lt;ul class=&quot;list-group&quot;&gt; &lt;li class=&quot;list-group-item&quot; th:each=&quot;person:$&#123;manyPerson&#125;&quot;&gt; &lt;span th:text=&quot;$&#123;person.name&#125;&quot;&gt;&lt;/span&gt; &lt;span th:text=&quot;$&#123;person.age&#125;&quot;&gt;&lt;/span&gt; &lt;/li&gt; &lt;/ul&gt; &lt;/div&gt; &lt;/div&gt; &lt;/div&gt;&lt;/body&gt;&lt;/html&gt; 这里我们使用了Thymeleaf模板引擎来获得后台传来的数据并解析，使用bootstrap框架显示数据。可以看到，Thymeleaf的用法和jsp还是有点像的。可以直接通过${}的形式来获得attribute中的数据。 在 spring boot 中，模板引擎默认是开启缓存的，如果修改了页面内容，刷新页面是得不到修改后的内容的。我们可以在application.yml中关闭模板引擎缓存：123spring: thymeleaf: cache: false 如果需要详细的Thymeleaf模板的使用方式教程，可以给我留言，我看情况来决定是否要写一篇。因为我用的也不是很多，大部分情况我都是前后端分离的。 3.5 运行项目，浏览器访问http://localhost:8080/view 可以看到，我们成功的在前端获取到了数据。方式就是将数据保存在attribute中，然后再前端页面获取。 3.6 修改ViewController中的@Controller为@RestController，重新运行 我们修改了注解，发现结果变了，直接显示了“index”,是因为@RestController会直接返回数据，而不是渲染页面，所以直接返回了index(这个index，是return语句中的) 3.7 创建DataController，用来直接返回数据12345678910111213141516171819202122package com.example.controller;import com.example.model.Person;import org.springframework.web.bind.annotation.RequestMapping;import org.springframework.web.bind.annotation.RestController;import java.util.Arrays;import java.util.List;@RestController // 使用RestController注解public class DataController &#123; @RequestMapping("/person") public Person person()&#123; return new Person("aa", 10); &#125; @RequestMapping("persons") public List&lt;Person&gt; persons()&#123; return Arrays.asList(new Person("bb", 11), new Person("cc", 12)); &#125;&#125; 3.8 重新运行项目访问http://localhost:8080/person 获得了json格式的数据 访问http://localhost:8080/persons 列表也可以直接渲染为json。 这里需要注意，如果我们方法的返回值是String（参考上面的index），那么返回的结果就是你return的字符串，如果方法的返回值是一个对象（person）或者一个集合（list，map等），那么得到的结果就是一个json字符串。spring boot默认使用jackson来进行解析。 jackson也是可以修改为gson或者fastjson的，我们下篇再讲。 3.9 修改DataController中的@RestController为@Controller，重新运行访问http://localhost:8080/person 访问http://localhost:8080/persons 会发现这两个都报错了，因为@Controller注解是渲染视图的，而我们返回的是对象或者集合，不能完成正常的渲染。 4. 小结本文主要讲解了spring boot 如何渲染视图和数据，讲解了@Controller和@RestController的区别与用法。如果有什么疑问，请及时联系我。 我之前写过一个重新认识java系类（还没写完，会写完的。。），篇幅很长，每一篇文章多的有7、8千字，和多人抱怨说看到一半就不想看了，因为太长了，所以 spring boot 这个系类会尽量的短小精悍，每篇文章只讲一个知识点，这样看着不累~]]></content>
@@ -337,6 +339,19 @@
         <tag>java</tag>
         <tag>springboot</tag>
         <tag>controller</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[【effective java】6:消除过期的对象引用]]></title>
+    <url>%2F2017%2F07%2F16%2Feffectivejava%2Feff-java-6%2F</url>
+    <content type="text"><![CDATA[java 有自己的垃圾回收机制，当你用完一个对象之后，它会被自动回收，这看起来有点不可思议，并且很容易让你觉得你自己再也不需要考虑内存管理的事了。显然，这是一种错误的想法。 1. 过期引用1.1 介绍如果一个栈是先增长，然后再收缩，那么，从栈中弹出来的对象将不会被当做垃圾回收，即使使用栈的程序不再引用这些对象，它们也不会被回收。这是因为，在栈内部维护着对这些对象的过期引用。 所谓的过期引用，是指永远也不会再被解除的引用。 1.2 修复这类问题的修复很简单：一旦对象已经过期，只需要请看这些引用就好了： 123456public Object pop() &#123; if (size == 0) throw new EmptyStackException(); Object result = elements[--size]; elements[size] == null; return result;&#125; 除了释放过期引用，清空过期引用的另一个好处是，如果它们以后又被错误的使用，程序就会立即抛出空指针异常，而不是让错误悄悄的潜下去。 1.3 注意 请空对象引用应该是一种例外而不是一种规范行为。消除过期引用最好的方法是让包含该引用的变量结束其生命周期。 一般而言，只要类是自己管理内存，那么就应该警惕内存泄漏问题。 2. 其他导致内存泄漏的原因2.1 缓存。一旦你把对象引用放到缓存中，他就很容易被遗忘掉，从而使得他不再被使用后的很长一段时间内仍然留在缓存中。 解决方案之一是，可以使用 WeakHashMap 代表缓存 只有当所需要的缓存项的生命周期是由该键的外部引用而不是值决定时，WeakHashMap 才有用处。 2.2 监听器和其回调如果你实现了一个 API，客户端在这个 API 中注册回调，却没有显示的取消回调，那么除非你采取了某些动作，否则他们就会积聚。 确保回调被立即被当做垃圾回收的最佳方法是只把他们保存在弱引用中，例如，只将他们保存成 WeakHashMap 中的键。]]></content>
+      <categories>
+        <category>java</category>
+        <category>effectivejava</category>
+      </categories>
+      <tags>
+        <tag>java</tag>
+        <tag>effectivejava</tag>
       </tags>
   </entry>
   <entry>
@@ -367,19 +382,6 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[【effective java】4:通过私有构造器强化不可实例化的能力]]></title>
-    <url>%2F2017%2F07%2F14%2Feffectivejava%2Feff-java-4%2F</url>
-    <content type="text"><![CDATA[4:通过私有构造器强化不可实例化的能力1.背景有的时候，你可能需要只包含静态方法和静态域的类。这些类的名声很不好，因为有些人在面向对象的语言中滥用这样的类来编写过程化的程序，尽管如此，他们也确实有他们特有的用处。 2.方案我们可以利用用这种类，以java.lang.Math 或者 java.util.Arrays 的方式，把基本类型的值或者数组类型上的相关方法组织起来。 我们也可以通过 java.util.Collections 的方式，把实现特定接口的对象上的静态方法（包括工厂方法）组织起来。 最后还可以利用这种类，吧 final 类上的方法组织起来，以取代扩展该类的做法。 3.问题这样的工具类不希望被实例化，实例对它没有任何意义。然而，在缺少显示构造器的情况下，编译器会自动提供一个公有的、无参的缺省构造器。用户可以利用这个构造器创建出工具类的实例。这种被无意识实例化的类是不应该的。 4.解决解决方案很简单，就是手动将无参构造器私有化： 12345public class Test &#123; private Test() &#123; throw new AcertionError(); &#125;&#125; 5.副作用这种做法会使得他的子类不能被实例化。因为子类的所有构造器都会显示或者隐式的调用父类的构造器，这种情况下，子类就没有可用的父类构造器了。]]></content>
-      <categories>
-        <category>java</category>
-        <category>effectivejava</category>
-      </categories>
-      <tags>
-        <tag>java</tag>
-        <tag>effectivejava</tag>
-      </tags>
-  </entry>
-  <entry>
     <title><![CDATA[【springboot-入门篇】第1篇--第一个spring-boot程序（多种搭建方式）]]></title>
     <url>%2F2017%2F07%2F14%2Fspring-boot%2F%E3%80%90springboot-%E5%85%A5%E9%97%A8%E7%AF%87%E3%80%91%E7%AC%AC1%E7%AF%87--%E7%AC%AC%E4%B8%80%E4%B8%AAspring-boot%E7%A8%8B%E5%BA%8F%EF%BC%88%E5%A4%9A%E7%A7%8D%E6%90%AD%E5%BB%BA%E6%96%B9%E5%BC%8F%EF%BC%89%2F</url>
     <content type="text"><![CDATA[学习一个新技术，先别管他的原理啊，流程啊，怎么组织代码啊什么的。直接从官网或者博客抄一个小demo，自己亲自跑一遍，然后再去看那一堆让人头皮发麻的讲解，就能相对容易的看懂了。 初学者的态度应该是：不要问我为什么，反正我就是可以这样运行！ 1. 创建一个spring boot项目可以使用哪些工具1.1 使用start.spring.io这是一个网站，可以在这个网站选择你需要的组件，然后会自动生成一个项目文件，你可以将它下载到本地，然后使用你常用的编译器打开就好。（它是下面三种方法的基础） 1.2 使用Spring Tool Suite(STS)STS是eclipse的一个插件，可以方便eclipse用户进行spring boot的开发。 1.3 使用Intellij IDEAIDEA 集成了spring boot（也是一个插件），idea对新技术的支持比较快，而且是最好用的java编译器（我认为的）。推荐大家使用它进行开发，教程可以参考我写的文章。 1.4 使用Spring boot CLISpring boot的命令行工具，可以很方便的操作spring项目。 接下来会逐一演示这四种方法。 2. 实战：创建第一个spring boot项目2.1 使用start.spring.io 打开这个网站，设置你的项目，选择需要的dependencies。然后点击生成项目。就可以把项目下载到本地了。 下载下来的就是一个maven项目，你可以使用你熟悉的ide打开它，然后进行代码的编写。 2.2 使用Spring Tool Suite(STS)首先，你需要安装这个插件。 安装好后，选择创建一个spring stater项目： 项目设置： 看到了么，start.spring.io O.O 版本和依赖选择： 完成 2.3 使用Intellij IDEA 选择spring initializr，然后选择jdk版本，点next。可以发现，idea的这个插件其实用的也是start.spring.io。 接下来配置你的项目： 选择你需要的依赖和版本： 设置项目名和位置： 完成： 2.4 使用Spring boot CLI2.4.1 下载安装：(当前最新版1.5.3) 方法1，手动安装，下载下面的压缩包，提供两种压缩格式。 spring-boot-cli-1.5.3.RELEASE-bin.zipspring-boot-cli-1.5.3.RELEASE-bin.tar.gz 下载完成后，遵循解压后的存档里的INSTALL.txt操作指南进行安装。一般而言，在.zip文件的bin/目录下存在一个spring脚本（Windows下是spring.bat），或者使用java -jar来运行一个.jar文件（该脚本会帮你确定classpath被正确设置）。 方法2，使用SDKMAN安装SDKMAN! (The Software Development Kit Manager) 可以用来管理多种有许多版本的sdk，包括groovy和spring boot cli。可以通过 sdkman.io来获得sdkman，然后通过它来安装cli。：123$ sdk install springboot$ spring --versionSpring Boot v1.5.3.RELEASE 你也可以通过配置，来获取其他版本的CLI:1234$ sdk install springboot dev /path/to/spring-boot/spring-boot-cli/target/spring-boot-cli-1.5.3.RELEASE-bin/spring-1.5.3.RELEASE/$ sdk default springboot dev$ spring --versionSpring CLI v1.5.3.RELEASE 方法3，如果你是mac用户，可以使用Homebrew： 123$ brew tap pivotal/tap$ brew install springboot// 会安装到/usr/local/bin 方法4，mac用户也可以使用MacPorts安装： 1$ sudo port install spring-boot-cli 命令行实现： Spring Boot CLI启动脚本为BASH和zsh shells提供完整的命令行实现。你可以在任何shell中source脚本（名称也是spring），或将它放到你个人或系统范围的bash实现初始化中。在一个Debian系统里，系统范围的脚本位于/shell-completion/bash下，当一个新的shell启动时该目录下的所有脚本都被执行。想要手动运行该脚本，例如，你已经使用GVM进行安装了： 123$ . ~/.gvm/springboot/current/shell-completion/bash/spring$ spring grab help jar run test version 如果你使用Homebrew或MacPorts安装Spring Boot CLI，命令行实现脚本会自动注册到你的shell。 恩，上面撤了一堆，都是安装CLI的方式，翻译自官网，选一种方式安装就好了。安装成功后： 2.4.2 创建一个项目： 输入命令： 123$ mkdir demo$ cd demo$ spring init -d=web -g=com.example -a=demo --package-name=com.example --name=demo -x -d（dependencies 依赖包）-g（Group Id）-a（Artifact Id）–package-name（Package name）–name（Project name）-x（Extract compatible archives） 更多详情可以输入spring help init查看。 查看结果： 和之前的创建方式得到的是一样的。 无论哪种创建方式都是要访问https://start.spring.io来获取模板工程代码。所以甚至可以使用CURL或HTTPie这些第三方工具来创建。当然。。创建个工程而已，没必要这么麻烦，直接idea不就好了？ 3. 编写代码及代码核心部分的分析创建好工程了，接下来，我们简单的写一个小demo。 3.1 简单的小demo。打开DemoApplication.java 修改代码为： 12345678910111213@SpringBootApplication(exclude=&#123;DataSourceAutoConfiguration.class,HibernateJpaAutoConfiguration.class&#125;) //移除自动注入数据源@RestController // 添加了一个注解public class DemoApplication &#123; public static void main(String[] args) &#123; SpringApplication.run(DemoApplication.class, args); &#125; //添加了一个方法 @RequestMapping(&quot;/hello&quot;) public String hello()&#123; return &quot;no hello world&quot;; &#125;&#125; 直接运行这个main方法： 浏览器访问http://localhost:8080/hello： 大功告成。第一个spring boot项目完成。 3.2 代码简单讲解12@SpringBootApplication(exclude=&#123;DataSourceAutoConfiguration.class,HibernateJpaAutoConfiguration.class&#125;) //移除自动注入数据源 现在新版本的springboot会自动注入数据源，所以需要在application配置文件里写你的数据库信息，但是我们暂时用不到它，所以先把这个功能移除，不然会报错。 1@RestController 这个一个组合注解，相当于@ResponseBody和@Controller，controller大家都知道，ResponseBody注解将内容或对象作为 HTTP 响应正文返回。 123public static void main(String[] args) &#123; SpringApplication.run(DemoApplication.class, args);&#125; 这个就是spring boot的入口。关于这个方法，我们以后会详细讲解。 1234@RequestMapping(&quot;/hello&quot;)public String hello()&#123; return &quot;no hello world&quot;;&#125; 写过springmvc的应该都懂吧，我就不多说了。由于只是演示，所以我就把它放在入口类中了，规范点应该自己写controller类的。 4. 小结创建一个spring boot的项目是非常方便的，由于start.spring.io的存在，你可以使用任何你喜欢的ide来快速开发spring boot项目。 从创建到运行，你会发现，我们没有创建任何一个xml，也没有多余的配置。创建好项目以后，写一个controller就可以运行了，非常的方便。 后面和数据库对接，做安全验证的时候你会发现，原来一切都可以这么简单。 本篇文章到这里就结束了。如果文章内容有错误，请及时与我联系。]]></content>
@@ -394,9 +396,9 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[3:用私有构造器或者枚举类型强化Singleton属性]]></title>
-    <url>%2F2017%2F07%2F13%2Feffectivejava%2Feff-java-3%2F</url>
-    <content type="text"><![CDATA[3:用私有构造器或者枚举类型强化Singleton属性1.简介Singleton 指仅仅被实例化一次的类（单例）。Singleton 通常被用来代表那些本质上唯一的系统组件，比如窗口管理器或者文件系统。 2.旧式实现方式在 JDK1.5 发行之前，实现 Singleton 有两种方法： 方法一： 1234class Singletonone &#123; public static final Singletonone SINGLETONONE = new Singletonone(); private Singletonone()&#123;&#125;;&#125; 利用构造器仅被调用一次，用来实例化公有的静态 final 域 Singletonone.SINGLETONONE;可以保证该类对象的全局唯一性。 这种写法可以通过反射来生成第二个实例，如果想要抵御这种攻击，可以修改构造器，在创建第二个对象的时候抛出异常。 方法二： 1234567class Singletontwo &#123; private static final Singletontwo SINGLETONTWO = new Singletontwo(); private Singletontwo()&#123;&#125;; public Singletontwo getInstance()&#123; return SINGLETONTWO; &#125;&#125; 这种叫恶汉式，还有一种懒汉式的方式。但是多线程会有问题。 3.新的方式jdk1.5 以后加入了枚举，我们可以通过枚举来实现。 123enum Singletonthree &#123; SINGLETONTHREE&#125; 写完了。]]></content>
+    <title><![CDATA[【effective java】4:通过私有构造器强化不可实例化的能力]]></title>
+    <url>%2F2017%2F07%2F14%2Feffectivejava%2Feff-java-4%2F</url>
+    <content type="text"><![CDATA[4:通过私有构造器强化不可实例化的能力1.背景有的时候，你可能需要只包含静态方法和静态域的类。这些类的名声很不好，因为有些人在面向对象的语言中滥用这样的类来编写过程化的程序，尽管如此，他们也确实有他们特有的用处。 2.方案我们可以利用用这种类，以java.lang.Math 或者 java.util.Arrays 的方式，把基本类型的值或者数组类型上的相关方法组织起来。 我们也可以通过 java.util.Collections 的方式，把实现特定接口的对象上的静态方法（包括工厂方法）组织起来。 最后还可以利用这种类，吧 final 类上的方法组织起来，以取代扩展该类的做法。 3.问题这样的工具类不希望被实例化，实例对它没有任何意义。然而，在缺少显示构造器的情况下，编译器会自动提供一个公有的、无参的缺省构造器。用户可以利用这个构造器创建出工具类的实例。这种被无意识实例化的类是不应该的。 4.解决解决方案很简单，就是手动将无参构造器私有化： 12345public class Test &#123; private Test() &#123; throw new AcertionError(); &#125;&#125; 5.副作用这种做法会使得他的子类不能被实例化。因为子类的所有构造器都会显示或者隐式的调用父类的构造器，这种情况下，子类就没有可用的父类构造器了。]]></content>
       <categories>
         <category>java</category>
         <category>effectivejava</category>
@@ -418,6 +420,19 @@
         <tag>java</tag>
         <tag>springboot</tag>
         <tag>入门</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[3:用私有构造器或者枚举类型强化Singleton属性]]></title>
+    <url>%2F2017%2F07%2F13%2Feffectivejava%2Feff-java-3%2F</url>
+    <content type="text"><![CDATA[3:用私有构造器或者枚举类型强化Singleton属性1.简介Singleton 指仅仅被实例化一次的类（单例）。Singleton 通常被用来代表那些本质上唯一的系统组件，比如窗口管理器或者文件系统。 2.旧式实现方式在 JDK1.5 发行之前，实现 Singleton 有两种方法： 方法一： 1234class Singletonone &#123; public static final Singletonone SINGLETONONE = new Singletonone(); private Singletonone()&#123;&#125;;&#125; 利用构造器仅被调用一次，用来实例化公有的静态 final 域 Singletonone.SINGLETONONE;可以保证该类对象的全局唯一性。 这种写法可以通过反射来生成第二个实例，如果想要抵御这种攻击，可以修改构造器，在创建第二个对象的时候抛出异常。 方法二： 1234567class Singletontwo &#123; private static final Singletontwo SINGLETONTWO = new Singletontwo(); private Singletontwo()&#123;&#125;; public Singletontwo getInstance()&#123; return SINGLETONTWO; &#125;&#125; 这种叫恶汉式，还有一种懒汉式的方式。但是多线程会有问题。 3.新的方式jdk1.5 以后加入了枚举，我们可以通过枚举来实现。 123enum Singletonthree &#123; SINGLETONTHREE&#125; 写完了。]]></content>
+      <categories>
+        <category>java</category>
+        <category>effectivejava</category>
+      </categories>
+      <tags>
+        <tag>java</tag>
+        <tag>effectivejava</tag>
       </tags>
   </entry>
   <entry>
