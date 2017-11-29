@@ -1,6 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[【算法-剑指offer】4. 重建二叉树]]></title>
+    <url>%2F2017%2F11%2F29%2Falgorithm%2F%E5%89%91%E6%8C%87offer%2F%E9%87%8D%E5%BB%BA%E4%BA%8C%E5%8F%89%E6%A0%91%2F</url>
+    <content type="text"><![CDATA[题目描述： 输入某二叉树的前序遍历和中序遍历的结果，请重建出该二叉树。假设输入的前序遍历和中序遍历的结果中都不含重复的数字。例如输入前序遍历序列{1,2,4,7,3,5,6,8}和中序遍历序列{4,7,2,1,5,3,8,6}，则重建二叉树并返回。 分析： 这道题一般有两种方案： 前序遍历可以得到根节点，根据根节点对中序遍历结果进行划分可以得到左子树和右子树，然后递归即可得到最终的树。 答案： 1234567891011121314151617181920212223242526272829303132/** * Definition for binary tree * public class TreeNode &#123; * int val; * TreeNode left; * TreeNode right; * TreeNode(int x) &#123; val = x; &#125; * &#125; */public class Solution &#123; public TreeNode reConstructBinaryTree(int [] pre,int [] in) &#123; TreeNode root=reConstructBinaryTree(pre,0,pre.length-1,in,0,in.length-1); return root; &#125; //前序遍历&#123;1,2,4,7,3,5,6,8&#125;和中序遍历序列&#123;4,7,2,1,5,3,8,6&#125; private TreeNode reConstructBinaryTree(int [] pre,int startPre,int endPre,int [] in,int startIn,int endIn) &#123; if(startPre&gt;endPre||startIn&gt;endIn)&#123; return null; &#125; TreeNode root=new TreeNode(pre[startPre]); for(int i=startIn;i&lt;=endIn;i++)&#123; if(in[i]==pre[startPre])&#123; root.left=reConstructBinaryTree(pre,startPre+1,startPre+i-startIn,in,startIn,i-1); root.right=reConstructBinaryTree(pre,i-startIn+startPre+1,endPre,in,i+1,endIn); break; &#125; &#125; return root; &#125;&#125;]]></content>
+      <categories>
+        <category>算法</category>
+        <category>剑指offer</category>
+        <category>二叉树</category>
+      </categories>
+      <tags>
+        <tag>算法</tag>
+        <tag>剑指offer</tag>
+        <tag>二叉树</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[【React】React 生命周期]]></title>
     <url>%2F2017%2F11%2F28%2FReact%2F%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%2F</url>
     <content type="text"><![CDATA[React 组件的生命周期有三个主要场景： 装载（Mounting）：组件被插入到 DOM 中； 更新（Updating）：组件重新渲染以更新 DOM； 卸载（Unmounting）：组件从 DOM 中移除。 每个场景调用的生命周期方法是不同的。 先看一下 React 都有哪些生命周期函数 getDefaultProps: 该方法在组件创建时（createClass）执行一次并缓存返回值。如果组件使用时未设置属性，就从缓存中读取默认属性。注意：getDefaultProps() 返回的缓存数据会在所有实例间共享。 getDefaultProps 在任何实例创建之前执行，不在装载阶段执行，放在这里只是为了方便理解 React 组件初始化流程。使用 ES6 语法时，也不可以使用该方法。 getInitialState: 组件装载之前执行一次，返回值用作 this.state 的初始值。 当使用 ES6 语法创建 React 组件时，直接在构造函数里初始化 state 即可，不需要也不可以调用该函数。 当用 ES6 的时候，上述两个方法要这样用： 123456789101112131415161718// getInitialState 这样写：constructor(props) &#123; super(props); this.state = &#123; //state &#125;&#125;//getDefaultProps 有两种写法：//1 在组件内部的使用staticstatic defaultProps = &#123; //props&#125;//2 在组件外部Hello.defaultProps = &#123; //props&#125; componentWillMount: 在渲染前调用,在客户端也在服务端。 componentDidMount: 在第一次渲染后调用，只在客户端。之后组件已经生成了对应的DOM结构，可以通过 this.getDOMNode() 来进行访问。 如果你想和其他JavaScript框架一起使用，可以在这个方法中调用 setTimeout, setInterval 或者发送 AJAX 请求等操作(防止异部操作阻塞 UI )。 componentWillReceiveProps 在组件接收到一个新的prop时被调用。这个方法在初始化 render 时不会被调用。 shouldComponentUpdate: 返回一个布尔值。在组件接收到新的props或者state时被调用。在初始化时或者使用 forceUpdate 时不被调用。 react 性能优化的主要方法。 componentWillUpdate: 在组件接收到新的props或者state但还没有render时被调用。在初始化时不会被调用。 componentDidUpdate: 在组件完成更新后立即调用。在初始化时不会被调用。 componentWillUnmount: 在组件从 DOM 中移除的时候立刻被调用。 下面来看一下每个不同的场景会调用哪个生命周期函数：1.创建阶段 该阶段主要发生在创建组件类的时候，即调用React.createClass的时候。这个阶段只会触发一个 getDefaultProps 方法，该方法返回一个对象，并且缓存下来。然后与父组件指定的props对象合并，最后赋值给this.props作为该组件的默认属性。对于那些没有被父辈组件指定的props属性的新建实例来说，这个方法返回的对象可用于为实例设置默认的props值。 props属性又是什么呢，它是一个对象，是组件用来接收外面传来的参数的，组件内部是不允许修改自己的props属性的，只能通过父组件来修改。在getDefaultProps方法中，是可以设定props默认值的。 2.实例化阶段 该阶段主要发生在实例化组件类的时候，也就是该组件类被调用的时候： 运行阶段 此时组件已经渲染好并且用户可以与它进行交互，通常是通过一次鼠标点击、手指点按或者键盘事件来触发一个事件处理器。随着用户改变了组件或者整个应用的 state，便会有新的 state 流入组件结构树 属性（props）改变造成的更新 状态（state）改变造成的更新 生命周期之销毁&amp;清理 每当react使用完一个组件，这个组件就必须从DOM中卸载随后被销毁。此时，仅有的一个钩子函数会做出响应，完成所有的清理与销毁工作，这很必要。 最后，随着一个组件从它的层级结构中移除，这个组件的生命也就走到了尽头。该方法会在组件被移出之前调被调用。在 componentDidMount 方法中添加的所有任务都需要在该方法中撤销，比如说创建的定时器或者添加的事件监听等。 整体的流程图: 总结1、 组件被创建后，如果不被调用，将只调用getDefaultProps（）方法。2、 componentWillMount（）和componentWillUpdate（）方法，是render调用之前最后一个方法，可以用来处理this.state赋值操作及业务逻辑。2、 因为this.state状态的改变，会重新渲染组件，render（）方法会执行，所以不要在render做this.state值改变操作，只用来展示。负责很有可能造成循环渲染，导致程序崩溃。]]></content>
@@ -95,19 +110,6 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[【effective java】15:使可变性最小化]]></title>
-    <url>%2F2017%2F07%2F24%2Feffectivejava%2Feff-java-15%2F</url>
-    <content type="text"><![CDATA[15:使可变性最小化使用不可变类的理由不可变类只是其实例不能被修改的类。不可变的类比可变类更加易于设计、实现和使用。它们不容易出错，且更加安全。 使类变成不可变类的几个规则 1.不要提供任何会修改对象状态的方法。 2.保证类不会被扩展。 3.使所有的域都是 final 的。 4.使所有的域都是私有的。 5.确保对于任何可变组建的互斥访问。 几个优点 1.不可变对象本质上是线程安全的，它们不要求同步 2.不可变类可以提供一些静态工厂，它们把频繁的请求的实例缓存起来，从而当现有实例可以符合请求的时候，就不必创建新的实例。 3.“不可变对象可以被自由的共享” ==&gt; 永远不需要进行保护性拷贝。 4.不仅可以共享不可变对象，甚至也可以共享它们的内部信息。 5.不可变对象为其他对象提供了大量的构件，无论是可变的还是不可变的。 缺点 1.对于每一个不同的值都需要一个单独的对象 设计方案 1.使类是 final 的。 2.让类的所有构造器都是私有的或者包级私有的并添加公有的静态工厂来代替公有构造器。 3.坚决不要为每个 get 方法都提供一个 set 方法。 4.构造器应该创建完全初始化的对象，不要在构造器或者静态工厂之外再提供公有的初始化方法，除非有令人信服的理由必须这么做。 5.如果有的类不能做成不可变的，扔应该尽可能的限制它的可变性。 6.如果不可变类要实现 Serilizable 接口，并且它包含一个或者多个指向可变对象的域，就必须提供一个显示的 readObject 或者 readResolve 方法。（或者使用 ObjectOutputStream.writeUnshared 和 ObjectInputStream.readUnshared 方法）]]></content>
-      <categories>
-        <category>java</category>
-        <category>effectivejava</category>
-      </categories>
-      <tags>
-        <tag>java</tag>
-        <tag>effectivejava</tag>
-      </tags>
-  </entry>
-  <entry>
     <title><![CDATA[【java 并发】4. 对象的共享（2）]]></title>
     <url>%2F2017%2F07%2F24%2Fjava%20concurrency%2Fjava-concurrency-4%2F</url>
     <content type="text"><![CDATA[2.发布与溢出发布一个对象是指，使对象能够在当前作用域之外的代码中使用。 比如，将一个执行该对象的引用保存带其他代码可以访问待的地方，或者在某一个非私有的方法中返回该引用，或者将引用传递到其他类的方法中。 许多时候，我们需要确保对象及其内部状态不被发布。而在某些情况下，我们又需要发布某个对象，但如果在发布时要确保线程安全性，则可能需要同步。 发布内部状态可能会破坏封装性，并使得程序难以维持不变性条件。 例如，如果在对象构造完成之前就发布该对象，就会破坏线程安全性。 当某个不应该发布的对象被发布时，这种情况就被称为逸出。 2.1 发布对象的几种情况 将对象的引用保存到一个公有的静态变量中。 12345public static Set&lt;Secret&gt; knownSecrets;public void initialize() &#123; knownSecrets = new HashSet&lt;Secret&gt;();&#125; 当发布某个变量的时候，可能会间接的发布其他对象。 如果将一个 Secret 对象添加到集合 knownSecrets 中，那么同样会发布这个对象。 如果从非私有方法中返回一个引用，那么同样会发布返回时的对象。 发布一个内部的类实例。 2.2 几个要点 当发布一个对象时，在该对象的非死有余中引用的所有对象同样会被发布。 当某个对象逸出后，你必须假设有某个类或者线程可能会误用该对象，并作出相应的处理。 不要在构造函数中使 this 逸出。 在构造函数中创建线程并没有错误，但最好不要立即启动它，而是通过一个 start 或者 initialize 方法来启动。]]></content>
@@ -120,6 +122,19 @@
         <tag>concurrency</tag>
         <tag>线程</tag>
         <tag>并发</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[【effective java】15:使可变性最小化]]></title>
+    <url>%2F2017%2F07%2F24%2Feffectivejava%2Feff-java-15%2F</url>
+    <content type="text"><![CDATA[15:使可变性最小化使用不可变类的理由不可变类只是其实例不能被修改的类。不可变的类比可变类更加易于设计、实现和使用。它们不容易出错，且更加安全。 使类变成不可变类的几个规则 1.不要提供任何会修改对象状态的方法。 2.保证类不会被扩展。 3.使所有的域都是 final 的。 4.使所有的域都是私有的。 5.确保对于任何可变组建的互斥访问。 几个优点 1.不可变对象本质上是线程安全的，它们不要求同步 2.不可变类可以提供一些静态工厂，它们把频繁的请求的实例缓存起来，从而当现有实例可以符合请求的时候，就不必创建新的实例。 3.“不可变对象可以被自由的共享” ==&gt; 永远不需要进行保护性拷贝。 4.不仅可以共享不可变对象，甚至也可以共享它们的内部信息。 5.不可变对象为其他对象提供了大量的构件，无论是可变的还是不可变的。 缺点 1.对于每一个不同的值都需要一个单独的对象 设计方案 1.使类是 final 的。 2.让类的所有构造器都是私有的或者包级私有的并添加公有的静态工厂来代替公有构造器。 3.坚决不要为每个 get 方法都提供一个 set 方法。 4.构造器应该创建完全初始化的对象，不要在构造器或者静态工厂之外再提供公有的初始化方法，除非有令人信服的理由必须这么做。 5.如果有的类不能做成不可变的，扔应该尽可能的限制它的可变性。 6.如果不可变类要实现 Serilizable 接口，并且它包含一个或者多个指向可变对象的域，就必须提供一个显示的 readObject 或者 readResolve 方法。（或者使用 ObjectOutputStream.writeUnshared 和 ObjectInputStream.readUnshared 方法）]]></content>
+      <categories>
+        <category>java</category>
+        <category>effectivejava</category>
+      </categories>
+      <tags>
+        <tag>java</tag>
+        <tag>effectivejava</tag>
       </tags>
   </entry>
   <entry>
@@ -218,6 +233,21 @@
       </tags>
   </entry>
   <entry>
+    <title><![CDATA[【java 并发】1. 初识java并发]]></title>
+    <url>%2F2017%2F07%2F20%2Fjava%20concurrency%2Fjava-concurrency-1%2F</url>
+    <content type="text"><![CDATA[1. 线程的优势 1.1 发挥多处理器强大的能力 通过提高处理器资源的利用率来提神系统的吞吐率。（充分利用处理器） 有助于在但处理器系统上获得更高的吞吐率。（合理安排处理器；异步） 1.2 建模的简单性 如果程序中只包含一种类型的任务，那么比包含多种不同类型任务的程序要更容易编写，错误更少，也更容易测试。 1.3 异步事件的简化处理 1.4 响应更灵敏的用户界面 传统的gui采用主事件循环（单线程），程序可能会“冻结” 2. 线程带来的风险 2.1 安全性问题 非同步线程会造成脏读，不可重复读等问题。 2.2 活跃性问题 死锁，饥饿，活锁等 2.3 性能问题 服务时间过长；响应不灵敏；吞吐率过低；资源消耗过高；可伸缩性较低等。 3. 线程无处不在 3.1 每个java程序都会使用线程 3.2 Timer 3.3 Servlet 和 jsp servlet 需要满足被多个线程同时调用（servlet需要是线程安全的） 3.4 远程方法调用（RMI） 两个线程安全问题： 正确的协同在多个对象中共享的状态 对远程对象本身状态的访问 3.5 Swing 和 AWT swing 的一些组件并不是线程安全的，如JTable。swing 程序通过将所有对gui组件的访问局限在事件线程中以实现线程安全性]]></content>
+      <categories>
+        <category>java</category>
+        <category>concurrency</category>
+      </categories>
+      <tags>
+        <tag>java</tag>
+        <tag>concurrency</tag>
+        <tag>线程</tag>
+        <tag>并发</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[【effective java】10:始终要覆盖toString]]></title>
     <url>%2F2017%2F07%2F20%2Feffectivejava%2Feff-java-10%2F</url>
     <content type="text"><![CDATA[10:始终要覆盖toString几个要点 1.虽然 toString 的约定并不像 equals 和 hashcode 的约定，但是提供良好的 toString 实现可以使类用起来更加舒适。 2.不管是否覆盖了 toString 方法，程序员都将以这种方式来产生诊断信息，但是如果没有覆盖 toString 方法，那么产生的信息将会难以理解。 3.在实际应用中，toString 方法应该赶回对象中包含的所有值得关注的信息。如果对象太大，toString 应该返回一个摘要信息。 4.在实现 toString 的时候，要决定是否在文档中指定返回值格式。指定格式的好处是，它可以被用作一种标准的、明确的、适合人阅读的对象表示法。不足之处是，如果这个类已经被广泛使用，一旦指定格式，就必须始终如一的坚持这种格式。 5.无论你是否决定使用格式，都应该在文档中明确的表明你的意图。 6.无论是否指定格式，都为 toString 返回值中包含的所有信息，提供一种编程式的访问路径。]]></content>
@@ -244,18 +274,17 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[【java 并发】1. 初识java并发]]></title>
-    <url>%2F2017%2F07%2F20%2Fjava%20concurrency%2Fjava-concurrency-1%2F</url>
-    <content type="text"><![CDATA[1. 线程的优势 1.1 发挥多处理器强大的能力 通过提高处理器资源的利用率来提神系统的吞吐率。（充分利用处理器） 有助于在但处理器系统上获得更高的吞吐率。（合理安排处理器；异步） 1.2 建模的简单性 如果程序中只包含一种类型的任务，那么比包含多种不同类型任务的程序要更容易编写，错误更少，也更容易测试。 1.3 异步事件的简化处理 1.4 响应更灵敏的用户界面 传统的gui采用主事件循环（单线程），程序可能会“冻结” 2. 线程带来的风险 2.1 安全性问题 非同步线程会造成脏读，不可重复读等问题。 2.2 活跃性问题 死锁，饥饿，活锁等 2.3 性能问题 服务时间过长；响应不灵敏；吞吐率过低；资源消耗过高；可伸缩性较低等。 3. 线程无处不在 3.1 每个java程序都会使用线程 3.2 Timer 3.3 Servlet 和 jsp servlet 需要满足被多个线程同时调用（servlet需要是线程安全的） 3.4 远程方法调用（RMI） 两个线程安全问题： 正确的协同在多个对象中共享的状态 对远程对象本身状态的访问 3.5 Swing 和 AWT swing 的一些组件并不是线程安全的，如JTable。swing 程序通过将所有对gui组件的访问局限在事件线程中以实现线程安全性]]></content>
+    <title><![CDATA[spring-boot-资料整合]]></title>
+    <url>%2F2017%2F07%2F19%2Fspring-boot%2Fspring-boot-%E8%B5%84%E6%96%99%E6%95%B4%E5%90%88%2F</url>
+    <content type="text"><![CDATA[awesome-spring-bootspringboot 各种资料整理(demo、教程、网站、starter文档等)，持续更新。 请关注：https://github.com/CFshuming/awesome-spring-boot 欢迎pr。 qq交流群 563636006 新建的，就我一个。。。 官方 springboot 源码 spring-boot 教程 Spring Boot教程 - 易百教程 翟永超 springboot 教程 Spring Boot 菜鸟教程（来自csdn） 泥瓦匠BYSocket教程 龙果学院教程 (部分视频收费) 慕课网入门视频 spring-boot-starter官方 待更新 非官方 dubbo mybatis twitter4j jwt rxjava elasticsearch grpc angular2 vuejs web-reactive resteasy dubbo-zipkin netty wicket jade4j spring-boot demo spring-boot-admin SpringBlog 微服务模板（spring cloud） building-microservices spring-boot-samples(demo合集) springboot+mybatis整合 spring-boot-all（demo合集） springboot + security整合 （Spring Boot and Spring Security OAuth ） jwt-spring-security (jwt Spring Boot and Spring Security) springboot react demo1 springboot react demo2 springboot + dubbo demo springboot angular2 demo jwt-angular-spring spring-boot 书籍和文档 官方文档 《Spring Boot参考指南》 Spring Boot 教程 spring-boot 网站 springboot中文网 spring for all 社区 泥瓦匠BYSocket 个人网站 spring-boot cli create-spring-boot-app jhipster:快速搭建 angular+springboot 项目 其他最新资料，请到github获取，不定期更新。 https://github.com/CFshuming/awesome-spring-boot]]></content>
       <categories>
         <category>java</category>
-        <category>concurrency</category>
+        <category>springboot</category>
       </categories>
       <tags>
         <tag>java</tag>
-        <tag>concurrency</tag>
-        <tag>线程</tag>
-        <tag>并发</tag>
+        <tag>springboot</tag>
+        <tag>资料整理</tag>
       </tags>
   </entry>
   <entry>
@@ -272,17 +301,16 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[spring-boot-资料整合]]></title>
-    <url>%2F2017%2F07%2F19%2Fspring-boot%2Fspring-boot-%E8%B5%84%E6%96%99%E6%95%B4%E5%90%88%2F</url>
-    <content type="text"><![CDATA[awesome-spring-bootspringboot 各种资料整理(demo、教程、网站、starter文档等)，持续更新。 请关注：https://github.com/CFshuming/awesome-spring-boot 欢迎pr。 qq交流群 563636006 新建的，就我一个。。。 官方 springboot 源码 spring-boot 教程 Spring Boot教程 - 易百教程 翟永超 springboot 教程 Spring Boot 菜鸟教程（来自csdn） 泥瓦匠BYSocket教程 龙果学院教程 (部分视频收费) 慕课网入门视频 spring-boot-starter官方 待更新 非官方 dubbo mybatis twitter4j jwt rxjava elasticsearch grpc angular2 vuejs web-reactive resteasy dubbo-zipkin netty wicket jade4j spring-boot demo spring-boot-admin SpringBlog 微服务模板（spring cloud） building-microservices spring-boot-samples(demo合集) springboot+mybatis整合 spring-boot-all（demo合集） springboot + security整合 （Spring Boot and Spring Security OAuth ） jwt-spring-security (jwt Spring Boot and Spring Security) springboot react demo1 springboot react demo2 springboot + dubbo demo springboot angular2 demo jwt-angular-spring spring-boot 书籍和文档 官方文档 《Spring Boot参考指南》 Spring Boot 教程 spring-boot 网站 springboot中文网 spring for all 社区 泥瓦匠BYSocket 个人网站 spring-boot cli create-spring-boot-app jhipster:快速搭建 angular+springboot 项目 其他最新资料，请到github获取，不定期更新。 https://github.com/CFshuming/awesome-spring-boot]]></content>
+    <title><![CDATA[【effective java】8:覆盖 equals 时请遵守通用规定]]></title>
+    <url>%2F2017%2F07%2F18%2Feffectivejava%2Feff-java-8%2F</url>
+    <content type="text"><![CDATA[8: 覆盖 equals 时请遵守通用规定1.覆盖 equals 后，需要满足的条件 1.类的每个实例本质上都是唯一的 2.不关心是否提供了“逻辑相等”的测试功能 3.超类已经覆盖了 equals，从超类继承过来d额行为对于子类也是合适的 4.类是私有的或者包私有的，可以确定它的 equals 方法永远不会被调用 2.覆盖 equals 方法时要遵守的几个约定 1.自反性 对于任何非 null 的引用值 x，x.euqals(x) 必须返回 true， 2.对称性 对于任何非 null 的引用值 x 和 y，当且仅当 y.equals(x) 返回 true 时，x.equals(y) 必须返回 true。 3.传递性 对于任何非 null 的引用值 x、y 和 z，如果 x.equals(y) 返回 true，y.equals(z) 也返回 true, 那么 x.equals(z) 也必须返回 true。 4.一致性 对于任何非 null 的引用值 x 和 y，只要 equals 的比较操作在对象中多有的信息都没有被修改，多次调用 x.equals(y) 就会一致的返回 true 或者 false。 5.非空性 所有的对象都不能为 null，为了防止抛出空指针异常。 3.高效实现 equals 方法的诀窍 1.使用 == 操作符检查“参数是否为这个对象的引用” 2.使用 instanceof 操作符检查“参数是否为正确的类型“ 3.把参数转换为正确的类型（接2） 4.对于该类中的每个”关键“域，检查参数中的域是否与该对象中对应的域相匹配 5.编写完之后，检查是否是对称的，传递的，一致的 6.覆盖 equals 时，总要覆盖 hashcode 7.不要企图让 equals 方法过于智能 8.不要将 equals 声明中的 Object 对象替换为其他的类型]]></content>
       <categories>
         <category>java</category>
-        <category>springboot</category>
+        <category>effectivejava</category>
       </categories>
       <tags>
         <tag>java</tag>
-        <tag>springboot</tag>
-        <tag>资料整理</tag>
+        <tag>effectivejava</tag>
       </tags>
   </entry>
   <entry>
@@ -298,19 +326,6 @@
         <tag>springboot</tag>
         <tag>jpa</tag>
         <tag>数据库</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[【effective java】8:覆盖 equals 时请遵守通用规定]]></title>
-    <url>%2F2017%2F07%2F18%2Feffectivejava%2Feff-java-8%2F</url>
-    <content type="text"><![CDATA[8: 覆盖 equals 时请遵守通用规定1.覆盖 equals 后，需要满足的条件 1.类的每个实例本质上都是唯一的 2.不关心是否提供了“逻辑相等”的测试功能 3.超类已经覆盖了 equals，从超类继承过来d额行为对于子类也是合适的 4.类是私有的或者包私有的，可以确定它的 equals 方法永远不会被调用 2.覆盖 equals 方法时要遵守的几个约定 1.自反性 对于任何非 null 的引用值 x，x.euqals(x) 必须返回 true， 2.对称性 对于任何非 null 的引用值 x 和 y，当且仅当 y.equals(x) 返回 true 时，x.equals(y) 必须返回 true。 3.传递性 对于任何非 null 的引用值 x、y 和 z，如果 x.equals(y) 返回 true，y.equals(z) 也返回 true, 那么 x.equals(z) 也必须返回 true。 4.一致性 对于任何非 null 的引用值 x 和 y，只要 equals 的比较操作在对象中多有的信息都没有被修改，多次调用 x.equals(y) 就会一致的返回 true 或者 false。 5.非空性 所有的对象都不能为 null，为了防止抛出空指针异常。 3.高效实现 equals 方法的诀窍 1.使用 == 操作符检查“参数是否为这个对象的引用” 2.使用 instanceof 操作符检查“参数是否为正确的类型“ 3.把参数转换为正确的类型（接2） 4.对于该类中的每个”关键“域，检查参数中的域是否与该对象中对应的域相匹配 5.编写完之后，检查是否是对称的，传递的，一致的 6.覆盖 equals 时，总要覆盖 hashcode 7.不要企图让 equals 方法过于智能 8.不要将 equals 声明中的 Object 对象替换为其他的类型]]></content>
-      <categories>
-        <category>java</category>
-        <category>effectivejava</category>
-      </categories>
-      <tags>
-        <tag>java</tag>
-        <tag>effectivejava</tag>
       </tags>
   </entry>
   <entry>
@@ -341,19 +356,6 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[【effective java】6:消除过期的对象引用]]></title>
-    <url>%2F2017%2F07%2F16%2Feffectivejava%2Feff-java-6%2F</url>
-    <content type="text"><![CDATA[java 有自己的垃圾回收机制，当你用完一个对象之后，它会被自动回收，这看起来有点不可思议，并且很容易让你觉得你自己再也不需要考虑内存管理的事了。显然，这是一种错误的想法。 1. 过期引用1.1 介绍如果一个栈是先增长，然后再收缩，那么，从栈中弹出来的对象将不会被当做垃圾回收，即使使用栈的程序不再引用这些对象，它们也不会被回收。这是因为，在栈内部维护着对这些对象的过期引用。 所谓的过期引用，是指永远也不会再被解除的引用。 1.2 修复这类问题的修复很简单：一旦对象已经过期，只需要请看这些引用就好了： 123456public Object pop() &#123; if (size == 0) throw new EmptyStackException(); Object result = elements[--size]; elements[size] == null; return result;&#125; 除了释放过期引用，清空过期引用的另一个好处是，如果它们以后又被错误的使用，程序就会立即抛出空指针异常，而不是让错误悄悄的潜下去。 1.3 注意 请空对象引用应该是一种例外而不是一种规范行为。消除过期引用最好的方法是让包含该引用的变量结束其生命周期。 一般而言，只要类是自己管理内存，那么就应该警惕内存泄漏问题。 2. 其他导致内存泄漏的原因2.1 缓存。一旦你把对象引用放到缓存中，他就很容易被遗忘掉，从而使得他不再被使用后的很长一段时间内仍然留在缓存中。 解决方案之一是，可以使用 WeakHashMap 代表缓存 只有当所需要的缓存项的生命周期是由该键的外部引用而不是值决定时，WeakHashMap 才有用处。 2.2 监听器和其回调如果你实现了一个 API，客户端在这个 API 中注册回调，却没有显示的取消回调，那么除非你采取了某些动作，否则他们就会积聚。 确保回调被立即被当做垃圾回收的最佳方法是只把他们保存在弱引用中，例如，只将他们保存成 WeakHashMap 中的键。]]></content>
-      <categories>
-        <category>java</category>
-        <category>effectivejava</category>
-      </categories>
-      <tags>
-        <tag>java</tag>
-        <tag>effectivejava</tag>
-      </tags>
-  </entry>
-  <entry>
     <title><![CDATA[【springboot-入门篇】第3篇--从controller开始学起]]></title>
     <url>%2F2017%2F07%2F16%2Fspring-boot%2F%E3%80%90springboot-%E5%85%A5%E9%97%A8%E7%AF%87%E3%80%91%E7%AC%AC3%E7%AF%87--%E4%BB%8Econtroller%E5%BC%80%E5%A7%8B%E5%AD%A6%E8%B5%B7%2F</url>
     <content type="text"><![CDATA[虽然文章标题是“学起”，但是我也不会真的从头开始讲，默认，你是懂springmvc的 o.o 1. 返回数据与返回页面在写web项目的时候，controller里的返回值一般分为两种，一种是返回页面，也就是ModeAndView，另一种是直接返回数据，比如json格式的数据。 返回一个页面，我们需要用到一些模板引擎，比如熟知的jsp，模板引擎后面会详细讲解。 返回数据一般会选择返回json数据，我们之前的demo项目中使用的@RestController就是一个返回数据的注解。 @RestController是一个组合注解，是由@Controller和@ResponseBody组合而成的。@Controller：将返回值渲染为页面。@ResponseBody：将返回值渲染为数据。 2. spring boot支持的模板引擎spring-boot 支持多种模版引擎包括： FreeMarker Groovy Thymeleaf （Spring 官网使用这个） Velocity JSP （不推荐，jsp在内嵌的servlet容器中运行有一些问题。） 我们在讲前后端分离之前，都会使用Thymeleaf模板引擎，先简单的介绍一下它。 2.1 Thymeleaf模板引擎Thymeleaf是一个java类库，它是一个xml/xhtml/html5的模板引擎，可以作为mvc的web应用的view层。 Thymeleaf还提供了额外的木块与spring mvc集成，所以使用ssm框架的也可以使用这个模板引擎。 本来想列一下Thymeleaf的用法的，但是感觉有点多，以后哪里用到哪里讲好了。 3. 实战接下来，我们通过一个项目，来实践一下两种不同的返回结果。 先看一下最终的目录结构： 3.1 创建项目project_1 选择依赖：web Thymeleaf 3.2 新建一个person类，用来封装数据12345678910111213141516171819202122232425262728293031package com.example.model;public class Person &#123; private String name; private Integer age; public Person() &#123; &#125; public Person(String name, Integer age) &#123; this.name = name; this.age = age; &#125; public void setName(String name) &#123; this.name = name; &#125; public void setAge(Integer age) &#123; this.age = age; &#125; public String getName() &#123; return name; &#125; public Integer getAge() &#123; return age; &#125;&#125; 3.3 新建一个ViewController，用来返回一个视图1234567891011121314151617181920212223242526272829package com.example.controller;import com.example.model.Person;import org.springframework.stereotype.Controller;import org.springframework.ui.Model;import org.springframework.web.bind.annotation.RequestMapping;import java.util.ArrayList;import java.util.List;@Controllerpublic class ViewController &#123; @RequestMapping(&quot;/view&quot;) public String view(Model model)&#123; Person person = new Person(&quot;x&quot;, 22); List&lt;Person&gt; list = new ArrayList&lt;&gt;(); list.add(new Person(&quot;a&quot;, 11)); list.add(new Person(&quot;b&quot;, 12)); list.add(new Person(&quot;c&quot;, 13)); model.addAttribute(&quot;onePerson&quot;, person); model.addAttribute(&quot;manyPerson&quot;, list); return &quot;index&quot;; &#125;&#125; 3.4 创建index.html，用来接收数据123456789101112131415161718192021222324252627282930313233343536&lt;html xmlns:th=&quot;http://www.thymeleaf.org&quot;&gt;&lt;head&gt; &lt;meta charset=&quot;UTF-8&quot;/&gt; &lt;title&gt;test&lt;/title&gt; &lt;link href=&quot;https://cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css&quot; rel=&quot;stylesheet&quot;/&gt; &lt;link href=&quot;https://cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap-theme.min.css&quot; rel=&quot;stylesheet&quot;/&gt;&lt;/head&gt;&lt;body&gt; &lt;div class=&quot;panel panel-primary&quot;&gt; &lt;div class=&quot;panel-heading&quot;&gt; &lt;h3 class=&quot;panel-title&quot;&gt;访问model&lt;/h3&gt; &lt;/div&gt; &lt;div class=&quot;panel-body&quot;&gt; &lt;span th:text=&quot;$&#123;onePerson.name&#125;&quot;&gt;&lt;/span&gt; &lt;/div&gt; &lt;/div&gt; &lt;div th:if=&quot;$&#123;not #lists.isEmpty(manyPerson)&#125;&quot;&gt; &lt;div class=&quot;panel panel-primary&quot;&gt; &lt;div class=&quot;panel-heading&quot;&gt; &lt;h3 class=&quot;panel-title&quot;&gt;列表&lt;/h3&gt; &lt;/div&gt; &lt;div class=&quot;panel-body&quot;&gt; &lt;ul class=&quot;list-group&quot;&gt; &lt;li class=&quot;list-group-item&quot; th:each=&quot;person:$&#123;manyPerson&#125;&quot;&gt; &lt;span th:text=&quot;$&#123;person.name&#125;&quot;&gt;&lt;/span&gt; &lt;span th:text=&quot;$&#123;person.age&#125;&quot;&gt;&lt;/span&gt; &lt;/li&gt; &lt;/ul&gt; &lt;/div&gt; &lt;/div&gt; &lt;/div&gt;&lt;/body&gt;&lt;/html&gt; 这里我们使用了Thymeleaf模板引擎来获得后台传来的数据并解析，使用bootstrap框架显示数据。可以看到，Thymeleaf的用法和jsp还是有点像的。可以直接通过${}的形式来获得attribute中的数据。 在 spring boot 中，模板引擎默认是开启缓存的，如果修改了页面内容，刷新页面是得不到修改后的内容的。我们可以在application.yml中关闭模板引擎缓存：123spring: thymeleaf: cache: false 如果需要详细的Thymeleaf模板的使用方式教程，可以给我留言，我看情况来决定是否要写一篇。因为我用的也不是很多，大部分情况我都是前后端分离的。 3.5 运行项目，浏览器访问http://localhost:8080/view 可以看到，我们成功的在前端获取到了数据。方式就是将数据保存在attribute中，然后再前端页面获取。 3.6 修改ViewController中的@Controller为@RestController，重新运行 我们修改了注解，发现结果变了，直接显示了“index”,是因为@RestController会直接返回数据，而不是渲染页面，所以直接返回了index(这个index，是return语句中的) 3.7 创建DataController，用来直接返回数据12345678910111213141516171819202122package com.example.controller;import com.example.model.Person;import org.springframework.web.bind.annotation.RequestMapping;import org.springframework.web.bind.annotation.RestController;import java.util.Arrays;import java.util.List;@RestController // 使用RestController注解public class DataController &#123; @RequestMapping("/person") public Person person()&#123; return new Person("aa", 10); &#125; @RequestMapping("persons") public List&lt;Person&gt; persons()&#123; return Arrays.asList(new Person("bb", 11), new Person("cc", 12)); &#125;&#125; 3.8 重新运行项目访问http://localhost:8080/person 获得了json格式的数据 访问http://localhost:8080/persons 列表也可以直接渲染为json。 这里需要注意，如果我们方法的返回值是String（参考上面的index），那么返回的结果就是你return的字符串，如果方法的返回值是一个对象（person）或者一个集合（list，map等），那么得到的结果就是一个json字符串。spring boot默认使用jackson来进行解析。 jackson也是可以修改为gson或者fastjson的，我们下篇再讲。 3.9 修改DataController中的@RestController为@Controller，重新运行访问http://localhost:8080/person 访问http://localhost:8080/persons 会发现这两个都报错了，因为@Controller注解是渲染视图的，而我们返回的是对象或者集合，不能完成正常的渲染。 4. 小结本文主要讲解了spring boot 如何渲染视图和数据，讲解了@Controller和@RestController的区别与用法。如果有什么疑问，请及时联系我。 我之前写过一个重新认识java系类（还没写完，会写完的。。），篇幅很长，每一篇文章多的有7、8千字，和多人抱怨说看到一半就不想看了，因为太长了，所以 spring boot 这个系类会尽量的短小精悍，每篇文章只讲一个知识点，这样看着不累~]]></content>
@@ -365,6 +367,19 @@
         <tag>java</tag>
         <tag>springboot</tag>
         <tag>controller</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[【effective java】6:消除过期的对象引用]]></title>
+    <url>%2F2017%2F07%2F16%2Feffectivejava%2Feff-java-6%2F</url>
+    <content type="text"><![CDATA[java 有自己的垃圾回收机制，当你用完一个对象之后，它会被自动回收，这看起来有点不可思议，并且很容易让你觉得你自己再也不需要考虑内存管理的事了。显然，这是一种错误的想法。 1. 过期引用1.1 介绍如果一个栈是先增长，然后再收缩，那么，从栈中弹出来的对象将不会被当做垃圾回收，即使使用栈的程序不再引用这些对象，它们也不会被回收。这是因为，在栈内部维护着对这些对象的过期引用。 所谓的过期引用，是指永远也不会再被解除的引用。 1.2 修复这类问题的修复很简单：一旦对象已经过期，只需要请看这些引用就好了： 123456public Object pop() &#123; if (size == 0) throw new EmptyStackException(); Object result = elements[--size]; elements[size] == null; return result;&#125; 除了释放过期引用，清空过期引用的另一个好处是，如果它们以后又被错误的使用，程序就会立即抛出空指针异常，而不是让错误悄悄的潜下去。 1.3 注意 请空对象引用应该是一种例外而不是一种规范行为。消除过期引用最好的方法是让包含该引用的变量结束其生命周期。 一般而言，只要类是自己管理内存，那么就应该警惕内存泄漏问题。 2. 其他导致内存泄漏的原因2.1 缓存。一旦你把对象引用放到缓存中，他就很容易被遗忘掉，从而使得他不再被使用后的很长一段时间内仍然留在缓存中。 解决方案之一是，可以使用 WeakHashMap 代表缓存 只有当所需要的缓存项的生命周期是由该键的外部引用而不是值决定时，WeakHashMap 才有用处。 2.2 监听器和其回调如果你实现了一个 API，客户端在这个 API 中注册回调，却没有显示的取消回调，那么除非你采取了某些动作，否则他们就会积聚。 确保回调被立即被当做垃圾回收的最佳方法是只把他们保存在弱引用中，例如，只将他们保存成 WeakHashMap 中的键。]]></content>
+      <categories>
+        <category>java</category>
+        <category>effectivejava</category>
+      </categories>
+      <tags>
+        <tag>java</tag>
+        <tag>effectivejava</tag>
       </tags>
   </entry>
   <entry>
@@ -422,6 +437,19 @@
       </tags>
   </entry>
   <entry>
+    <title><![CDATA[3:用私有构造器或者枚举类型强化Singleton属性]]></title>
+    <url>%2F2017%2F07%2F13%2Feffectivejava%2Feff-java-3%2F</url>
+    <content type="text"><![CDATA[3:用私有构造器或者枚举类型强化Singleton属性1.简介Singleton 指仅仅被实例化一次的类（单例）。Singleton 通常被用来代表那些本质上唯一的系统组件，比如窗口管理器或者文件系统。 2.旧式实现方式在 JDK1.5 发行之前，实现 Singleton 有两种方法： 方法一： 1234class Singletonone &#123; public static final Singletonone SINGLETONONE = new Singletonone(); private Singletonone()&#123;&#125;;&#125; 利用构造器仅被调用一次，用来实例化公有的静态 final 域 Singletonone.SINGLETONONE;可以保证该类对象的全局唯一性。 这种写法可以通过反射来生成第二个实例，如果想要抵御这种攻击，可以修改构造器，在创建第二个对象的时候抛出异常。 方法二： 1234567class Singletontwo &#123; private static final Singletontwo SINGLETONTWO = new Singletontwo(); private Singletontwo()&#123;&#125;; public Singletontwo getInstance()&#123; return SINGLETONTWO; &#125;&#125; 这种叫恶汉式，还有一种懒汉式的方式。但是多线程会有问题。 3.新的方式jdk1.5 以后加入了枚举，我们可以通过枚举来实现。 123enum Singletonthree &#123; SINGLETONTHREE&#125; 写完了。]]></content>
+      <categories>
+        <category>java</category>
+        <category>effectivejava</category>
+      </categories>
+      <tags>
+        <tag>java</tag>
+        <tag>effectivejava</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[【springboot-入门篇】第0篇--spring-boot是什么]]></title>
     <url>%2F2017%2F07%2F13%2Fspring-boot%2F%E3%80%90springboot-%E5%85%A5%E9%97%A8%E7%AF%87%E3%80%91%E7%AC%AC0%E7%AF%87--spring-boot%E6%98%AF%E4%BB%80%E4%B9%88%2F</url>
     <content type="text"><![CDATA[作为一个java程序员，如果你还不知道springboot，那你一定是落后了。 1. 什么是springbootSpring Boot是由Pivotal团队提供的全新框架，其设计目的是用来简化新Spring应用的初始搭建以及开发过程。该框架使用了特定的方式来进行配置，从而使开发人员不再需要定义样板化的配置。通过这种方式，Spring Boot致力于在蓬勃发展的快速应用开发领域（rapid application development）成为领导者。 spring大家都知道，boot是启动的意思。所以，spring boot其实就是一个启动spring项目的一个工具而已。从最根本上来讲，Spring Boot就是一些库的集合，它能够被任意项目的构建系统所使用。 2. 为什么会出现以前在写spring项目的时候，要配置各种xml文件，还记得曾经被ssh框架支配的恐惧。随着spring3，spring4的相继推出，约定大于配置逐渐成为了开发者的共识，大家也渐渐的从写xml转为写各种注解，在spring4的项目里，你甚至可以一行xml都不写。 虽然spring4已经可以做到无xml，但写一个大项目需要茫茫多的包，maven配置要写几百行，也是一件很可怕的事。 现在，快速开发一个网站的平台层出不穷，nodejs，php等虎视眈眈，并且脚本语言渐渐流行了起来（Node JS，Ruby，Groovy，Scala等），spring的开发模式越来越显得笨重。 在这种环境下，spring boot伴随着spring4一起出现了。 3. 可以做什么那么，spring boot可以做什么呢？ spring boot并不是一个全新的框架，它不是spring解决方案的一个替代品，而是spring的一个封装。所以，你以前可以用spring做的事情，现在用spring boot都可以做。 现在流行微服务与分布式系统，springboot就是一个非常好的微服务开发框架，你可以使用它快速的搭建起一个系统。同时，你也可以使用spring cloud（Spring Cloud是一个基于Spring Boot实现的云应用开发工具）来搭建一个分布式的网站。 4. 优点4.1 使编码变得简单 spring boot采用java config的方式，对spring进行配置，并且提供了大量的注解，极大地提高了工作效率。 4.2 使配置变得简单 spring boot提供许多默认配置，当然也提供自定义配置。但是所有spring boot的项目都只有一个配置文件：application.properties/application.yml。用了spring boot，再也不用担心配置出错找不到问题所在了。 4.3 使部署变得简单spring boot内置了三种servlet容器：tomcat，jetty，undertow。 所以，你只需要一个java的运行环境就可以跑spring boot的项目了。spring boot的项目可以打成一个jar包，然后通过java -jar xxx.jar来运行。（spring boot项目的入口是一个main方法，运行该方法即可。 ） 4.4 使监控变得简单spring boot提供了actuator包，可以使用它来对你的应用进行监控。它主要提供了以下功能： 我们将在后续文章中学习它。 5. 相关技术5.1 微服务架构微服务是一种架构风格，一个大型复杂软件应用由一个或多个微服务组成。系统中的各个微服务可被独立部署，各个微服务之间是松耦合的。每个微服务仅关注于完成一件任务并很好地完成该任务。在所有情况下，每个任务代表着一个小的业务能力。 比如我要开发一个购票系统。就可以简单的拆分为用户管理微服务和售票系统微服务。两个服务都可以独立运行，都有自己的数据库，他们之间通过restapi 进行通信。 而spring boot就是搭建微服务的一个很好的选择。 5.2 restfulrestful 是一种api的风格，后面的文章里，会着重讲解。spring boot可以很方便的提供restful 风格的api。 5.3 spring cloud微服务有很多优点，当然也有一些挑战。可以参考这篇文章：微服务实战（一）：微服务架构的优势与不足。 微服务一般都是运行在分布式环境中的，这可不是简单的写一个ssm框架的小程序就可以解决的，其中需要用到很多技术，比如负载均衡，反向代理，服务治理，配置管理，消息总线等，spring cloud提供了这些技术。并且，spring cloud全家桶是基于spring boot的。 之后会专门开一个spring cloud的专题。 6. 总结来总结一下spring boot的特点。 独立运行的Spring项目Spring Boot可以以jar包的形式进行独立的运行，使用：java -jar xx.jar 就可以成功的运行项目，或者在应用项目的主程序中运行main函数即可； 内嵌的Servlet容器我们上面已经讲过。 提供starter简化Manen配置spring boot提供各种starter，其实就是一些spring bao的集合，只不过spring boot帮我们整合起来了而已。 上图只是其中的一部分，还有很多其他的。通过这些starter也可以看得出来，spring boot可以和其他主流的框架无缝集成，比如mybatis等。所以，你不需要担心你想用的技术spring boot不支持。 自动配置Spring，无xml文件Spring Boot会根据我们项目中类路径的jar包/类，为jar包的类进行自动配置Bean，这样一来就大大的简化了我们的配置。当然，这只是Spring考虑到的大多数的使用场景，在一些特殊情况，我们还需要自定义自动配置（就在那唯一的配置文件里，而且它不是xml文件！）。 应用监控Spring Boot提供了基于http、ssh、telnet对运行时的项目进行监控。 springboot 入门篇将会从头开始，介绍spring boot的一些技术及应用，每周至少两篇，欢迎关注。同时，由于我也是一个初学者，文章中难免有一些不正确的地方，希望各位批评指正，共同进步。 spring boot 官网：http://projects.spring.io/spring-boot/spring boot 中文网：https://springcloud.cc/ 参考文章：http://www.csdn.net/article/a/2016-05-12/15838098Spring Boot_百度百科]]></content>
@@ -433,19 +461,6 @@
         <tag>java</tag>
         <tag>springboot</tag>
         <tag>入门</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[3:用私有构造器或者枚举类型强化Singleton属性]]></title>
-    <url>%2F2017%2F07%2F13%2Feffectivejava%2Feff-java-3%2F</url>
-    <content type="text"><![CDATA[3:用私有构造器或者枚举类型强化Singleton属性1.简介Singleton 指仅仅被实例化一次的类（单例）。Singleton 通常被用来代表那些本质上唯一的系统组件，比如窗口管理器或者文件系统。 2.旧式实现方式在 JDK1.5 发行之前，实现 Singleton 有两种方法： 方法一： 1234class Singletonone &#123; public static final Singletonone SINGLETONONE = new Singletonone(); private Singletonone()&#123;&#125;;&#125; 利用构造器仅被调用一次，用来实例化公有的静态 final 域 Singletonone.SINGLETONONE;可以保证该类对象的全局唯一性。 这种写法可以通过反射来生成第二个实例，如果想要抵御这种攻击，可以修改构造器，在创建第二个对象的时候抛出异常。 方法二： 1234567class Singletontwo &#123; private static final Singletontwo SINGLETONTWO = new Singletontwo(); private Singletontwo()&#123;&#125;; public Singletontwo getInstance()&#123; return SINGLETONTWO; &#125;&#125; 这种叫恶汉式，还有一种懒汉式的方式。但是多线程会有问题。 3.新的方式jdk1.5 以后加入了枚举，我们可以通过枚举来实现。 123enum Singletonthree &#123; SINGLETONTHREE&#125; 写完了。]]></content>
-      <categories>
-        <category>java</category>
-        <category>effectivejava</category>
-      </categories>
-      <tags>
-        <tag>java</tag>
-        <tag>effectivejava</tag>
       </tags>
   </entry>
   <entry>
