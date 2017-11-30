@@ -1,6 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[【算法-剑指offer】5. 用两个栈实现队列]]></title>
+    <url>%2F2017%2F11%2F30%2Falgorithm%2F%E5%89%91%E6%8C%87offer%2F%E7%94%A8%E4%B8%A4%E4%B8%AA%E6%A0%88%E5%AE%9E%E7%8E%B0%E9%98%9F%E5%88%97%2F</url>
+    <content type="text"><![CDATA[题目描述： 用两个栈来实现一个队列，完成队列的 Push 和 Pop 操作。 队列中的元素为int类型。 分析： 栈 a 用来放 push 的数据，栈 b 用来 pop 数据；执行 pop 的时候如果 b 为空，就把 a 中的数据加到 b 里；添加的时候不用考虑。 答案： 12345678910111213141516171819import java.util.Stack;public class Solution &#123; Stack&lt;Integer&gt; stack1 = new Stack&lt;Integer&gt;(); Stack&lt;Integer&gt; stack2 = new Stack&lt;Integer&gt;(); public void push(int node) &#123; stack1.push(node); &#125; public int pop() &#123; if(stack2.empty())&#123; while(!stack1.empty())&#123; stack2.push(stack1.pop()); &#125; &#125; return stack2.pop(); &#125;&#125;]]></content>
+      <categories>
+        <category>算法</category>
+        <category>剑指offer</category>
+        <category>队列</category>
+      </categories>
+      <tags>
+        <tag>算法</tag>
+        <tag>剑指offer</tag>
+        <tag>队列</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[【算法-剑指offer】4. 重建二叉树]]></title>
     <url>%2F2017%2F11%2F29%2Falgorithm%2F%E5%89%91%E6%8C%87offer%2F%E9%87%8D%E5%BB%BA%E4%BA%8C%E5%8F%89%E6%A0%91%2F</url>
     <content type="text"><![CDATA[题目描述： 输入某二叉树的前序遍历和中序遍历的结果，请重建出该二叉树。假设输入的前序遍历和中序遍历的结果中都不含重复的数字。例如输入前序遍历序列{1,2,4,7,3,5,6,8}和中序遍历序列{4,7,2,1,5,3,8,6}，则重建二叉树并返回。 分析： 这道题一般有两种方案： 前序遍历可以得到根节点，根据根节点对中序遍历结果进行划分可以得到左子树和右子树，然后递归即可得到最终的树。 答案： 1234567891011121314151617181920212223242526272829303132/** * Definition for binary tree * public class TreeNode &#123; * int val; * TreeNode left; * TreeNode right; * TreeNode(int x) &#123; val = x; &#125; * &#125; */public class Solution &#123; public TreeNode reConstructBinaryTree(int [] pre,int [] in) &#123; TreeNode root=reConstructBinaryTree(pre,0,pre.length-1,in,0,in.length-1); return root; &#125; //前序遍历&#123;1,2,4,7,3,5,6,8&#125;和中序遍历序列&#123;4,7,2,1,5,3,8,6&#125; private TreeNode reConstructBinaryTree(int [] pre,int startPre,int endPre,int [] in,int startIn,int endIn) &#123; if(startPre&gt;endPre||startIn&gt;endIn)&#123; return null; &#125; TreeNode root=new TreeNode(pre[startPre]); for(int i=startIn;i&lt;=endIn;i++)&#123; if(in[i]==pre[startPre])&#123; root.left=reConstructBinaryTree(pre,startPre+1,startPre+i-startIn,in,startIn,i-1); root.right=reConstructBinaryTree(pre,i-startIn+startPre+1,endPre,in,i+1,endIn); break; &#125; &#125; return root; &#125;&#125;]]></content>
@@ -138,6 +153,21 @@
       </tags>
   </entry>
   <entry>
+    <title><![CDATA[【java 并发】 3. 对象的共享（1）]]></title>
+    <url>%2F2017%2F07%2F23%2Fjava%20concurrency%2Fjava-concurrency-3%2F</url>
+    <content type="text"><![CDATA[同步的另一个重要的方面是：内存可见性。我们不仅希望放置某个现场正在使用对象状态而另一个线程在同时修改该状态，而且希望确保当一个线程修改了对象状态后，其他线程能够看到发生的状态变化。 1.可见性多线程环境中，如果没有使用同步机制，编译器、处理器以及运行时等都可能对操作的执行顺序进行一些意想不到的调整，这就导致一个线程修改了一个变量，另一个线程不能及时的得知该变量的更新，最终导致意外错误。 1.1 失效数据当一个数据被一个线程改变，而另一个线程读取到了修改前的值，就出现了失效数据。 1.2 非原子的64位操作java 内存模型要求，变量的读取操作和写入操作都必须是原子操作。对于 java 中的 double 和 long 来说，他们都是64位的。jvm 允许将64位的读操作或者写操作分解为两个32位操作。当读取一个非 volatite 类型的 long 变量时，如果对该变量的读操作和写操作是在两个不同的线程中执行的，那么很可能会读到某个值的高32位和另一个值的低32位。 因此，除非用 volatile 来声明或者用锁来保护，否则在多线程环境中，long 和 double 都是不安全的。 1.3 加锁与可见性内置锁可以用于确保某个线程以一种可预测的方式来查看另一个线程的执行结果。这样可以确保某个线程写入该变量的值对于其他线程来说都是可见的。 加锁的行为不仅仅局限于互斥行为，还包括内存可见性。 1.4 volatile 变量java 语言提供了一种稍弱的同步机制，即 volatile 变量，用来确保将变量的更新操作通知到其他线程。 volatile 变量不会被缓存在寄存器或者对其他处理器不可见的地方，因此在读取 volatile 类型的变量时总会返回最新写入的值。 从内存的角度看，写入 volatile 变量相当于退出同步代码块，而读取 volatile 变量就相当于读取同步代码块。 并不建议过度依赖 volatile 变量提供可见性。因为这样的代码相对于加锁来说更脆弱，也更难理解。]]></content>
+      <categories>
+        <category>java</category>
+        <category>concurrency</category>
+      </categories>
+      <tags>
+        <tag>java</tag>
+        <tag>concurrency</tag>
+        <tag>线程</tag>
+        <tag>并发</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[【effective java】14:在公有类中使用访问方法而非公有域]]></title>
     <url>%2F2017%2F07%2F23%2Feffectivejava%2Feff-java-14%2F</url>
     <content type="text"><![CDATA[14:在公有类中使用访问方法而非公有域就是提供 get set 方法]]></content>
@@ -151,9 +181,9 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[【java 并发】 3. 对象的共享（1）]]></title>
-    <url>%2F2017%2F07%2F23%2Fjava%20concurrency%2Fjava-concurrency-3%2F</url>
-    <content type="text"><![CDATA[同步的另一个重要的方面是：内存可见性。我们不仅希望放置某个现场正在使用对象状态而另一个线程在同时修改该状态，而且希望确保当一个线程修改了对象状态后，其他线程能够看到发生的状态变化。 1.可见性多线程环境中，如果没有使用同步机制，编译器、处理器以及运行时等都可能对操作的执行顺序进行一些意想不到的调整，这就导致一个线程修改了一个变量，另一个线程不能及时的得知该变量的更新，最终导致意外错误。 1.1 失效数据当一个数据被一个线程改变，而另一个线程读取到了修改前的值，就出现了失效数据。 1.2 非原子的64位操作java 内存模型要求，变量的读取操作和写入操作都必须是原子操作。对于 java 中的 double 和 long 来说，他们都是64位的。jvm 允许将64位的读操作或者写操作分解为两个32位操作。当读取一个非 volatite 类型的 long 变量时，如果对该变量的读操作和写操作是在两个不同的线程中执行的，那么很可能会读到某个值的高32位和另一个值的低32位。 因此，除非用 volatile 来声明或者用锁来保护，否则在多线程环境中，long 和 double 都是不安全的。 1.3 加锁与可见性内置锁可以用于确保某个线程以一种可预测的方式来查看另一个线程的执行结果。这样可以确保某个线程写入该变量的值对于其他线程来说都是可见的。 加锁的行为不仅仅局限于互斥行为，还包括内存可见性。 1.4 volatile 变量java 语言提供了一种稍弱的同步机制，即 volatile 变量，用来确保将变量的更新操作通知到其他线程。 volatile 变量不会被缓存在寄存器或者对其他处理器不可见的地方，因此在读取 volatile 类型的变量时总会返回最新写入的值。 从内存的角度看，写入 volatile 变量相当于退出同步代码块，而读取 volatile 变量就相当于读取同步代码块。 并不建议过度依赖 volatile 变量提供可见性。因为这样的代码相对于加锁来说更脆弱，也更难理解。]]></content>
+    <title><![CDATA[【java 并发】2. 线程的安全性]]></title>
+    <url>%2F2017%2F07%2F22%2Fjava%20concurrency%2Fjava-concurrency-2%2F</url>
+    <content type="text"><![CDATA[要编写线程安全的代码，其核心在于要对状态访问操作进行管理，特别是对共享的和可变的状态的访问。 共享，意味着变量可以由多个线程同时访问。 可变，意味着变量的值在其生命周期内可以发生变化。 java 中主要的同步机制是synchronized 关键字，它提供一种独占的加锁方式。但“同步”这个术语还包括 volatile 类型的变量，显式锁以及原子变量。 1. 什么是线程安全性当多个线程访问某个类时，这个类始终都能表现出正确的行为，那么就称这个类是线程安全的。 无状态对象一定是线程安全的。 无状态对象：既不包含任何域，也不包含任何对其他类中域的引用，计算中过程中的临时状态仅存在于线程栈上的局部变量中，并且只能由正在执行的线程访问。 比如： 大多数 Servlet 类 都是无状态的，从而极大地降低了在实现 Servlet 线程安全性时的复杂性，只有当 Servlet 在处理请求时需要保存一些信息，线程安全性才会成为一个问题。 2. 原子性静态条件（RaceCondition）：在并发编程中，由于不恰当的执行顺序而出现不正确的结果的情况。 2.1 竞态条件当某个计算的正确性取决于多个线程的交替执行顺序时，就会发生竞态条件。 正确的结果取决于运气。 最常见的竞态条件是“先检查后执行（Check-Then-Act）”。比如懒加载（延迟初始化）。 2.2 延迟初始化12345678910public class LazyInitCase &#123; private ExpensiveObj instance = null; public ExpensiveObj getInstance() &#123; if (instance == null) &#123; instance = new ExpensiveObj(); &#125; return instance; &#125;&#125; 在多线程环境下，这样写就有可能出现错误。 与大多数并发错误一样，竞态条件并不总是会产生错误，还需要执行了某种不恰当的顺序。 2.3 复合操作我们将“先检查后执行”以及“读取-修改-写入”等操作统称为复合操作。为了达到线程安全，复合操作需要是原子操作。 原子操作：要么不执行，要么一次性执行完毕。 java.util.concurrent.atomic 中提供了一些原子变量类。 3. 加锁机制3.1 内置锁每个java对象 都可以用作一个实现同步的锁，这些锁被称为内置锁或者监视器锁。 java的内置锁相当于一种互斥锁。 3.2 重入如果一个锁是可重入的，那么当一个线程试图获得一个已经由他自己持有的锁，这个请求会成功。内置锁是可重入的。 重入，意味着获取锁的操作的粒度是“线程”，而不是“调用”。 重入进一步提升了加锁行为的封装性，简化了面向对象并发代码的开发。 4. 用锁来保护状态可以通过锁来构造一些协议，以实现对共享状态的独占访问。 每个共享的和可变的变量都应该只由一个锁来保护。 5. 活跃性与性能使用两种不同的同步机制不仅会带来混乱，也不会在性能或安全性上带来任何好处。]]></content>
       <categories>
         <category>java</category>
         <category>concurrency</category>
@@ -192,21 +222,6 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[【java 并发】2. 线程的安全性]]></title>
-    <url>%2F2017%2F07%2F22%2Fjava%20concurrency%2Fjava-concurrency-2%2F</url>
-    <content type="text"><![CDATA[要编写线程安全的代码，其核心在于要对状态访问操作进行管理，特别是对共享的和可变的状态的访问。 共享，意味着变量可以由多个线程同时访问。 可变，意味着变量的值在其生命周期内可以发生变化。 java 中主要的同步机制是synchronized 关键字，它提供一种独占的加锁方式。但“同步”这个术语还包括 volatile 类型的变量，显式锁以及原子变量。 1. 什么是线程安全性当多个线程访问某个类时，这个类始终都能表现出正确的行为，那么就称这个类是线程安全的。 无状态对象一定是线程安全的。 无状态对象：既不包含任何域，也不包含任何对其他类中域的引用，计算中过程中的临时状态仅存在于线程栈上的局部变量中，并且只能由正在执行的线程访问。 比如： 大多数 Servlet 类 都是无状态的，从而极大地降低了在实现 Servlet 线程安全性时的复杂性，只有当 Servlet 在处理请求时需要保存一些信息，线程安全性才会成为一个问题。 2. 原子性静态条件（RaceCondition）：在并发编程中，由于不恰当的执行顺序而出现不正确的结果的情况。 2.1 竞态条件当某个计算的正确性取决于多个线程的交替执行顺序时，就会发生竞态条件。 正确的结果取决于运气。 最常见的竞态条件是“先检查后执行（Check-Then-Act）”。比如懒加载（延迟初始化）。 2.2 延迟初始化12345678910public class LazyInitCase &#123; private ExpensiveObj instance = null; public ExpensiveObj getInstance() &#123; if (instance == null) &#123; instance = new ExpensiveObj(); &#125; return instance; &#125;&#125; 在多线程环境下，这样写就有可能出现错误。 与大多数并发错误一样，竞态条件并不总是会产生错误，还需要执行了某种不恰当的顺序。 2.3 复合操作我们将“先检查后执行”以及“读取-修改-写入”等操作统称为复合操作。为了达到线程安全，复合操作需要是原子操作。 原子操作：要么不执行，要么一次性执行完毕。 java.util.concurrent.atomic 中提供了一些原子变量类。 3. 加锁机制3.1 内置锁每个java对象 都可以用作一个实现同步的锁，这些锁被称为内置锁或者监视器锁。 java的内置锁相当于一种互斥锁。 3.2 重入如果一个锁是可重入的，那么当一个线程试图获得一个已经由他自己持有的锁，这个请求会成功。内置锁是可重入的。 重入，意味着获取锁的操作的粒度是“线程”，而不是“调用”。 重入进一步提升了加锁行为的封装性，简化了面向对象并发代码的开发。 4. 用锁来保护状态可以通过锁来构造一些协议，以实现对共享状态的独占访问。 每个共享的和可变的变量都应该只由一个锁来保护。 5. 活跃性与性能使用两种不同的同步机制不仅会带来混乱，也不会在性能或安全性上带来任何好处。]]></content>
-      <categories>
-        <category>java</category>
-        <category>concurrency</category>
-      </categories>
-      <tags>
-        <tag>java</tag>
-        <tag>concurrency</tag>
-        <tag>线程</tag>
-        <tag>并发</tag>
-      </tags>
-  </entry>
-  <entry>
     <title><![CDATA[【effective java】12:考虑实现Comparable接口]]></title>
     <url>%2F2017%2F07%2F22%2Feffectivejava%2Feff-java-12%2F</url>
     <content type="text"><![CDATA[12:考虑实现Comparable接口简介一旦实现了 Comparable 接口，他就可以和许多反省算法以及依赖于该接口的集合实现进行协作。 java 平台类库中的所有值类都实现了 Comparable 接口。如果你正在编写一个值类，它具有非常明显的内在排序关系，比如按字母排序、按数值顺序或者时间排序，那你就应该坚决考虑实现这个接口。 几个建议与约定 1.实现者必须确保所有的 x 和 y 都满足 sgn(x.compareTo(y)) == -sgn(y.compareTo(x))。 2.实现者还必须保证这个比较关系是可传递的：x.compareTo(y) &gt; 0 &amp;&amp; y.compareTo(z) &gt; 0 =&gt; x.compareTo(z) &gt; 0。 3.实现者必须保证 x.compareTo(y) == 0 暗示着所有的 z 都满足 sgn(x.compareTo(z)) == sgn(y.compareTo(z)) 强烈建议： (x.compareTo(y) == 0) == (x.equals(y))，但是这并非绝对必要。一般来说，如果违反了这个条件，都应该予以说明。推荐使用这样的说法：”注意，该类具有内在的排序功能，但是与 equals 不一致“。]]></content>
@@ -233,18 +248,16 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[【java 并发】1. 初识java并发]]></title>
-    <url>%2F2017%2F07%2F20%2Fjava%20concurrency%2Fjava-concurrency-1%2F</url>
-    <content type="text"><![CDATA[1. 线程的优势 1.1 发挥多处理器强大的能力 通过提高处理器资源的利用率来提神系统的吞吐率。（充分利用处理器） 有助于在但处理器系统上获得更高的吞吐率。（合理安排处理器；异步） 1.2 建模的简单性 如果程序中只包含一种类型的任务，那么比包含多种不同类型任务的程序要更容易编写，错误更少，也更容易测试。 1.3 异步事件的简化处理 1.4 响应更灵敏的用户界面 传统的gui采用主事件循环（单线程），程序可能会“冻结” 2. 线程带来的风险 2.1 安全性问题 非同步线程会造成脏读，不可重复读等问题。 2.2 活跃性问题 死锁，饥饿，活锁等 2.3 性能问题 服务时间过长；响应不灵敏；吞吐率过低；资源消耗过高；可伸缩性较低等。 3. 线程无处不在 3.1 每个java程序都会使用线程 3.2 Timer 3.3 Servlet 和 jsp servlet 需要满足被多个线程同时调用（servlet需要是线程安全的） 3.4 远程方法调用（RMI） 两个线程安全问题： 正确的协同在多个对象中共享的状态 对远程对象本身状态的访问 3.5 Swing 和 AWT swing 的一些组件并不是线程安全的，如JTable。swing 程序通过将所有对gui组件的访问局限在事件线程中以实现线程安全性]]></content>
+    <title><![CDATA[【effective java】16:复合优先于继承]]></title>
+    <url>%2F2017%2F07%2F20%2Feffectivejava%2Feff-java-16%2F</url>
+    <content type="text"><![CDATA[前言继承是实现代码重用的有力手段，但它并不永远都是最好的选择，使用不当会使软件变得很脆弱。 在包的内部使用继承是非常安全的，在那里，子类和超类都处在同一个程序员的控制之下。对于专门为了继承而设计、并且具有很好文档说明的类来说，使用继承也是非常安全的。 然而，对于普通的具体类进行垮包边界的继承，则是非常危险的。 这里说的继承，不包括实现接口。 ##]]></content>
       <categories>
         <category>java</category>
-        <category>concurrency</category>
+        <category>effectivejava</category>
       </categories>
       <tags>
         <tag>java</tag>
-        <tag>concurrency</tag>
-        <tag>线程</tag>
-        <tag>并发</tag>
+        <tag>effectivejava</tag>
       </tags>
   </entry>
   <entry>
@@ -261,16 +274,18 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[【effective java】16:复合优先于继承]]></title>
-    <url>%2F2017%2F07%2F20%2Feffectivejava%2Feff-java-16%2F</url>
-    <content type="text"><![CDATA[前言继承是实现代码重用的有力手段，但它并不永远都是最好的选择，使用不当会使软件变得很脆弱。 在包的内部使用继承是非常安全的，在那里，子类和超类都处在同一个程序员的控制之下。对于专门为了继承而设计、并且具有很好文档说明的类来说，使用继承也是非常安全的。 然而，对于普通的具体类进行垮包边界的继承，则是非常危险的。 这里说的继承，不包括实现接口。 ##]]></content>
+    <title><![CDATA[【java 并发】1. 初识java并发]]></title>
+    <url>%2F2017%2F07%2F20%2Fjava%20concurrency%2Fjava-concurrency-1%2F</url>
+    <content type="text"><![CDATA[1. 线程的优势 1.1 发挥多处理器强大的能力 通过提高处理器资源的利用率来提神系统的吞吐率。（充分利用处理器） 有助于在但处理器系统上获得更高的吞吐率。（合理安排处理器；异步） 1.2 建模的简单性 如果程序中只包含一种类型的任务，那么比包含多种不同类型任务的程序要更容易编写，错误更少，也更容易测试。 1.3 异步事件的简化处理 1.4 响应更灵敏的用户界面 传统的gui采用主事件循环（单线程），程序可能会“冻结” 2. 线程带来的风险 2.1 安全性问题 非同步线程会造成脏读，不可重复读等问题。 2.2 活跃性问题 死锁，饥饿，活锁等 2.3 性能问题 服务时间过长；响应不灵敏；吞吐率过低；资源消耗过高；可伸缩性较低等。 3. 线程无处不在 3.1 每个java程序都会使用线程 3.2 Timer 3.3 Servlet 和 jsp servlet 需要满足被多个线程同时调用（servlet需要是线程安全的） 3.4 远程方法调用（RMI） 两个线程安全问题： 正确的协同在多个对象中共享的状态 对远程对象本身状态的访问 3.5 Swing 和 AWT swing 的一些组件并不是线程安全的，如JTable。swing 程序通过将所有对gui组件的访问局限在事件线程中以实现线程安全性]]></content>
       <categories>
         <category>java</category>
-        <category>effectivejava</category>
+        <category>concurrency</category>
       </categories>
       <tags>
         <tag>java</tag>
-        <tag>effectivejava</tag>
+        <tag>concurrency</tag>
+        <tag>线程</tag>
+        <tag>并发</tag>
       </tags>
   </entry>
   <entry>
@@ -383,6 +398,19 @@
       </tags>
   </entry>
   <entry>
+    <title><![CDATA[【effective java】5:避免创建不必要的对象]]></title>
+    <url>%2F2017%2F07%2F15%2Feffectivejava%2Feff-java-5%2F</url>
+    <content type="text"><![CDATA[5:避免创建不必要的对象1. 总览一般来说，最好能重用对象，而不是在每次需要的时候就创建一个相同功能的新对象。 比如，我们不应该这样写：String s = new String(&quot;string&quot;);，而应该这样写：String s = &quot;string&quot;;。 2.几个好的思想 1.静态工厂方法总是优于构造器。 对于同时提供了静态工厂方法和构造器的不可变类，通常可以使用静态工厂方法而不是构造器，以避免创建不必要的对象。例如，静态工厂方法Boolean.valueOf(String)几乎总是优先于构造器Boolean(String)。 2.除了重用不可变的对象之外，也可以重用那些已知的不会被修改的可变对象。 3.要优先使用基本数据类型，而不是他们的包装类，要当心无意识的自动装箱。 4.通过创建附加对象，提升程序的清晰性、简洁性和功能性，这通常是件好事。 小对象的创建和回收动作是十分廉价的，特别是在现代jvm上更是如此。 5.通过维护自己的对象池来避免创建对象并不是一种好的做法，除非池中的对象是非常重量级的。 6.在提倡使用保护性拷贝的时候，因重用对象而付出的代价要远远大于因重复创建对象而付出的代价。]]></content>
+      <categories>
+        <category>java</category>
+        <category>effectivejava</category>
+      </categories>
+      <tags>
+        <tag>java</tag>
+        <tag>effectivejava</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[【springboot-入门篇】第2篇--springboot的各种配置]]></title>
     <url>%2F2017%2F07%2F15%2Fspring-boot%2F%E3%80%90springboot-%E5%85%A5%E9%97%A8%E7%AF%87%E3%80%91%E7%AC%AC2%E7%AF%87--springboot%E7%9A%84%E5%90%84%E7%A7%8D%E9%85%8D%E7%BD%AE%2F</url>
     <content type="text"><![CDATA[1. 配置文件简介spring boot使用一个全局配置文件：application.properties或者application.yml，放置在src/main/resources目录下或者类路径的/config目录下。 application.properties是我们熟知的键值对配置文件： application.yml是yaml语言的配置文件，yaml是一种以数据为中心的语言，在配置数据的时候具有面向对象的特征。我们以后的代码都会使用yml格式的配置文件。： spring boot 的全局配置文件的作用是对一些默认配置的配置进行修改。后面我们会详细的讲解。 2. pom配置文件（starter） pom，是maven的配置文件，gradel也差不多，因为我一直在用maven，所以就讲maven了。 为了解决大型项目以及一些常用组件jar包过多的问题，spring boot 为我们提供了许多starter pom，每一个pom都已经添加好了对应的依赖，以往我们需要写茫茫多的dependence，但是现在只需要一个starter就可以了，并且spring boot 还为它们提供了默认的配置和自动配置的bean。 2.1 官方starter 2.1.1 应用程序的starters 名称 描述 spring-boot-starter 核心Spring Boot starter，包括自动配置支持，日志和YAML spring-boot-starter-actuator 生产准备的特性，用于帮我们监控和管理应用 spring-boot-starter-amqp 对”高级消息队列协议”的支持，通过spring-rabbit实现 spring-boot-starter-aop 对面向切面编程的支持，包括spring-aop和AspectJ spring-boot-starter-batch 对Spring Batch的支持，包括HSQLDB数据库 spring-boot-starter-cloud-connectors 对Spring Cloud Connectors的支持，简化在云平台下（例如，Cloud Foundry 和Heroku）服务的连接 spring-boot-starter-data-elasticsearch 对Elasticsearch搜索和分析引擎的支持，包括spring-data-elasticsearch spring-boot-starter-data-gemfire 对GemFire分布式数据存储的支持，包括spring-data-gemfire spring-boot-starter-data-jpa 对”Java持久化API”的支持，包括spring-data-jpa，spring-orm和Hibernate spring-boot-starter-data-mongodb 对MongoDB NOSQL数据库的支持，包括spring-data-mongodb spring-boot-starter-data-rest 对通过REST暴露Spring Data仓库的支持，通过spring-data-rest-webmvc实现 spring-boot-starter-data-solr 对Apache Solr搜索平台的支持，包括spring-data-solr spring-boot-starter-freemarker 对FreeMarker模板引擎的支持 spring-boot-starter-groovy-templates 对Groovy模板引擎的支持 spring-boot-starter-hateoas 对基于HATEOAS的RESTful服务的支持，通过spring-hateoas实现 spring-boot-starter-hornetq 对”Java消息服务API”的支持，通过HornetQ实现 spring-boot-starter-integration 对普通spring-integration模块的支持 spring-boot-starter-jdbc 对JDBC数据库的支持 spring-boot-starter-jersey 对Jersey RESTful Web服务框架的支持 spring-boot-starter-jta-atomikos 对JTA分布式事务的支持，通过Atomikos实现 spring-boot-starter-jta-bitronix 对JTA分布式事务的支持，通过Bitronix实现 spring-boot-starter-mail 对javax.mail的支持 spring-boot-starter-mobile 对spring-mobile的支持 spring-boot-starter-mustache 对Mustache模板引擎的支持 spring-boot-starter-redis 对REDIS键值数据存储的支持，包括spring-redis spring-boot-starter-security 对spring-security的支持 spring-boot-starter-social-facebook 对spring-social-facebook的支持 spring-boot-starter-social-linkedin 对spring-social-linkedin的支持 spring-boot-starter-social-twitter 对spring-social-twitter的支持 spring-boot-starter-test 对常用测试依赖的支持，包括JUnit, Hamcrest和Mockito，还有spring-test模块 spring-boot-starter-thymeleaf 对Thymeleaf模板引擎的支持，包括和Spring的集成 spring-boot-starter-velocity 对Velocity模板引擎的支持 spring-boot-starter-web 对全栈web开发的支持， 包括Tomcat和spring-webmvc spring-boot-starter-websocket 对WebSocket开发的支持 spring-boot-starter-ws 对Spring Web服务的支持 2.1.2 spring boot生产准备的starters： 名称 描述 spring-boot-starter-actuator 添加生产准备特性，比如指标和监控 spring-boot-starter-remote-shell 添加远程ssh shell支持 2.1.3 排除或交换具体技术方面的starters 名称 描述 spring-boot-starter-jetty 导入Jetty HTTP引擎（作为Tomcat的替代） spring-boot-starter-log4j 对Log4J日志系统的支持 spring-boot-starter-logging 导入Spring Boot的默认日志系统 spring-boot-starter-tomcat 导入Spring Boot的默认HTTP引擎 spring-boot-starter-undertow 导入Undertow HTTP引擎（作为Tomcat的替代） 2.2 非官方starter也有一些第三方为spring boot 提供了starter： Handlebars Vaadin Apache Camel WRO4J Spring Batch（高级用法） HDIV Jade Templates(Jade4J) Actitivi 这些都可以在github上找到，感兴趣的可以去搜一下。 3. xml配置文件spring boot 提倡零配置，也就是无xml配置，但是在实际项目中，可能有一些要求必须使用xml配置，这时我们可以使用spring提供的@ImportResource 来加载xml配置，比如： 1@ImportResource(&#123;&quot;classpath:some-context.xml&quot;,&quot;classpath:other-context.xml&quot;&#125;) 4. 命令行参数配置上一篇文章中也有提到，spring boot 项目是可以打成jar包的，然后通过java -jar xxx.jar 来执行，我们都知道，main函数是可以接受参数的，同样，spring boot的main函数也可以。 我们可以通过下面的命令来修改Tomcat的端口号：1java -jar xxx.jar --server.port=9090 5. 自定义属性配置5.1 普通配置在写spring项目的时候，我们可以在properties文件中定义一个变量，然后再代码中通过 @PropertySource 指明 properties 文件的位置，然后通过@Value注入相应的值。 在spring boot 中我们同样可以自定义一个变量，因为spring boot中的全局配置文件默认在一个目录下，所以我们可以直接用@Value注入值。 比如，在上一篇文章的demo项目中，我们可以在application.yml文件中这样定义： 12key: hello: hello world 修改DemoApplication.java代码为： 12345678910111213141516@SpringBootApplication(exclude=&#123;DataSourceAutoConfiguration.class,HibernateJpaAutoConfiguration.class&#125;)@RestControllerpublic class DemoApplication &#123; @Value("$&#123;key.hello&#125;") private String hello; public static void main(String[] args) &#123; SpringApplication.run(DemoApplication.class, args); &#125; @RequestMapping("/hello") public String hello()&#123; return hello; &#125;&#125; 运行项目，在浏览器中访问http://localhost:8080/hello： 值被正常的注入进去了。 5.2 类型安全的配置上面的例子中，使用@Value注入每个配置在实际的应用中会显得格外的麻烦，因为配置一般会有很多，用上面的方式就要写好多@Value，并且如果在多个类文件中都使用这个值的话，工作量会更大。所以，需要一种更好的方式。并且，这种方式是有安全隐患的，比如我需要的是一个long类型，但是注入的却是String，这个时候就报错了： 1Failed to convert value of type &apos;java.lang.String&apos; to required type &apos;long&apos;; spring boot 提供了基于类型安全的配置方式，通过@ConfigurationProperties将properties属性和一个bean及其属性关联，从而实现类型安全的配置。 我们来看一下： application.yml:123key: name: cleverfan sex: man 在demo项目中创建一个class： Person.java 12345678910111213141516171819202122@Component@ConfigurationProperties(prefix = &quot;key&quot;)public class Person &#123; private String name; private String sex; public void setName(String name) &#123; this.name = name; &#125; public void setSex(String sex) &#123; this.sex = sex; &#125; public String getName() &#123; return name; &#125; public String getSex() &#123; return sex; &#125;&#125; 修改DemoApplication.java ： 12345678910111213141516@SpringBootApplication(exclude=&#123;DataSourceAutoConfiguration.class,HibernateJpaAutoConfiguration.class&#125;)@RestControllerpublic class DemoApplication &#123; @Autowired private Person person; public static void main(String[] args) &#123; SpringApplication.run(DemoApplication.class, args); &#125; @RequestMapping(&quot;/hello&quot;) public String hello()&#123; return person.getName() + &quot;: &quot; + person.getSex(); &#125;&#125; 启动项目，访问http://localhost:8080/hello： 回到刚刚的问题，如果这个时候我需要的是long，但是给的是String怎么办呢？这里给出一个很简单的处理方式： Person.java123456789101112131415161718192021222324252627@Component@ConfigurationProperties(prefix = &quot;key&quot;)public class Person &#123; private String name; private long sex; public void setName(String name) &#123; this.name = name; &#125; public void setSex(String sex) &#123; try&#123; this.sex = Long.valueOf(sex); &#125;catch (Exception e)&#123; this.sex = 0L; &#125; &#125; public String getName() &#123; return name; &#125; public long getSex() &#123; return sex; &#125;&#125; yml配置文件不变，我们传递的是字符串，这次重启项目，访问http://localhost:8080/hello： 这样就可以简单的保证数据的安全了。 6. 日志配置spring boot 支持Java Util Loggin、Log4J、Log4J2和LogBack作为日志框架，无论使用哪种日志框架，spring boot已为当前使用日志框架的控制台输出及文件输出做好了配置。 默认情况下，spring boot 使用 Logback作为日志框架。可以在配置文件中（yml）修改默认配置文件的配置： 配置日志级别： 12logging: level: debug 配置日志文件 1234logging: org: springframework: web: debug 7. Profile配置Profile 是 spring 用来针对不同的环境对不同的配置提供支持的，比如生成环境，测试环境和开发环境。全局 Profile 使用application-{profile}.yml(例如application-prod.yml)命名。 下面我们做一个演示，我们把demo项目分为生产（prod）和开发（dev）环境，生产环境下端口号为8000，开发环境下为8888。 我们在demo项目的application.yml文件的同级目录下创建两个文件：application-prod.yml: 12server: port: 8000 application-dev.yml: 12server: port: 8888 目录结构是这样的： application.yml1234567891011key: name: cleverfan sex: manlogging: level: debugspring: profiles: active: dev 启动项目： 端口号是8888 修改application.yml： 123spring: profiles: active: prod 重新启动项目： 端口号的8000 证明我们的配置生效了。 配置就先讲到这里，如果有疑问或者错误，请及时与我联系。如果有需要补充的地方，也可以私戳我~]]></content>
@@ -394,19 +422,6 @@
         <tag>java</tag>
         <tag>springboot</tag>
         <tag>配置</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[【effective java】5:避免创建不必要的对象]]></title>
-    <url>%2F2017%2F07%2F15%2Feffectivejava%2Feff-java-5%2F</url>
-    <content type="text"><![CDATA[5:避免创建不必要的对象1. 总览一般来说，最好能重用对象，而不是在每次需要的时候就创建一个相同功能的新对象。 比如，我们不应该这样写：String s = new String(&quot;string&quot;);，而应该这样写：String s = &quot;string&quot;;。 2.几个好的思想 1.静态工厂方法总是优于构造器。 对于同时提供了静态工厂方法和构造器的不可变类，通常可以使用静态工厂方法而不是构造器，以避免创建不必要的对象。例如，静态工厂方法Boolean.valueOf(String)几乎总是优先于构造器Boolean(String)。 2.除了重用不可变的对象之外，也可以重用那些已知的不会被修改的可变对象。 3.要优先使用基本数据类型，而不是他们的包装类，要当心无意识的自动装箱。 4.通过创建附加对象，提升程序的清晰性、简洁性和功能性，这通常是件好事。 小对象的创建和回收动作是十分廉价的，特别是在现代jvm上更是如此。 5.通过维护自己的对象池来避免创建对象并不是一种好的做法，除非池中的对象是非常重量级的。 6.在提倡使用保护性拷贝的时候，因重用对象而付出的代价要远远大于因重复创建对象而付出的代价。]]></content>
-      <categories>
-        <category>java</category>
-        <category>effectivejava</category>
-      </categories>
-      <tags>
-        <tag>java</tag>
-        <tag>effectivejava</tag>
       </tags>
   </entry>
   <entry>
