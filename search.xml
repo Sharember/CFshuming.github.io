@@ -1,6 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[【算法-剑指offer】10. 矩形覆盖]]></title>
+    <url>%2F2017%2F12%2F05%2Falgorithm%2F%E5%89%91%E6%8C%87offer%2F%E7%9F%A9%E5%BD%A2%E8%A6%86%E7%9B%96%2F</url>
+    <content type="text"><![CDATA[题目描述： 我们可以用21的小矩形横着或者竖着去覆盖更大的矩形。请问用n个21的小矩形无重叠地覆盖一个2*n的大矩形，总共有多少种方法？ 分析： 斐波那契数列变种。 2n的大矩形，和n个21的小矩形 其中target*2为大矩阵的大小 有以下几种情形： 1⃣️target 2⃣️target = 1大矩形为2*1，只有一种摆放方法，return1； 3⃣️target = 2 大矩形为2*2，有两种摆放方法，return2； 4⃣️target = n 分为两步考虑： 第一次摆放一块 2*1 的小矩阵，则摆放方法总共为f(target - 1) | √ | | | | | | | || √ | | | | | | | | 第一次摆放一块1*2的小矩阵，则摆放方法总共为f(target-2) 因为，摆放了一块12的小矩阵（用√√表示），对应下方的12（用××表示）摆放方法就确定了，所以为f(targte-2) | √ | √ | | | | | | || × | × | | | | | | | 答案： 123456789101112131415161718// 动态规划public class Solution &#123; public int RectCover(int target) &#123; if(target == 0) &#123; return 0; &#125; if(target == 1) &#123; return 1; &#125; int dp [] = new int[target + 1]; dp[1] = 1; dp[2] = 2; for(int i = 3; i &lt;= target; i++) &#123; dp[i] = dp[i - 1] + dp[i - 2]; &#125; return dp[target]; &#125;&#125;]]></content>
+      <categories>
+        <category>算法</category>
+        <category>剑指offer</category>
+        <category>递归/动态规划</category>
+      </categories>
+      <tags>
+        <tag>算法</tag>
+        <tag>剑指offer</tag>
+        <tag>递归</tag>
+        <tag>动态规划</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[【算法-剑指offer】9. 变态跳台阶]]></title>
+    <url>%2F2017%2F12%2F05%2Falgorithm%2F%E5%89%91%E6%8C%87offer%2F%E5%8F%98%E6%80%81%E8%B7%B3%E5%8F%B0%E9%98%B6%2F</url>
+    <content type="text"><![CDATA[题目描述： 一只青蛙一次可以跳上1级台阶，也可以跳上2级……它也可以跳上n级。求该青蛙跳上一个n级的台阶总共有多少种跳法。 分析： 关于本题，前提是n个台阶会有一次n阶的跳法。分析如下: f(1) = 1 f(2) = f(2-1) + f(2-2) //f(2-2) 表示2阶一次跳2阶的次数。 f(3) = f(3-1) + f(3-2) + f(3-3) … f(n) = f(n-1) + f(n-2) + f(n-3) + … + f(n-(n-1)) + f(n-n) 说明： 1）这里的f(n) 代表的是n个台阶有一次1,2,…n阶的 跳法数。 2）n = 1时，只有1种跳法，f(1) = 1 3) n = 2时，会有两个跳得方式，一次1阶或者2阶，这回归到了问题（1） ，f(2) = f(2-1) + f(2-2) 4) n = 3时，会有三种跳得方式，1阶、2阶、3阶， 那么就是第一次跳出1阶后面剩下：f(3-1);第一次跳出2阶，剩下f(3-2)；第一次3阶，那么剩下f(3-3) 因此结论是f(3) = f(3-1)+f(3-2)+f(3-3) 5) n = n时，会有n中跳的方式，1阶、2阶…n阶，得出结论： f(n) = f(n-1)+f(n-2)+…+f(n-(n-1)) + f(n-n) =&gt; f(0) + f(1) + f(2) + f(3) + … + f(n-1) 6) 由以上已经是一种结论，但是为了简单，我们可以继续简化： f(n-1) = f(0) + f(1)+f(2)+f(3) + … + f((n-1)-1) = f(0) + f(1) + f(2) + f(3) + … + f(n-2) f(n) = f(0) + f(1) + f(2) + f(3) + … + f(n-2) + f(n-1) = f(n-1) + f(n-1) 可以得出： f(n) = 2*f(n-1) 7) 得出最终结论,在n阶台阶，一次有1、2、…n阶的跳的方式时，总得跳法为： | 1 ,(n=0 ) f(n) = | 1 ,(n=1 ) | 2*f(n-1),(n&gt;=2) 答案： 123456789101112131415161718// 递归public class Solution &#123; public int JumpFloorII(int target) &#123; if (target &lt;= 0) &#123; return -1; &#125; else if (target == 1) &#123; return 1; &#125; else &#123; return 2 * JumpFloorII(target - 1); &#125; &#125;&#125;// 最屌的解法public class Solution &#123; public int JumpFloorII(int target) &#123; return 1&lt;&lt; -- target; &#125;&#125;]]></content>
+      <categories>
+        <category>算法</category>
+        <category>剑指offer</category>
+        <category>递归/动态规划</category>
+      </categories>
+      <tags>
+        <tag>算法</tag>
+        <tag>剑指offer</tag>
+        <tag>递归</tag>
+        <tag>动态规划</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[【算法-剑指offer】8. 跳台阶]]></title>
     <url>%2F2017%2F12%2F04%2Falgorithm%2F%E5%89%91%E6%8C%87offer%2F%E8%B7%B3%E5%8F%B0%E9%98%B6%2F</url>
     <content type="text"><![CDATA[题目描述： 一只青蛙一次可以跳上1级台阶，也可以跳上2级。求该青蛙跳上一个n级的台阶总共有多少种跳法。 分析： 典型的递归 动态规划 答案： 12345678910111213141516171819202122// 动态规划public class Solution &#123; public int JumpFloor(int target) &#123; if (target == 0)&#123; return 0; &#125; if (target == 1) &#123; return 1; &#125; if (target == 2) &#123; return 2; &#125; int dp[] = new int[target+1]; dp[0] = 0; dp[1] = 1; dp[2] = 2; for (int i = 3; i &lt;= target; i ++) &#123; dp[i] = dp[i-1] + dp[i-2]; &#125; return dp[target]; &#125;&#125;]]></content>
@@ -308,19 +340,6 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[【effective java】16:复合优先于继承]]></title>
-    <url>%2F2017%2F07%2F20%2Feffectivejava%2Feff-java-16%2F</url>
-    <content type="text"><![CDATA[前言继承是实现代码重用的有力手段，但它并不永远都是最好的选择，使用不当会使软件变得很脆弱。 在包的内部使用继承是非常安全的，在那里，子类和超类都处在同一个程序员的控制之下。对于专门为了继承而设计、并且具有很好文档说明的类来说，使用继承也是非常安全的。 然而，对于普通的具体类进行垮包边界的继承，则是非常危险的。 这里说的继承，不包括实现接口。 ##]]></content>
-      <categories>
-        <category>java</category>
-        <category>effectivejava</category>
-      </categories>
-      <tags>
-        <tag>java</tag>
-        <tag>effectivejava</tag>
-      </tags>
-  </entry>
-  <entry>
     <title><![CDATA[【java 并发】1. 初识java并发]]></title>
     <url>%2F2017%2F07%2F20%2Fjava%20concurrency%2Fjava-concurrency-1%2F</url>
     <content type="text"><![CDATA[1. 线程的优势 1.1 发挥多处理器强大的能力 通过提高处理器资源的利用率来提神系统的吞吐率。（充分利用处理器） 有助于在但处理器系统上获得更高的吞吐率。（合理安排处理器；异步） 1.2 建模的简单性 如果程序中只包含一种类型的任务，那么比包含多种不同类型任务的程序要更容易编写，错误更少，也更容易测试。 1.3 异步事件的简化处理 1.4 响应更灵敏的用户界面 传统的gui采用主事件循环（单线程），程序可能会“冻结” 2. 线程带来的风险 2.1 安全性问题 非同步线程会造成脏读，不可重复读等问题。 2.2 活跃性问题 死锁，饥饿，活锁等 2.3 性能问题 服务时间过长；响应不灵敏；吞吐率过低；资源消耗过高；可伸缩性较低等。 3. 线程无处不在 3.1 每个java程序都会使用线程 3.2 Timer 3.3 Servlet 和 jsp servlet 需要满足被多个线程同时调用（servlet需要是线程安全的） 3.4 远程方法调用（RMI） 两个线程安全问题： 正确的协同在多个对象中共享的状态 对远程对象本身状态的访问 3.5 Swing 和 AWT swing 的一些组件并不是线程安全的，如JTable。swing 程序通过将所有对gui组件的访问局限在事件线程中以实现线程安全性]]></content>
@@ -336,9 +355,9 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[【effective java】9:覆盖equals时总要覆盖hashcode]]></title>
-    <url>%2F2017%2F07%2F19%2Feffectivejava%2Feff-java-9%2F</url>
-    <content type="text"><![CDATA[9:覆盖equals时总要覆盖hashcode1.hashcode 通用约定 1.在应用程序执行期间，只要对象的 equals 方法的比较嘈杂所用到的信息没有被修改，那么对这同一个对象调用多次 hashcode 方法都必须始终如一的返回同一个函数。在同一个应用程序的多次执行过过程中，每次执行所返回的整数可以不一致。 2.如果两个对象根据 equals 方法的毕竟是相等的，那么调用这两个对象中任意一个对象的 hashcode 方法都必须产出同样的整数结果。 3.如果两个对象根据 equals 方法比较是不相等的，那么调用这两个对象中任意一个对象的 hashcode 方法，产生的结果可以相同也可以不同。但是你应该知道，给不相等的对象产生不一样的 hash 值，有可能提高散列表的性能。 2.尽可能给不相等的对象产生不一样的 hash 值的简单方法 1.把某个非零的常数值，比如17，保存在一个名为 result 的 int 类型变量中。 2.对于对象中每个关键域 f（指 equals 方法中涉及的每个域），完成以下步骤： a.为该域计算 int 类型的散列码c： 如果该域是 boolean 类型，计算 （f ? 1 : 0）。 如果该域是 byte、char、short 或者 int 类型，计算 （int）f。 如果该域是 long 类型，计算 (int)(f ^ (f &gt;&gt;&gt; 32))。 如果该域是 float 类型，计算 Float.floatToIntBits(f)。 如果该域是 double 类型，计算 Double.doubleToLongBits(f),然后按照上面第三步，为得到的 long 类型值计算散列值。 如果该域是一个对象引用，并且该类的 equals 方法通过递归的调用 equals 的方式来比较这个域，则同样为这个域递归的调用 hashcode。如果需要更复杂d额比较，则为这个域计算一个”范式“，然后针对这个范式调用 hashcode。如果这个域的值为 null，则返回0。 如果该域s回一个数组，则要吧每一个元素当做单独的域来处理。也就是说，递归地应用上述规则。如果数组中的每个元素都很重要，可以利用 Arrays.hashCode 方法。 b.按照下面的公式，把 a 中计算得到的散列码 c 合并到 result 中： result = 31 * result + c; 3.返回 result。 4.写完 hashcode 方法以后，判断一下是否满足三个条件。 在散列码计算过程中，可以把冗余域排除在外。 3.几点注意 如果一个类是不可变的，并且计算散列码的开销也比较大，就应该考虑把散列码缓存在对象内部，而不是每次请求都重新计算。 不要试图从散列码计算中排除掉一个对象的关键部分来提高性能。]]></content>
+    <title><![CDATA[【effective java】16:复合优先于继承]]></title>
+    <url>%2F2017%2F07%2F20%2Feffectivejava%2Feff-java-16%2F</url>
+    <content type="text"><![CDATA[前言继承是实现代码重用的有力手段，但它并不永远都是最好的选择，使用不当会使软件变得很脆弱。 在包的内部使用继承是非常安全的，在那里，子类和超类都处在同一个程序员的控制之下。对于专门为了继承而设计、并且具有很好文档说明的类来说，使用继承也是非常安全的。 然而，对于普通的具体类进行垮包边界的继承，则是非常危险的。 这里说的继承，不包括实现接口。 ##]]></content>
       <categories>
         <category>java</category>
         <category>effectivejava</category>
@@ -363,9 +382,9 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[【effective java】8:覆盖 equals 时请遵守通用规定]]></title>
-    <url>%2F2017%2F07%2F18%2Feffectivejava%2Feff-java-8%2F</url>
-    <content type="text"><![CDATA[8: 覆盖 equals 时请遵守通用规定1.覆盖 equals 后，需要满足的条件 1.类的每个实例本质上都是唯一的 2.不关心是否提供了“逻辑相等”的测试功能 3.超类已经覆盖了 equals，从超类继承过来d额行为对于子类也是合适的 4.类是私有的或者包私有的，可以确定它的 equals 方法永远不会被调用 2.覆盖 equals 方法时要遵守的几个约定 1.自反性 对于任何非 null 的引用值 x，x.euqals(x) 必须返回 true， 2.对称性 对于任何非 null 的引用值 x 和 y，当且仅当 y.equals(x) 返回 true 时，x.equals(y) 必须返回 true。 3.传递性 对于任何非 null 的引用值 x、y 和 z，如果 x.equals(y) 返回 true，y.equals(z) 也返回 true, 那么 x.equals(z) 也必须返回 true。 4.一致性 对于任何非 null 的引用值 x 和 y，只要 equals 的比较操作在对象中多有的信息都没有被修改，多次调用 x.equals(y) 就会一致的返回 true 或者 false。 5.非空性 所有的对象都不能为 null，为了防止抛出空指针异常。 3.高效实现 equals 方法的诀窍 1.使用 == 操作符检查“参数是否为这个对象的引用” 2.使用 instanceof 操作符检查“参数是否为正确的类型“ 3.把参数转换为正确的类型（接2） 4.对于该类中的每个”关键“域，检查参数中的域是否与该对象中对应的域相匹配 5.编写完之后，检查是否是对称的，传递的，一致的 6.覆盖 equals 时，总要覆盖 hashcode 7.不要企图让 equals 方法过于智能 8.不要将 equals 声明中的 Object 对象替换为其他的类型]]></content>
+    <title><![CDATA[【effective java】9:覆盖equals时总要覆盖hashcode]]></title>
+    <url>%2F2017%2F07%2F19%2Feffectivejava%2Feff-java-9%2F</url>
+    <content type="text"><![CDATA[9:覆盖equals时总要覆盖hashcode1.hashcode 通用约定 1.在应用程序执行期间，只要对象的 equals 方法的比较嘈杂所用到的信息没有被修改，那么对这同一个对象调用多次 hashcode 方法都必须始终如一的返回同一个函数。在同一个应用程序的多次执行过过程中，每次执行所返回的整数可以不一致。 2.如果两个对象根据 equals 方法的毕竟是相等的，那么调用这两个对象中任意一个对象的 hashcode 方法都必须产出同样的整数结果。 3.如果两个对象根据 equals 方法比较是不相等的，那么调用这两个对象中任意一个对象的 hashcode 方法，产生的结果可以相同也可以不同。但是你应该知道，给不相等的对象产生不一样的 hash 值，有可能提高散列表的性能。 2.尽可能给不相等的对象产生不一样的 hash 值的简单方法 1.把某个非零的常数值，比如17，保存在一个名为 result 的 int 类型变量中。 2.对于对象中每个关键域 f（指 equals 方法中涉及的每个域），完成以下步骤： a.为该域计算 int 类型的散列码c： 如果该域是 boolean 类型，计算 （f ? 1 : 0）。 如果该域是 byte、char、short 或者 int 类型，计算 （int）f。 如果该域是 long 类型，计算 (int)(f ^ (f &gt;&gt;&gt; 32))。 如果该域是 float 类型，计算 Float.floatToIntBits(f)。 如果该域是 double 类型，计算 Double.doubleToLongBits(f),然后按照上面第三步，为得到的 long 类型值计算散列值。 如果该域是一个对象引用，并且该类的 equals 方法通过递归的调用 equals 的方式来比较这个域，则同样为这个域递归的调用 hashcode。如果需要更复杂d额比较，则为这个域计算一个”范式“，然后针对这个范式调用 hashcode。如果这个域的值为 null，则返回0。 如果该域s回一个数组，则要吧每一个元素当做单独的域来处理。也就是说，递归地应用上述规则。如果数组中的每个元素都很重要，可以利用 Arrays.hashCode 方法。 b.按照下面的公式，把 a 中计算得到的散列码 c 合并到 result 中： result = 31 * result + c; 3.返回 result。 4.写完 hashcode 方法以后，判断一下是否满足三个条件。 在散列码计算过程中，可以把冗余域排除在外。 3.几点注意 如果一个类是不可变的，并且计算散列码的开销也比较大，就应该考虑把散列码缓存在对象内部，而不是每次请求都重新计算。 不要试图从散列码计算中排除掉一个对象的关键部分来提高性能。]]></content>
       <categories>
         <category>java</category>
         <category>effectivejava</category>
@@ -391,17 +410,16 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[【springboot-入门篇】第4篇-spring-boot-使用servlet，filter，listener和interceptor]]></title>
-    <url>%2F2017%2F07%2F17%2Fspring-boot%2F%E3%80%90springboot-%E5%85%A5%E9%97%A8%E7%AF%87%E3%80%91%E7%AC%AC4%E7%AF%87-spring-boot-%E4%BD%BF%E7%94%A8servlet%EF%BC%8Cfilter%EF%BC%8Clistener%E5%92%8Cinterceptor%2F</url>
-    <content type="text"><![CDATA[上一篇我们学习了 spring boot 利用Controller响应数据与响应页面。 一般的Web开发使用 Controller 基本上可以完成大部分需求，但是有的时候我们还是会用到 Servlet、Filter、Listener 等等。 在spring boot中添加自己的Servlet、Filter、Listener有两种方法 代码注册: 通过ServletRegistrationBean、 FilterRegistrationBean 和ServletListenerRegistrationBean 获得控制。 注解注册: 在SpringBootApplication 上使用@ServletComponentScan注解后，Servlet、Filter、Listener 可以直接通过 @WebServlet、@WebFilter、@WebListener 注解自动注册，无需其他代码。 spring boot 中注册servlet代码注册 创建Servlet类：AaServlet.java。 123456789101112131415public class AaServlet extends HttpServlet &#123; @Override protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException &#123; System.out.println(&quot;doGet&quot;); doPost(req, resp); &#125; @Override protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException &#123; System.out.println(&quot;doPost()&quot;); resp.setContentType(&quot;text/html&quot;); PrintWriter out = resp.getWriter(); out.println(&quot;&lt;h1&gt;AaServlet&lt;/h1&gt;&quot;); &#125;&#125; 通过ServletRegistrationBean注册。 1234567//Project2Application.java @Bean public ServletRegistrationBean AaServletRegistration() &#123; ServletRegistrationBean registration = new ServletRegistrationBean(new AaServlet()); registration.addUrlMappings(&quot;/a&quot;); return registration; &#125; 运行测试。 访问：http://localhost:8080/a 注解注册 创建Servlet类：BbServlet.java。 1234567891011121314151617@WebServlet(urlPatterns = &quot;/b&quot;)public class BbServlet extends HttpServlet &#123; @Override protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException &#123; System.out.println(&quot;doGet&quot;); doPost(req, resp); &#125; @Override protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException &#123; System.out.println(&quot;doPost()&quot;); resp.setContentType(&quot;text/html&quot;); PrintWriter out = resp.getWriter(); out.println(&quot;&lt;h1&gt;BbServlet&lt;/h1&gt;&quot;); &#125;&#125; 添加注解@ServletComponentScan。 12345678910111213141516@ServletComponentScan@SpringBootApplicationpublic class Project2Application &#123; public static void main(String[] args) &#123; SpringApplication.run(Project2Application.class, args); &#125; @Bean public ServletRegistrationBean AaServletRegistration() &#123; ServletRegistrationBean registration = new ServletRegistrationBean(new AaServlet()); registration.addUrlMappings(&quot;/a&quot;); return registration; &#125;&#125; 运行测试。 访问：http://localhost:8080/b filter 和 listener的注册和servlet一样。这里就不多说了。 接下来说一下拦截器。 自定义拦截器Spring提供了HandlerInterceptor（拦截器）。它的功能跟过滤器类似，但是提供更精细的的控制能力：在request被响应之前、request被响应之后、视图渲染之前以及request全部结束之后。我们不能通过拦截器修改request内容，但是可以通过抛出异常（或者返回false）来暂停request的执行。 spring boot提供了一些拦截器，我们可以直接拿来使用，比如： ConversionServiceExposingInterceptor CorsInterceptor LocaleChangeInterceptor PathExposingHandlerInterceptor ResourceUrlProviderExposingInterceptor ThemeChangeInterceptor UriTemplateVariablesHandlerInterceptor UserRoleAuthorizationInterceptor 我们也可以自己定义拦截器，定义拦截器的步骤大致分为： 1、创建我们自己的拦截器类并实现 HandlerInterceptor 接口。 2、创建一个Java类继承WebMvcConfigurerAdapter，并重写addInterceptors 方法。3、实例化我们自定义的拦截器，然后将对像手动添加到拦截器链中（在addInterceptors方法中添加）。 我们来亲自试一下： 创建我们自己的拦截器 123456789101112131415161718192021222324//MyInterceptor2public class MyInterceptor1 implements HandlerInterceptor &#123; @Override public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception &#123; System.out.println(&quot;MyInterceptor1==========&gt;在请求处理之前进行调用（Controller方法调用之前）&quot;); return true;// 只有返回true才会继续向下执行，返回false取消当前请求 &#125; @Override public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception &#123; System.out.println(&quot;MyInterceptor1==========&gt;请求处理之后进行调用，但是在视图被渲染之前（Controller方法调用之后）&quot;); &#125; @Override public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception &#123; System.out.println(&quot;MyInterceptor1==========&gt;在整个请求结束之后被调用，也就是在DispatcherServlet 渲染了对应的视图之后执行（主要是用于进行资源清理工作）&quot;); &#125;&#125; 123456789101112131415161718192021222324//MyInterceptor2public class MyInterceptor2 implements HandlerInterceptor &#123; @Override public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception &#123; System.out.println(&quot;MyInterceptor2==========&gt;在请求处理之前进行调用（Controller方法调用之前）&quot;); return true;// 只有返回true才会继续向下执行，返回false取消当前请求 &#125; @Override public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception &#123; System.out.println(&quot;MyInterceptor2==========&gt;请求处理之后进行调用，但是在视图被渲染之前（Controller方法调用之后）&quot;); &#125; @Override public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception &#123; System.out.println(&quot;MyInterceptor2==========&gt;在整个请求结束之后被调用，也就是在DispatcherServlet 渲染了对应的视图之后执行（主要是用于进行资源清理工作）&quot;); &#125;&#125; 创建一个Java类继承WebMvcConfigurerAdapter，并重写addInterceptors 方法,添加拦截器。 123456789101112131415//MyWebAppConfigurer@Configurationpublic class MyWebAppConfigurer extends WebMvcConfigurerAdapter &#123; @Override public void addInterceptors(InterceptorRegistry registry) &#123; // 多个拦截器组成一个拦截器链 // addPathPatterns 用于添加拦截规则 // excludePathPatterns 用户排除拦截 registry.addInterceptor(new MyInterceptor1()).addPathPatterns(&quot;/**&quot;); registry.addInterceptor(new MyInterceptor2()).addPathPatterns(&quot;/**&quot;); super.addInterceptors(registry); &#125;&#125; 测试：运行项目，随便访问一个路径，比如http://localhost:8080/test 浏览器会报错，不用管，看控制台。 拦截器已经起作用了。 值得注意的是：只有经过DispatcherServlet 的请求，才会走拦截器链，我们自定义的Servlet 请求是不会被拦截的，比如我们自定义的Servlet地址是不会被拦截器拦截的。 但是过滤器不同。不管是属于哪个Servlet 只要复合过滤器的过滤规则，过滤器都会拦截。 本篇文章就先介绍到这里，如果哪里讲的不明白，请及时与我联系。 参考文章：Spring Boot 拦截器]]></content>
+    <title><![CDATA[【effective java】8:覆盖 equals 时请遵守通用规定]]></title>
+    <url>%2F2017%2F07%2F18%2Feffectivejava%2Feff-java-8%2F</url>
+    <content type="text"><![CDATA[8: 覆盖 equals 时请遵守通用规定1.覆盖 equals 后，需要满足的条件 1.类的每个实例本质上都是唯一的 2.不关心是否提供了“逻辑相等”的测试功能 3.超类已经覆盖了 equals，从超类继承过来d额行为对于子类也是合适的 4.类是私有的或者包私有的，可以确定它的 equals 方法永远不会被调用 2.覆盖 equals 方法时要遵守的几个约定 1.自反性 对于任何非 null 的引用值 x，x.euqals(x) 必须返回 true， 2.对称性 对于任何非 null 的引用值 x 和 y，当且仅当 y.equals(x) 返回 true 时，x.equals(y) 必须返回 true。 3.传递性 对于任何非 null 的引用值 x、y 和 z，如果 x.equals(y) 返回 true，y.equals(z) 也返回 true, 那么 x.equals(z) 也必须返回 true。 4.一致性 对于任何非 null 的引用值 x 和 y，只要 equals 的比较操作在对象中多有的信息都没有被修改，多次调用 x.equals(y) 就会一致的返回 true 或者 false。 5.非空性 所有的对象都不能为 null，为了防止抛出空指针异常。 3.高效实现 equals 方法的诀窍 1.使用 == 操作符检查“参数是否为这个对象的引用” 2.使用 instanceof 操作符检查“参数是否为正确的类型“ 3.把参数转换为正确的类型（接2） 4.对于该类中的每个”关键“域，检查参数中的域是否与该对象中对应的域相匹配 5.编写完之后，检查是否是对称的，传递的，一致的 6.覆盖 equals 时，总要覆盖 hashcode 7.不要企图让 equals 方法过于智能 8.不要将 equals 声明中的 Object 对象替换为其他的类型]]></content>
       <categories>
         <category>java</category>
-        <category>springboot</category>
+        <category>effectivejava</category>
       </categories>
       <tags>
         <tag>java</tag>
-        <tag>springboot</tag>
-        <tag>入门</tag>
+        <tag>effectivejava</tag>
       </tags>
   </entry>
   <entry>
@@ -415,6 +433,20 @@
       <tags>
         <tag>java</tag>
         <tag>effectivejava</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[【springboot-入门篇】第4篇-spring-boot-使用servlet，filter，listener和interceptor]]></title>
+    <url>%2F2017%2F07%2F17%2Fspring-boot%2F%E3%80%90springboot-%E5%85%A5%E9%97%A8%E7%AF%87%E3%80%91%E7%AC%AC4%E7%AF%87-spring-boot-%E4%BD%BF%E7%94%A8servlet%EF%BC%8Cfilter%EF%BC%8Clistener%E5%92%8Cinterceptor%2F</url>
+    <content type="text"><![CDATA[上一篇我们学习了 spring boot 利用Controller响应数据与响应页面。 一般的Web开发使用 Controller 基本上可以完成大部分需求，但是有的时候我们还是会用到 Servlet、Filter、Listener 等等。 在spring boot中添加自己的Servlet、Filter、Listener有两种方法 代码注册: 通过ServletRegistrationBean、 FilterRegistrationBean 和ServletListenerRegistrationBean 获得控制。 注解注册: 在SpringBootApplication 上使用@ServletComponentScan注解后，Servlet、Filter、Listener 可以直接通过 @WebServlet、@WebFilter、@WebListener 注解自动注册，无需其他代码。 spring boot 中注册servlet代码注册 创建Servlet类：AaServlet.java。 123456789101112131415public class AaServlet extends HttpServlet &#123; @Override protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException &#123; System.out.println(&quot;doGet&quot;); doPost(req, resp); &#125; @Override protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException &#123; System.out.println(&quot;doPost()&quot;); resp.setContentType(&quot;text/html&quot;); PrintWriter out = resp.getWriter(); out.println(&quot;&lt;h1&gt;AaServlet&lt;/h1&gt;&quot;); &#125;&#125; 通过ServletRegistrationBean注册。 1234567//Project2Application.java @Bean public ServletRegistrationBean AaServletRegistration() &#123; ServletRegistrationBean registration = new ServletRegistrationBean(new AaServlet()); registration.addUrlMappings(&quot;/a&quot;); return registration; &#125; 运行测试。 访问：http://localhost:8080/a 注解注册 创建Servlet类：BbServlet.java。 1234567891011121314151617@WebServlet(urlPatterns = &quot;/b&quot;)public class BbServlet extends HttpServlet &#123; @Override protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException &#123; System.out.println(&quot;doGet&quot;); doPost(req, resp); &#125; @Override protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException &#123; System.out.println(&quot;doPost()&quot;); resp.setContentType(&quot;text/html&quot;); PrintWriter out = resp.getWriter(); out.println(&quot;&lt;h1&gt;BbServlet&lt;/h1&gt;&quot;); &#125;&#125; 添加注解@ServletComponentScan。 12345678910111213141516@ServletComponentScan@SpringBootApplicationpublic class Project2Application &#123; public static void main(String[] args) &#123; SpringApplication.run(Project2Application.class, args); &#125; @Bean public ServletRegistrationBean AaServletRegistration() &#123; ServletRegistrationBean registration = new ServletRegistrationBean(new AaServlet()); registration.addUrlMappings(&quot;/a&quot;); return registration; &#125;&#125; 运行测试。 访问：http://localhost:8080/b filter 和 listener的注册和servlet一样。这里就不多说了。 接下来说一下拦截器。 自定义拦截器Spring提供了HandlerInterceptor（拦截器）。它的功能跟过滤器类似，但是提供更精细的的控制能力：在request被响应之前、request被响应之后、视图渲染之前以及request全部结束之后。我们不能通过拦截器修改request内容，但是可以通过抛出异常（或者返回false）来暂停request的执行。 spring boot提供了一些拦截器，我们可以直接拿来使用，比如： ConversionServiceExposingInterceptor CorsInterceptor LocaleChangeInterceptor PathExposingHandlerInterceptor ResourceUrlProviderExposingInterceptor ThemeChangeInterceptor UriTemplateVariablesHandlerInterceptor UserRoleAuthorizationInterceptor 我们也可以自己定义拦截器，定义拦截器的步骤大致分为： 1、创建我们自己的拦截器类并实现 HandlerInterceptor 接口。 2、创建一个Java类继承WebMvcConfigurerAdapter，并重写addInterceptors 方法。3、实例化我们自定义的拦截器，然后将对像手动添加到拦截器链中（在addInterceptors方法中添加）。 我们来亲自试一下： 创建我们自己的拦截器 123456789101112131415161718192021222324//MyInterceptor2public class MyInterceptor1 implements HandlerInterceptor &#123; @Override public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception &#123; System.out.println(&quot;MyInterceptor1==========&gt;在请求处理之前进行调用（Controller方法调用之前）&quot;); return true;// 只有返回true才会继续向下执行，返回false取消当前请求 &#125; @Override public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception &#123; System.out.println(&quot;MyInterceptor1==========&gt;请求处理之后进行调用，但是在视图被渲染之前（Controller方法调用之后）&quot;); &#125; @Override public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception &#123; System.out.println(&quot;MyInterceptor1==========&gt;在整个请求结束之后被调用，也就是在DispatcherServlet 渲染了对应的视图之后执行（主要是用于进行资源清理工作）&quot;); &#125;&#125; 123456789101112131415161718192021222324//MyInterceptor2public class MyInterceptor2 implements HandlerInterceptor &#123; @Override public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception &#123; System.out.println(&quot;MyInterceptor2==========&gt;在请求处理之前进行调用（Controller方法调用之前）&quot;); return true;// 只有返回true才会继续向下执行，返回false取消当前请求 &#125; @Override public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception &#123; System.out.println(&quot;MyInterceptor2==========&gt;请求处理之后进行调用，但是在视图被渲染之前（Controller方法调用之后）&quot;); &#125; @Override public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception &#123; System.out.println(&quot;MyInterceptor2==========&gt;在整个请求结束之后被调用，也就是在DispatcherServlet 渲染了对应的视图之后执行（主要是用于进行资源清理工作）&quot;); &#125;&#125; 创建一个Java类继承WebMvcConfigurerAdapter，并重写addInterceptors 方法,添加拦截器。 123456789101112131415//MyWebAppConfigurer@Configurationpublic class MyWebAppConfigurer extends WebMvcConfigurerAdapter &#123; @Override public void addInterceptors(InterceptorRegistry registry) &#123; // 多个拦截器组成一个拦截器链 // addPathPatterns 用于添加拦截规则 // excludePathPatterns 用户排除拦截 registry.addInterceptor(new MyInterceptor1()).addPathPatterns(&quot;/**&quot;); registry.addInterceptor(new MyInterceptor2()).addPathPatterns(&quot;/**&quot;); super.addInterceptors(registry); &#125;&#125; 测试：运行项目，随便访问一个路径，比如http://localhost:8080/test 浏览器会报错，不用管，看控制台。 拦截器已经起作用了。 值得注意的是：只有经过DispatcherServlet 的请求，才会走拦截器链，我们自定义的Servlet 请求是不会被拦截的，比如我们自定义的Servlet地址是不会被拦截器拦截的。 但是过滤器不同。不管是属于哪个Servlet 只要复合过滤器的过滤规则，过滤器都会拦截。 本篇文章就先介绍到这里，如果哪里讲的不明白，请及时与我联系。 参考文章：Spring Boot 拦截器]]></content>
+      <categories>
+        <category>java</category>
+        <category>springboot</category>
+      </categories>
+      <tags>
+        <tag>java</tag>
+        <tag>springboot</tag>
+        <tag>入门</tag>
       </tags>
   </entry>
   <entry>
@@ -499,6 +531,19 @@
       </tags>
   </entry>
   <entry>
+    <title><![CDATA[3:用私有构造器或者枚举类型强化Singleton属性]]></title>
+    <url>%2F2017%2F07%2F13%2Feffectivejava%2Feff-java-3%2F</url>
+    <content type="text"><![CDATA[3:用私有构造器或者枚举类型强化Singleton属性1.简介Singleton 指仅仅被实例化一次的类（单例）。Singleton 通常被用来代表那些本质上唯一的系统组件，比如窗口管理器或者文件系统。 2.旧式实现方式在 JDK1.5 发行之前，实现 Singleton 有两种方法： 方法一： 1234class Singletonone &#123; public static final Singletonone SINGLETONONE = new Singletonone(); private Singletonone()&#123;&#125;;&#125; 利用构造器仅被调用一次，用来实例化公有的静态 final 域 Singletonone.SINGLETONONE;可以保证该类对象的全局唯一性。 这种写法可以通过反射来生成第二个实例，如果想要抵御这种攻击，可以修改构造器，在创建第二个对象的时候抛出异常。 方法二： 1234567class Singletontwo &#123; private static final Singletontwo SINGLETONTWO = new Singletontwo(); private Singletontwo()&#123;&#125;; public Singletontwo getInstance()&#123; return SINGLETONTWO; &#125;&#125; 这种叫恶汉式，还有一种懒汉式的方式。但是多线程会有问题。 3.新的方式jdk1.5 以后加入了枚举，我们可以通过枚举来实现。 123enum Singletonthree &#123; SINGLETONTHREE&#125; 写完了。]]></content>
+      <categories>
+        <category>java</category>
+        <category>effectivejava</category>
+      </categories>
+      <tags>
+        <tag>java</tag>
+        <tag>effectivejava</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[【springboot-入门篇】第0篇--spring-boot是什么]]></title>
     <url>%2F2017%2F07%2F13%2Fspring-boot%2F%E3%80%90springboot-%E5%85%A5%E9%97%A8%E7%AF%87%E3%80%91%E7%AC%AC0%E7%AF%87--spring-boot%E6%98%AF%E4%BB%80%E4%B9%88%2F</url>
     <content type="text"><![CDATA[作为一个java程序员，如果你还不知道springboot，那你一定是落后了。 1. 什么是springbootSpring Boot是由Pivotal团队提供的全新框架，其设计目的是用来简化新Spring应用的初始搭建以及开发过程。该框架使用了特定的方式来进行配置，从而使开发人员不再需要定义样板化的配置。通过这种方式，Spring Boot致力于在蓬勃发展的快速应用开发领域（rapid application development）成为领导者。 spring大家都知道，boot是启动的意思。所以，spring boot其实就是一个启动spring项目的一个工具而已。从最根本上来讲，Spring Boot就是一些库的集合，它能够被任意项目的构建系统所使用。 2. 为什么会出现以前在写spring项目的时候，要配置各种xml文件，还记得曾经被ssh框架支配的恐惧。随着spring3，spring4的相继推出，约定大于配置逐渐成为了开发者的共识，大家也渐渐的从写xml转为写各种注解，在spring4的项目里，你甚至可以一行xml都不写。 虽然spring4已经可以做到无xml，但写一个大项目需要茫茫多的包，maven配置要写几百行，也是一件很可怕的事。 现在，快速开发一个网站的平台层出不穷，nodejs，php等虎视眈眈，并且脚本语言渐渐流行了起来（Node JS，Ruby，Groovy，Scala等），spring的开发模式越来越显得笨重。 在这种环境下，spring boot伴随着spring4一起出现了。 3. 可以做什么那么，spring boot可以做什么呢？ spring boot并不是一个全新的框架，它不是spring解决方案的一个替代品，而是spring的一个封装。所以，你以前可以用spring做的事情，现在用spring boot都可以做。 现在流行微服务与分布式系统，springboot就是一个非常好的微服务开发框架，你可以使用它快速的搭建起一个系统。同时，你也可以使用spring cloud（Spring Cloud是一个基于Spring Boot实现的云应用开发工具）来搭建一个分布式的网站。 4. 优点4.1 使编码变得简单 spring boot采用java config的方式，对spring进行配置，并且提供了大量的注解，极大地提高了工作效率。 4.2 使配置变得简单 spring boot提供许多默认配置，当然也提供自定义配置。但是所有spring boot的项目都只有一个配置文件：application.properties/application.yml。用了spring boot，再也不用担心配置出错找不到问题所在了。 4.3 使部署变得简单spring boot内置了三种servlet容器：tomcat，jetty，undertow。 所以，你只需要一个java的运行环境就可以跑spring boot的项目了。spring boot的项目可以打成一个jar包，然后通过java -jar xxx.jar来运行。（spring boot项目的入口是一个main方法，运行该方法即可。 ） 4.4 使监控变得简单spring boot提供了actuator包，可以使用它来对你的应用进行监控。它主要提供了以下功能： 我们将在后续文章中学习它。 5. 相关技术5.1 微服务架构微服务是一种架构风格，一个大型复杂软件应用由一个或多个微服务组成。系统中的各个微服务可被独立部署，各个微服务之间是松耦合的。每个微服务仅关注于完成一件任务并很好地完成该任务。在所有情况下，每个任务代表着一个小的业务能力。 比如我要开发一个购票系统。就可以简单的拆分为用户管理微服务和售票系统微服务。两个服务都可以独立运行，都有自己的数据库，他们之间通过restapi 进行通信。 而spring boot就是搭建微服务的一个很好的选择。 5.2 restfulrestful 是一种api的风格，后面的文章里，会着重讲解。spring boot可以很方便的提供restful 风格的api。 5.3 spring cloud微服务有很多优点，当然也有一些挑战。可以参考这篇文章：微服务实战（一）：微服务架构的优势与不足。 微服务一般都是运行在分布式环境中的，这可不是简单的写一个ssm框架的小程序就可以解决的，其中需要用到很多技术，比如负载均衡，反向代理，服务治理，配置管理，消息总线等，spring cloud提供了这些技术。并且，spring cloud全家桶是基于spring boot的。 之后会专门开一个spring cloud的专题。 6. 总结来总结一下spring boot的特点。 独立运行的Spring项目Spring Boot可以以jar包的形式进行独立的运行，使用：java -jar xx.jar 就可以成功的运行项目，或者在应用项目的主程序中运行main函数即可； 内嵌的Servlet容器我们上面已经讲过。 提供starter简化Manen配置spring boot提供各种starter，其实就是一些spring bao的集合，只不过spring boot帮我们整合起来了而已。 上图只是其中的一部分，还有很多其他的。通过这些starter也可以看得出来，spring boot可以和其他主流的框架无缝集成，比如mybatis等。所以，你不需要担心你想用的技术spring boot不支持。 自动配置Spring，无xml文件Spring Boot会根据我们项目中类路径的jar包/类，为jar包的类进行自动配置Bean，这样一来就大大的简化了我们的配置。当然，这只是Spring考虑到的大多数的使用场景，在一些特殊情况，我们还需要自定义自动配置（就在那唯一的配置文件里，而且它不是xml文件！）。 应用监控Spring Boot提供了基于http、ssh、telnet对运行时的项目进行监控。 springboot 入门篇将会从头开始，介绍spring boot的一些技术及应用，每周至少两篇，欢迎关注。同时，由于我也是一个初学者，文章中难免有一些不正确的地方，希望各位批评指正，共同进步。 spring boot 官网：http://projects.spring.io/spring-boot/spring boot 中文网：https://springcloud.cc/ 参考文章：http://www.csdn.net/article/a/2016-05-12/15838098Spring Boot_百度百科]]></content>
@@ -510,19 +555,6 @@
         <tag>java</tag>
         <tag>springboot</tag>
         <tag>入门</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[3:用私有构造器或者枚举类型强化Singleton属性]]></title>
-    <url>%2F2017%2F07%2F13%2Feffectivejava%2Feff-java-3%2F</url>
-    <content type="text"><![CDATA[3:用私有构造器或者枚举类型强化Singleton属性1.简介Singleton 指仅仅被实例化一次的类（单例）。Singleton 通常被用来代表那些本质上唯一的系统组件，比如窗口管理器或者文件系统。 2.旧式实现方式在 JDK1.5 发行之前，实现 Singleton 有两种方法： 方法一： 1234class Singletonone &#123; public static final Singletonone SINGLETONONE = new Singletonone(); private Singletonone()&#123;&#125;;&#125; 利用构造器仅被调用一次，用来实例化公有的静态 final 域 Singletonone.SINGLETONONE;可以保证该类对象的全局唯一性。 这种写法可以通过反射来生成第二个实例，如果想要抵御这种攻击，可以修改构造器，在创建第二个对象的时候抛出异常。 方法二： 1234567class Singletontwo &#123; private static final Singletontwo SINGLETONTWO = new Singletontwo(); private Singletontwo()&#123;&#125;; public Singletontwo getInstance()&#123; return SINGLETONTWO; &#125;&#125; 这种叫恶汉式，还有一种懒汉式的方式。但是多线程会有问题。 3.新的方式jdk1.5 以后加入了枚举，我们可以通过枚举来实现。 123enum Singletonthree &#123; SINGLETONTHREE&#125; 写完了。]]></content>
-      <categories>
-        <category>java</category>
-        <category>effectivejava</category>
-      </categories>
-      <tags>
-        <tag>java</tag>
-        <tag>effectivejava</tag>
       </tags>
   </entry>
   <entry>
