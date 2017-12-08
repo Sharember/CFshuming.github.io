@@ -303,7 +303,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/07/17/spring-boot/【springboot-入门篇】第4篇-spring-boot-使用servlet，filter，listener和interceptor/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/07/17/effectivejava/eff-java-7/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="CFshuming">
@@ -322,7 +322,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/07/17/spring-boot/【springboot-入门篇】第4篇-spring-boot-使用servlet，filter，listener和interceptor/" itemprop="url">【springboot-入门篇】第4篇-spring-boot-使用servlet，filter，listener和interceptor</a></h1>
+                <a class="post-title-link" href="/2017/07/17/effectivejava/eff-java-7/" itemprop="url">【effective java】7:避免使用终结方法</a></h1>
         
 
         <div class="post-meta">
@@ -368,8 +368,8 @@
                 
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/java/springboot/" itemprop="url" rel="index">
-                    <span itemprop="name">springboot</span>
+                  <a href="/categories/java/effectivejava/" itemprop="url" rel="index">
+                    <span itemprop="name">effectivejava</span>
                   </a>
                 </span>
 
@@ -387,8 +387,8 @@
                 <i class="fa fa-comment-o"></i>
               </span>
               
-                <a href="/2017/07/17/spring-boot/【springboot-入门篇】第4篇-spring-boot-使用servlet，filter，listener和interceptor/#SOHUCS" itemprop="discussionUrl">
-                  <span id="url::http://yoursite.com/2017/07/17/spring-boot/【springboot-入门篇】第4篇-spring-boot-使用servlet，filter，listener和interceptor/" class="cy_cmt_count" data-xid="2017/07/17/spring-boot/【springboot-入门篇】第4篇-spring-boot-使用servlet，filter，listener和interceptor/" itemprop="commentsCount" ></span>
+                <a href="/2017/07/17/effectivejava/eff-java-7/#SOHUCS" itemprop="discussionUrl">
+                  <span id="url::http://yoursite.com/2017/07/17/effectivejava/eff-java-7/" class="cy_cmt_count" data-xid="2017/07/17/effectivejava/eff-java-7/" itemprop="commentsCount" ></span>
                 </a>
               
             
@@ -418,14 +418,14 @@
       
         
           
-          
-上一篇我们学习了 spring boot 利用Controller响应数据与响应页面。 一般的Web开发使用 Controller 基本上可以完成大部分需求，但是有的时候我们还是会用到 Servlet、Filter、Listener 等等。
+          7:避免使用终结方法终结方法（finalizer）通常是不可预测的，也是很危险的，一般情况下是不必要的。
+为什么要避免使用1终结方法的缺点在于不能保证会被及时的执行。从一个对象变得不可达开始，到它的终结方法被执行，所花费的这段时间是任意长的。
 
-在spring boot中添加自己的Servlet、F
+所以，注重时间的任务不应该由终结方法来完成，例如，用终
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2017/07/17/spring-boot/【springboot-入门篇】第4篇-spring-boot-使用servlet，filter，listener和interceptor/#more" rel="contents">
+            <a class="btn" href="/2017/07/17/effectivejava/eff-java-7/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
