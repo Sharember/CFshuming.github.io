@@ -303,7 +303,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/07/23/java concurrency/java-concurrency-3/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/07/24/java concurrency/java-concurrency-4/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="CFshuming">
@@ -322,7 +322,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/07/23/java concurrency/java-concurrency-3/" itemprop="url">【java 并发】 3. 对象的共享（1）</a></h1>
+                <a class="post-title-link" href="/2017/07/24/java concurrency/java-concurrency-4/" itemprop="url">【java 并发】4. 对象的共享（2）</a></h1>
         
 
         <div class="post-meta">
@@ -334,8 +334,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-23T20:46:25+08:00">
-                2017-07-23
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-24T20:46:25+08:00">
+                2017-07-24
               </time>
             
 
@@ -387,8 +387,8 @@
                 <i class="fa fa-comment-o"></i>
               </span>
               
-                <a href="/2017/07/23/java concurrency/java-concurrency-3/#SOHUCS" itemprop="discussionUrl">
-                  <span id="url::http://yoursite.com/2017/07/23/java concurrency/java-concurrency-3/" class="cy_cmt_count" data-xid="2017/07/23/java concurrency/java-concurrency-3/" itemprop="commentsCount" ></span>
+                <a href="/2017/07/24/java concurrency/java-concurrency-4/#SOHUCS" itemprop="discussionUrl">
+                  <span id="url::http://yoursite.com/2017/07/24/java concurrency/java-concurrency-4/" class="cy_cmt_count" data-xid="2017/07/24/java concurrency/java-concurrency-4/" itemprop="commentsCount" ></span>
                 </a>
               
             
@@ -418,12 +418,15 @@
       
         
           
-          同步的另一个重要的方面是：内存可见性。我们不仅希望放置某个现场正在使用对象状态而另一个线程在同时修改该状态，而且希望确保当一个线程修改了对象状态后，其他线程能够看到发生的状态变化。
-1.可见性多线程环境中，如果没有使用同步机制，编译器、处理器以及运行时等都可能对操作的执行顺序进行一些意想不到的调整，
+          2.发布与溢出发布一个对象是指，使对象能够在当前作用域之外的代码中使用。
+
+比如，将一个执行该对象的引用保存带其他代码可以访问待的地方，或者在某一个非私有的方法中返回该引用，或者将引用传递到其他类的方法中。
+
+许多时候，我们需要确保对象及其内部状态不被发布。而在某些情况下，我们又需要发布某个对象，但
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2017/07/23/java concurrency/java-concurrency-3/#more" rel="contents">
+            <a class="btn" href="/2017/07/24/java concurrency/java-concurrency-4/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -644,7 +647,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/07/22/effectivejava/eff-java-13/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/07/23/java concurrency/java-concurrency-3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="CFshuming">
@@ -663,7 +666,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/07/22/effectivejava/eff-java-13/" itemprop="url">【effective java】13:使类和成员的可访问性最小化</a></h1>
+                <a class="post-title-link" href="/2017/07/23/java concurrency/java-concurrency-3/" itemprop="url">【java 并发】 3. 对象的共享（1）</a></h1>
         
 
         <div class="post-meta">
@@ -675,8 +678,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-22T20:46:25+08:00">
-                2017-07-22
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-23T20:46:25+08:00">
+                2017-07-23
               </time>
             
 
@@ -709,8 +712,8 @@
                 
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/java/effectivejava/" itemprop="url" rel="index">
-                    <span itemprop="name">effectivejava</span>
+                  <a href="/categories/java/concurrency/" itemprop="url" rel="index">
+                    <span itemprop="name">concurrency</span>
                   </a>
                 </span>
 
@@ -728,8 +731,8 @@
                 <i class="fa fa-comment-o"></i>
               </span>
               
-                <a href="/2017/07/22/effectivejava/eff-java-13/#SOHUCS" itemprop="discussionUrl">
-                  <span id="url::http://yoursite.com/2017/07/22/effectivejava/eff-java-13/" class="cy_cmt_count" data-xid="2017/07/22/effectivejava/eff-java-13/" itemprop="commentsCount" ></span>
+                <a href="/2017/07/23/java concurrency/java-concurrency-3/#SOHUCS" itemprop="discussionUrl">
+                  <span id="url::http://yoursite.com/2017/07/23/java concurrency/java-concurrency-3/" class="cy_cmt_count" data-xid="2017/07/23/java concurrency/java-concurrency-3/" itemprop="commentsCount" ></span>
                 </a>
               
             
@@ -759,12 +762,12 @@
       
         
           
-          13:使类和成员的可访问性最小化1. 简介要区别设计良好的模块与设计不好的模块，最重要的因素在于，这个模块对于外部的其他模块而言，是否隐藏其内部数据和其他实现细节。
-设计良好的模块会隐藏所有的实现细节，把它的 API 与它的实现清晰的隔离开来。然后模块之间只通过它们的 API 进行通信，一个模块不需
+          同步的另一个重要的方面是：内存可见性。我们不仅希望放置某个现场正在使用对象状态而另一个线程在同时修改该状态，而且希望确保当一个线程修改了对象状态后，其他线程能够看到发生的状态变化。
+1.可见性多线程环境中，如果没有使用同步机制，编译器、处理器以及运行时等都可能对操作的执行顺序进行一些意想不到的调整，
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2017/07/22/effectivejava/eff-java-13/#more" rel="contents">
+            <a class="btn" href="/2017/07/23/java concurrency/java-concurrency-3/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -993,7 +996,7 @@ java 中主要的同步机制是synchronized 关键字，它提供一种独占�
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/07/22/web/web-dns/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/07/22/effectivejava/eff-java-13/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="CFshuming">
@@ -1012,7 +1015,7 @@ java 中主要的同步机制是synchronized 关键字，它提供一种独占�
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/07/22/web/web-dns/" itemprop="url">DNS域名解析过程（不考虑负载均衡等复杂情况）</a></h1>
+                <a class="post-title-link" href="/2017/07/22/effectivejava/eff-java-13/" itemprop="url">【effective java】13:使类和成员的可访问性最小化</a></h1>
         
 
         <div class="post-meta">
@@ -1047,8 +1050,8 @@ java 中主要的同步机制是synchronized 关键字，它提供一种独占�
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/web/" itemprop="url" rel="index">
-                    <span itemprop="name">web</span>
+                  <a href="/categories/java/" itemprop="url" rel="index">
+                    <span itemprop="name">java</span>
                   </a>
                 </span>
 
@@ -1058,8 +1061,8 @@ java 中主要的同步机制是synchronized 关键字，它提供一种独占�
                 
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/web/dns/" itemprop="url" rel="index">
-                    <span itemprop="name">dns</span>
+                  <a href="/categories/java/effectivejava/" itemprop="url" rel="index">
+                    <span itemprop="name">effectivejava</span>
                   </a>
                 </span>
 
@@ -1077,8 +1080,8 @@ java 中主要的同步机制是synchronized 关键字，它提供一种独占�
                 <i class="fa fa-comment-o"></i>
               </span>
               
-                <a href="/2017/07/22/web/web-dns/#SOHUCS" itemprop="discussionUrl">
-                  <span id="url::http://yoursite.com/2017/07/22/web/web-dns/" class="cy_cmt_count" data-xid="2017/07/22/web/web-dns/" itemprop="commentsCount" ></span>
+                <a href="/2017/07/22/effectivejava/eff-java-13/#SOHUCS" itemprop="discussionUrl">
+                  <span id="url::http://yoursite.com/2017/07/22/effectivejava/eff-java-13/" class="cy_cmt_count" data-xid="2017/07/22/effectivejava/eff-java-13/" itemprop="commentsCount" ></span>
                 </a>
               
             
@@ -1108,16 +1111,12 @@ java 中主要的同步机制是synchronized 关键字，它提供一种独占�
       
         
           
-          DNS域名解析过程（不考虑负载均衡等复杂情况）在浏览器中输入：www.abc.com 会发生哪些事情呢？
-
-1.浏览器检查缓存中有没有该域名对应的解析过的ip地址，如果有，解析过程结束。
-
-
-浏览器缓存域名是有限制的，不仅缓存的大小有限制，缓存的时间也有限制。缓存时间可以通过TTL属性来控制。这个缓
+          13:使类和成员的可访问性最小化1. 简介要区别设计良好的模块与设计不好的模块，最重要的因素在于，这个模块对于外部的其他模块而言，是否隐藏其内部数据和其他实现细节。
+设计良好的模块会隐藏所有的实现细节，把它的 API 与它的实现清晰的隔离开来。然后模块之间只通过它们的 API 进行通信，一个模块不需
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2017/07/22/web/web-dns/#more" rel="contents">
+            <a class="btn" href="/2017/07/22/effectivejava/eff-java-13/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1205,7 +1204,7 @@ java 中主要的同步机制是synchronized 关键字，它提供一种独占�
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">41</span>
+                  <span class="site-state-item-count">42</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -1216,7 +1215,7 @@ java 中主要的同步机制是synchronized 关键字，它提供一种独占�
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">19</span>
+                  <span class="site-state-item-count">21</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -1227,7 +1226,7 @@ java 中主要的同步机制是synchronized 关键字，它提供一种独占�
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">34</span>
+                  <span class="site-state-item-count">36</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>

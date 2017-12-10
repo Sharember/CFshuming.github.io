@@ -1,6 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[【奇淫技巧】1. 位运算]]></title>
+    <url>%2F2017%2F12%2F08%2F%E5%A5%87%E6%B7%AB%E6%8A%80%E5%B7%A7%2F%E4%BD%8D%E8%BF%90%E7%AE%97%2F</url>
+    <content type="text"><![CDATA[技巧1：检查整数是奇数还是偶数 12345678// 只要整数的最后一位比特是 1 ，那它就是奇数，反之就是偶数if ((x &amp; 1) == 0) &#123; // x is even&#125;else &#123; // x is odd&#125; 技巧2：测试第n位比特 12345678// 假设向左平移 n 位，接下来的与运算就是只保留第 n 位，其它位都清零了。if (x &amp; (1 &lt;&lt; n)) &#123; // n-th bit is set&#125;else &#123; // n-th bit is not set&#125; 技巧3：将第 n 位设为1 123// 与1进行或运算将参与运算的位置为 1，与 0 进行或运算参与预算的位不变。y = x | (1 &lt;&lt; n) 技巧4：将第n位设为0 12// ~(1 &lt;&lt; n)，它将第 n 位设为 0，其它位全部为 1y = x &amp; ~(1 &lt;&lt; n) 技巧5：将第n位取反 123// 如果第n位比特为1，将它与1进行异或运算结果就是0，如果它是0，那么它与1异或运算的结果就是1。于是这一位就取反了。y = x ^ (1 &lt;&lt; n) 技巧6：将最右边的数值为1的bit位设为0 123y = x &amp; (x - 1)// 例如x=10101011，运算结果是00000100。 技巧7：找到一个数的最右边值为1的比特位，将其他位置为0 123y = x &amp; (-x)// 例如x=10101011，运算结果是00000100。 技巧8：找到x最右边的值为0的比特位，将其他位置为0，这一位置为1 123y = ~x &amp; (x + 1)// 例如x=10101011），运算结果是00000100。 技巧9：将最右边值为0的比特取反 1234y = x | (x + 1)// 例如x=10100011运算后结果为10100111。 技巧10： 交换两数 1234567void Swap(int a, int b) &#123; if (a != b) &#123; a ^= b; b ^= a; a ^= b; &#125; &#125; 技巧11： 正数变成负数，负数变成正数 12// 取反 +1 即可y = ~a + 1 技巧12： 求绝对值 123456int my_abs(int a) &#123; int i = a &gt;&gt; 31; // 取符号位（默认 int 占32位） return i == 0 ? a : (~a + 1); // return ((a ^ i) - i); 可以优化为这样&#125; 技巧13： 二进制逆序 123456int ans = 0;for(int i = 31; i &gt;= 0; i--) &#123; ans |= (n &amp; 1) &lt;&lt; i; n &gt;&gt;= 1;&#125;return ans &gt;&gt;&gt; 0; 技巧14：O(1) 时间检测整数 n 是否是 2 的幂次 1N &amp; (N - 1) == 0 技巧14： 如果要将整数A转换为B，需要改变多少个bit位 12345678// 计算A异或B之后这个数中1的个数int count = 0, n = A ^ B;while (n != 0) &#123; ++count; n = (n - 1) &amp; n;&#125;return count; 技巧15： 数组中，只有一个数出现一次，剩下都出现两次，找出出现一次的数 123// 将所有的数异或起来，就可以得到唯一的那个数。a ^ b ^ b = a Matrix67 的文章位运算简介及实用技巧（一）：基础篇位运算简介及实用技巧（二）：进阶篇(1)位运算简介及实用技巧（三）：进阶篇(2)位运算简介及实用技巧（四）：实战篇]]></content>
+      <categories>
+        <category>奇淫技巧</category>
+        <category>位运算</category>
+      </categories>
+      <tags>
+        <tag>奇淫技巧</tag>
+        <tag>位运算</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[【算法-剑指offer】10. 矩形覆盖]]></title>
     <url>%2F2017%2F12%2F05%2Falgorithm%2F%E5%89%91%E6%8C%87offer%2F%E7%9F%A9%E5%BD%A2%E8%A6%86%E7%9B%96%2F</url>
     <content type="text"><![CDATA[题目描述： 我们可以用21的小矩形横着或者竖着去覆盖更大的矩形。请问用n个21的小矩形无重叠地覆盖一个2*n的大矩形，总共有多少种方法？ 分析： 斐波那契数列变种。 2n的大矩形，和n个21的小矩形 其中target*2为大矩阵的大小 有以下几种情形： 1⃣️target 2⃣️target = 1大矩形为2*1，只有一种摆放方法，return1； 3⃣️target = 2 大矩形为2*2，有两种摆放方法，return2； 4⃣️target = n 分为两步考虑： 第一次摆放一块 2*1 的小矩阵，则摆放方法总共为f(target - 1) | √ | | | | | | | || √ | | | | | | | | 第一次摆放一块1*2的小矩阵，则摆放方法总共为f(target-2) 因为，摆放了一块12的小矩阵（用√√表示），对应下方的12（用××表示）摆放方法就确定了，所以为f(targte-2) | √ | √ | | | | | | || × | × | | | | | | | 答案： 123456789101112131415161718// 动态规划public class Solution &#123; public int RectCover(int target) &#123; if(target == 0) &#123; return 0; &#125; if(target == 1) &#123; return 1; &#125; int dp [] = new int[target + 1]; dp[1] = 1; dp[2] = 2; for(int i = 3; i &lt;= target; i++) &#123; dp[i] = dp[i - 1] + dp[i - 2]; &#125; return dp[target]; &#125;&#125;]]></content>
@@ -232,6 +245,19 @@
       </tags>
   </entry>
   <entry>
+    <title><![CDATA[【effective java】14:在公有类中使用访问方法而非公有域]]></title>
+    <url>%2F2017%2F07%2F23%2Feffectivejava%2Feff-java-14%2F</url>
+    <content type="text"><![CDATA[14:在公有类中使用访问方法而非公有域就是提供 get set 方法]]></content>
+      <categories>
+        <category>java</category>
+        <category>effectivejava</category>
+      </categories>
+      <tags>
+        <tag>java</tag>
+        <tag>effectivejava</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[【java 并发】 3. 对象的共享（1）]]></title>
     <url>%2F2017%2F07%2F23%2Fjava%20concurrency%2Fjava-concurrency-3%2F</url>
     <content type="text"><![CDATA[同步的另一个重要的方面是：内存可见性。我们不仅希望放置某个现场正在使用对象状态而另一个线程在同时修改该状态，而且希望确保当一个线程修改了对象状态后，其他线程能够看到发生的状态变化。 1.可见性多线程环境中，如果没有使用同步机制，编译器、处理器以及运行时等都可能对操作的执行顺序进行一些意想不到的调整，这就导致一个线程修改了一个变量，另一个线程不能及时的得知该变量的更新，最终导致意外错误。 1.1 失效数据当一个数据被一个线程改变，而另一个线程读取到了修改前的值，就出现了失效数据。 1.2 非原子的64位操作java 内存模型要求，变量的读取操作和写入操作都必须是原子操作。对于 java 中的 double 和 long 来说，他们都是64位的。jvm 允许将64位的读操作或者写操作分解为两个32位操作。当读取一个非 volatite 类型的 long 变量时，如果对该变量的读操作和写操作是在两个不同的线程中执行的，那么很可能会读到某个值的高32位和另一个值的低32位。 因此，除非用 volatile 来声明或者用锁来保护，否则在多线程环境中，long 和 double 都是不安全的。 1.3 加锁与可见性内置锁可以用于确保某个线程以一种可预测的方式来查看另一个线程的执行结果。这样可以确保某个线程写入该变量的值对于其他线程来说都是可见的。 加锁的行为不仅仅局限于互斥行为，还包括内存可见性。 1.4 volatile 变量java 语言提供了一种稍弱的同步机制，即 volatile 变量，用来确保将变量的更新操作通知到其他线程。 volatile 变量不会被缓存在寄存器或者对其他处理器不可见的地方，因此在读取 volatile 类型的变量时总会返回最新写入的值。 从内存的角度看，写入 volatile 变量相当于退出同步代码块，而读取 volatile 变量就相当于读取同步代码块。 并不建议过度依赖 volatile 变量提供可见性。因为这样的代码相对于加锁来说更脆弱，也更难理解。]]></content>
@@ -247,16 +273,18 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[【effective java】14:在公有类中使用访问方法而非公有域]]></title>
-    <url>%2F2017%2F07%2F23%2Feffectivejava%2Feff-java-14%2F</url>
-    <content type="text"><![CDATA[14:在公有类中使用访问方法而非公有域就是提供 get set 方法]]></content>
+    <title><![CDATA[【java 并发】2. 线程的安全性]]></title>
+    <url>%2F2017%2F07%2F22%2Fjava%20concurrency%2Fjava-concurrency-2%2F</url>
+    <content type="text"><![CDATA[要编写线程安全的代码，其核心在于要对状态访问操作进行管理，特别是对共享的和可变的状态的访问。 共享，意味着变量可以由多个线程同时访问。 可变，意味着变量的值在其生命周期内可以发生变化。 java 中主要的同步机制是synchronized 关键字，它提供一种独占的加锁方式。但“同步”这个术语还包括 volatile 类型的变量，显式锁以及原子变量。 1. 什么是线程安全性当多个线程访问某个类时，这个类始终都能表现出正确的行为，那么就称这个类是线程安全的。 无状态对象一定是线程安全的。 无状态对象：既不包含任何域，也不包含任何对其他类中域的引用，计算中过程中的临时状态仅存在于线程栈上的局部变量中，并且只能由正在执行的线程访问。 比如： 大多数 Servlet 类 都是无状态的，从而极大地降低了在实现 Servlet 线程安全性时的复杂性，只有当 Servlet 在处理请求时需要保存一些信息，线程安全性才会成为一个问题。 2. 原子性静态条件（RaceCondition）：在并发编程中，由于不恰当的执行顺序而出现不正确的结果的情况。 2.1 竞态条件当某个计算的正确性取决于多个线程的交替执行顺序时，就会发生竞态条件。 正确的结果取决于运气。 最常见的竞态条件是“先检查后执行（Check-Then-Act）”。比如懒加载（延迟初始化）。 2.2 延迟初始化12345678910public class LazyInitCase &#123; private ExpensiveObj instance = null; public ExpensiveObj getInstance() &#123; if (instance == null) &#123; instance = new ExpensiveObj(); &#125; return instance; &#125;&#125; 在多线程环境下，这样写就有可能出现错误。 与大多数并发错误一样，竞态条件并不总是会产生错误，还需要执行了某种不恰当的顺序。 2.3 复合操作我们将“先检查后执行”以及“读取-修改-写入”等操作统称为复合操作。为了达到线程安全，复合操作需要是原子操作。 原子操作：要么不执行，要么一次性执行完毕。 java.util.concurrent.atomic 中提供了一些原子变量类。 3. 加锁机制3.1 内置锁每个java对象 都可以用作一个实现同步的锁，这些锁被称为内置锁或者监视器锁。 java的内置锁相当于一种互斥锁。 3.2 重入如果一个锁是可重入的，那么当一个线程试图获得一个已经由他自己持有的锁，这个请求会成功。内置锁是可重入的。 重入，意味着获取锁的操作的粒度是“线程”，而不是“调用”。 重入进一步提升了加锁行为的封装性，简化了面向对象并发代码的开发。 4. 用锁来保护状态可以通过锁来构造一些协议，以实现对共享状态的独占访问。 每个共享的和可变的变量都应该只由一个锁来保护。 5. 活跃性与性能使用两种不同的同步机制不仅会带来混乱，也不会在性能或安全性上带来任何好处。]]></content>
       <categories>
         <category>java</category>
-        <category>effectivejava</category>
+        <category>concurrency</category>
       </categories>
       <tags>
         <tag>java</tag>
-        <tag>effectivejava</tag>
+        <tag>concurrency</tag>
+        <tag>线程</tag>
+        <tag>并发</tag>
       </tags>
   </entry>
   <entry>
@@ -270,21 +298,6 @@
       <tags>
         <tag>java</tag>
         <tag>effectivejava</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[【java 并发】2. 线程的安全性]]></title>
-    <url>%2F2017%2F07%2F22%2Fjava%20concurrency%2Fjava-concurrency-2%2F</url>
-    <content type="text"><![CDATA[要编写线程安全的代码，其核心在于要对状态访问操作进行管理，特别是对共享的和可变的状态的访问。 共享，意味着变量可以由多个线程同时访问。 可变，意味着变量的值在其生命周期内可以发生变化。 java 中主要的同步机制是synchronized 关键字，它提供一种独占的加锁方式。但“同步”这个术语还包括 volatile 类型的变量，显式锁以及原子变量。 1. 什么是线程安全性当多个线程访问某个类时，这个类始终都能表现出正确的行为，那么就称这个类是线程安全的。 无状态对象一定是线程安全的。 无状态对象：既不包含任何域，也不包含任何对其他类中域的引用，计算中过程中的临时状态仅存在于线程栈上的局部变量中，并且只能由正在执行的线程访问。 比如： 大多数 Servlet 类 都是无状态的，从而极大地降低了在实现 Servlet 线程安全性时的复杂性，只有当 Servlet 在处理请求时需要保存一些信息，线程安全性才会成为一个问题。 2. 原子性静态条件（RaceCondition）：在并发编程中，由于不恰当的执行顺序而出现不正确的结果的情况。 2.1 竞态条件当某个计算的正确性取决于多个线程的交替执行顺序时，就会发生竞态条件。 正确的结果取决于运气。 最常见的竞态条件是“先检查后执行（Check-Then-Act）”。比如懒加载（延迟初始化）。 2.2 延迟初始化12345678910public class LazyInitCase &#123; private ExpensiveObj instance = null; public ExpensiveObj getInstance() &#123; if (instance == null) &#123; instance = new ExpensiveObj(); &#125; return instance; &#125;&#125; 在多线程环境下，这样写就有可能出现错误。 与大多数并发错误一样，竞态条件并不总是会产生错误，还需要执行了某种不恰当的顺序。 2.3 复合操作我们将“先检查后执行”以及“读取-修改-写入”等操作统称为复合操作。为了达到线程安全，复合操作需要是原子操作。 原子操作：要么不执行，要么一次性执行完毕。 java.util.concurrent.atomic 中提供了一些原子变量类。 3. 加锁机制3.1 内置锁每个java对象 都可以用作一个实现同步的锁，这些锁被称为内置锁或者监视器锁。 java的内置锁相当于一种互斥锁。 3.2 重入如果一个锁是可重入的，那么当一个线程试图获得一个已经由他自己持有的锁，这个请求会成功。内置锁是可重入的。 重入，意味着获取锁的操作的粒度是“线程”，而不是“调用”。 重入进一步提升了加锁行为的封装性，简化了面向对象并发代码的开发。 4. 用锁来保护状态可以通过锁来构造一些协议，以实现对共享状态的独占访问。 每个共享的和可变的变量都应该只由一个锁来保护。 5. 活跃性与性能使用两种不同的同步机制不仅会带来混乱，也不会在性能或安全性上带来任何好处。]]></content>
-      <categories>
-        <category>java</category>
-        <category>concurrency</category>
-      </categories>
-      <tags>
-        <tag>java</tag>
-        <tag>concurrency</tag>
-        <tag>线程</tag>
-        <tag>并发</tag>
       </tags>
   </entry>
   <entry>
@@ -327,18 +340,16 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[【java 并发】1. 初识java并发]]></title>
-    <url>%2F2017%2F07%2F20%2Fjava%20concurrency%2Fjava-concurrency-1%2F</url>
-    <content type="text"><![CDATA[1. 线程的优势 1.1 发挥多处理器强大的能力 通过提高处理器资源的利用率来提神系统的吞吐率。（充分利用处理器） 有助于在但处理器系统上获得更高的吞吐率。（合理安排处理器；异步） 1.2 建模的简单性 如果程序中只包含一种类型的任务，那么比包含多种不同类型任务的程序要更容易编写，错误更少，也更容易测试。 1.3 异步事件的简化处理 1.4 响应更灵敏的用户界面 传统的gui采用主事件循环（单线程），程序可能会“冻结” 2. 线程带来的风险 2.1 安全性问题 非同步线程会造成脏读，不可重复读等问题。 2.2 活跃性问题 死锁，饥饿，活锁等 2.3 性能问题 服务时间过长；响应不灵敏；吞吐率过低；资源消耗过高；可伸缩性较低等。 3. 线程无处不在 3.1 每个java程序都会使用线程 3.2 Timer 3.3 Servlet 和 jsp servlet 需要满足被多个线程同时调用（servlet需要是线程安全的） 3.4 远程方法调用（RMI） 两个线程安全问题： 正确的协同在多个对象中共享的状态 对远程对象本身状态的访问 3.5 Swing 和 AWT swing 的一些组件并不是线程安全的，如JTable。swing 程序通过将所有对gui组件的访问局限在事件线程中以实现线程安全性]]></content>
+    <title><![CDATA[【effective java】10:始终要覆盖toString]]></title>
+    <url>%2F2017%2F07%2F20%2Feffectivejava%2Feff-java-10%2F</url>
+    <content type="text"><![CDATA[10:始终要覆盖toString几个要点 1.虽然 toString 的约定并不像 equals 和 hashcode 的约定，但是提供良好的 toString 实现可以使类用起来更加舒适。 2.不管是否覆盖了 toString 方法，程序员都将以这种方式来产生诊断信息，但是如果没有覆盖 toString 方法，那么产生的信息将会难以理解。 3.在实际应用中，toString 方法应该赶回对象中包含的所有值得关注的信息。如果对象太大，toString 应该返回一个摘要信息。 4.在实现 toString 的时候，要决定是否在文档中指定返回值格式。指定格式的好处是，它可以被用作一种标准的、明确的、适合人阅读的对象表示法。不足之处是，如果这个类已经被广泛使用，一旦指定格式，就必须始终如一的坚持这种格式。 5.无论你是否决定使用格式，都应该在文档中明确的表明你的意图。 6.无论是否指定格式，都为 toString 返回值中包含的所有信息，提供一种编程式的访问路径。]]></content>
       <categories>
         <category>java</category>
-        <category>concurrency</category>
+        <category>effectivejava</category>
       </categories>
       <tags>
         <tag>java</tag>
-        <tag>concurrency</tag>
-        <tag>线程</tag>
-        <tag>并发</tag>
+        <tag>effectivejava</tag>
       </tags>
   </entry>
   <entry>
@@ -355,16 +366,18 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[【effective java】10:始终要覆盖toString]]></title>
-    <url>%2F2017%2F07%2F20%2Feffectivejava%2Feff-java-10%2F</url>
-    <content type="text"><![CDATA[10:始终要覆盖toString几个要点 1.虽然 toString 的约定并不像 equals 和 hashcode 的约定，但是提供良好的 toString 实现可以使类用起来更加舒适。 2.不管是否覆盖了 toString 方法，程序员都将以这种方式来产生诊断信息，但是如果没有覆盖 toString 方法，那么产生的信息将会难以理解。 3.在实际应用中，toString 方法应该赶回对象中包含的所有值得关注的信息。如果对象太大，toString 应该返回一个摘要信息。 4.在实现 toString 的时候，要决定是否在文档中指定返回值格式。指定格式的好处是，它可以被用作一种标准的、明确的、适合人阅读的对象表示法。不足之处是，如果这个类已经被广泛使用，一旦指定格式，就必须始终如一的坚持这种格式。 5.无论你是否决定使用格式，都应该在文档中明确的表明你的意图。 6.无论是否指定格式，都为 toString 返回值中包含的所有信息，提供一种编程式的访问路径。]]></content>
+    <title><![CDATA[【java 并发】1. 初识java并发]]></title>
+    <url>%2F2017%2F07%2F20%2Fjava%20concurrency%2Fjava-concurrency-1%2F</url>
+    <content type="text"><![CDATA[1. 线程的优势 1.1 发挥多处理器强大的能力 通过提高处理器资源的利用率来提神系统的吞吐率。（充分利用处理器） 有助于在但处理器系统上获得更高的吞吐率。（合理安排处理器；异步） 1.2 建模的简单性 如果程序中只包含一种类型的任务，那么比包含多种不同类型任务的程序要更容易编写，错误更少，也更容易测试。 1.3 异步事件的简化处理 1.4 响应更灵敏的用户界面 传统的gui采用主事件循环（单线程），程序可能会“冻结” 2. 线程带来的风险 2.1 安全性问题 非同步线程会造成脏读，不可重复读等问题。 2.2 活跃性问题 死锁，饥饿，活锁等 2.3 性能问题 服务时间过长；响应不灵敏；吞吐率过低；资源消耗过高；可伸缩性较低等。 3. 线程无处不在 3.1 每个java程序都会使用线程 3.2 Timer 3.3 Servlet 和 jsp servlet 需要满足被多个线程同时调用（servlet需要是线程安全的） 3.4 远程方法调用（RMI） 两个线程安全问题： 正确的协同在多个对象中共享的状态 对远程对象本身状态的访问 3.5 Swing 和 AWT swing 的一些组件并不是线程安全的，如JTable。swing 程序通过将所有对gui组件的访问局限在事件线程中以实现线程安全性]]></content>
       <categories>
         <category>java</category>
-        <category>effectivejava</category>
+        <category>concurrency</category>
       </categories>
       <tags>
         <tag>java</tag>
-        <tag>effectivejava</tag>
+        <tag>concurrency</tag>
+        <tag>线程</tag>
+        <tag>并发</tag>
       </tags>
   </entry>
   <entry>
@@ -395,6 +408,19 @@
       </tags>
   </entry>
   <entry>
+    <title><![CDATA[【effective java】8:覆盖 equals 时请遵守通用规定]]></title>
+    <url>%2F2017%2F07%2F18%2Feffectivejava%2Feff-java-8%2F</url>
+    <content type="text"><![CDATA[8: 覆盖 equals 时请遵守通用规定1.覆盖 equals 后，需要满足的条件 1.类的每个实例本质上都是唯一的 2.不关心是否提供了“逻辑相等”的测试功能 3.超类已经覆盖了 equals，从超类继承过来d额行为对于子类也是合适的 4.类是私有的或者包私有的，可以确定它的 equals 方法永远不会被调用 2.覆盖 equals 方法时要遵守的几个约定 1.自反性 对于任何非 null 的引用值 x，x.euqals(x) 必须返回 true， 2.对称性 对于任何非 null 的引用值 x 和 y，当且仅当 y.equals(x) 返回 true 时，x.equals(y) 必须返回 true。 3.传递性 对于任何非 null 的引用值 x、y 和 z，如果 x.equals(y) 返回 true，y.equals(z) 也返回 true, 那么 x.equals(z) 也必须返回 true。 4.一致性 对于任何非 null 的引用值 x 和 y，只要 equals 的比较操作在对象中多有的信息都没有被修改，多次调用 x.equals(y) 就会一致的返回 true 或者 false。 5.非空性 所有的对象都不能为 null，为了防止抛出空指针异常。 3.高效实现 equals 方法的诀窍 1.使用 == 操作符检查“参数是否为这个对象的引用” 2.使用 instanceof 操作符检查“参数是否为正确的类型“ 3.把参数转换为正确的类型（接2） 4.对于该类中的每个”关键“域，检查参数中的域是否与该对象中对应的域相匹配 5.编写完之后，检查是否是对称的，传递的，一致的 6.覆盖 equals 时，总要覆盖 hashcode 7.不要企图让 equals 方法过于智能 8.不要将 equals 声明中的 Object 对象替换为其他的类型]]></content>
+      <categories>
+        <category>java</category>
+        <category>effectivejava</category>
+      </categories>
+      <tags>
+        <tag>java</tag>
+        <tag>effectivejava</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[【springboot-入门篇】第5篇-数据库访问之JPA(hibernate)]]></title>
     <url>%2F2017%2F07%2F18%2Fspring-boot%2F%E3%80%90springboot-%E5%85%A5%E9%97%A8%E7%AF%87%E3%80%91%E7%AC%AC5%E7%AF%87-%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BF%E9%97%AE%E4%B9%8BJPA(hibernate)%2F</url>
     <content type="text"><![CDATA[hibernate是数据访问解决技术的霸主之一，使用了O/R映射技术实现数据访问。随着hibernate的盛行，它主导了EJB3.0的JPA规范。JPA 机java persistence API，JPA是一个基于O/R映射的规范。所谓规范，就是之定义规则，比如注解、接口，但是不提供实现，软件提供商课按照规范来实现。而使用者只需要知道JPA 有哪些接口就可以了，至于是怎么实现的，完全不需要关心。JPA的主要实现由hibernate，eclipselink和openjpa等。当然，我们不需要关心它们的具体实现方式是什么，我们只需要用就可以了。 未完待续]]></content>
@@ -410,9 +436,9 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[【effective java】8:覆盖 equals 时请遵守通用规定]]></title>
-    <url>%2F2017%2F07%2F18%2Feffectivejava%2Feff-java-8%2F</url>
-    <content type="text"><![CDATA[8: 覆盖 equals 时请遵守通用规定1.覆盖 equals 后，需要满足的条件 1.类的每个实例本质上都是唯一的 2.不关心是否提供了“逻辑相等”的测试功能 3.超类已经覆盖了 equals，从超类继承过来d额行为对于子类也是合适的 4.类是私有的或者包私有的，可以确定它的 equals 方法永远不会被调用 2.覆盖 equals 方法时要遵守的几个约定 1.自反性 对于任何非 null 的引用值 x，x.euqals(x) 必须返回 true， 2.对称性 对于任何非 null 的引用值 x 和 y，当且仅当 y.equals(x) 返回 true 时，x.equals(y) 必须返回 true。 3.传递性 对于任何非 null 的引用值 x、y 和 z，如果 x.equals(y) 返回 true，y.equals(z) 也返回 true, 那么 x.equals(z) 也必须返回 true。 4.一致性 对于任何非 null 的引用值 x 和 y，只要 equals 的比较操作在对象中多有的信息都没有被修改，多次调用 x.equals(y) 就会一致的返回 true 或者 false。 5.非空性 所有的对象都不能为 null，为了防止抛出空指针异常。 3.高效实现 equals 方法的诀窍 1.使用 == 操作符检查“参数是否为这个对象的引用” 2.使用 instanceof 操作符检查“参数是否为正确的类型“ 3.把参数转换为正确的类型（接2） 4.对于该类中的每个”关键“域，检查参数中的域是否与该对象中对应的域相匹配 5.编写完之后，检查是否是对称的，传递的，一致的 6.覆盖 equals 时，总要覆盖 hashcode 7.不要企图让 equals 方法过于智能 8.不要将 equals 声明中的 Object 对象替换为其他的类型]]></content>
+    <title><![CDATA[【effective java】7:避免使用终结方法]]></title>
+    <url>%2F2017%2F07%2F17%2Feffectivejava%2Feff-java-7%2F</url>
+    <content type="text"><![CDATA[7:避免使用终结方法终结方法（finalizer）通常是不可预测的，也是很危险的，一般情况下是不必要的。 为什么要避免使用1终结方法的缺点在于不能保证会被及时的执行。从一个对象变得不可达开始，到它的终结方法被执行，所花费的这段时间是任意长的。 所以，注重时间的任务不应该由终结方法来完成，例如，用终结方法来关闭已打开的文件，这是很严重的错误。 2及时的执行终结方法正是垃圾回收算法的一个主要功能，不同的 jvm 的实现方式有所不同，所以在你自己的电脑上的 jvm 可能运行的很好，但是在其他人的 jvm 下可能差别会很大。 3java 语言规范不保证终结方法会被及时的执行，甚至根本就不保证它们会被执行。当一个程序终结的时候，某些已经无法访问的对象上的终结方法却根本没有执行，这是完全有可能的。 4不要被 System.gc System.runFinalization 这两个所诱惑，它们却是增加了终结方法被执行的机会，但是它们也并不能保证终结方法一定会被执行。唯一可以保证终结方法被执行的方法是 System.runFinalizersOnExit 以及 Runtime.runFinalizersOnExit， 然而它们都有致命的缺陷，已经被废弃了。 5如果未被捕捉的异常在终结过程中被抛出来，那么这种异常可以被忽略，并且该对象的终结过程也会终止。未被捕获的异常会使对象处于破坏的状态，如果另一个线程企图使用这种被破坏的对象，则可能发生任何不确定的行为。 6使用终结方法，会有一个严重的性能损失。 如何正确的终止如果一个类中封装的资源（例如文件或者线程）确实需要终止，应该怎么做才能不用编写终结方法呢？ 只需要提供一个显示的终结方法，并要求客户端在每个实例不再有用的时候显示额调用合格方法。 该类必须记录下自己是否已经被终止了。 比如 javaio 中，各个流的 close() 方法。 显示d额终止方法通常与 try-finally 结构结合起来使用。 终结方法有什么好处1当对象的所有者忘记调用前面段落中建议d 显示终止方法时，终结方法可以充当“安全网” 迟一点释放资源总比不释放好。 2第二个用途与本地对等体有关。 本地对等体是一个本地对象，普通对象通过本地方法委托给一个本地对象，因为本地对等体b㐊一个普通d额对象，所以垃圾回收器不会知道他，当它的 java 对等体被回收的时候，他不会被回收。 在本地对等体并不拥有关键资源的情况下，终结方法是”回收“它的最好选择。如果本地对等体有需要及时回收的资源，那么该类就应该提供合适的显示终止方法。 总结总之，除非是作为安全网，或者是为了终止非关键d额本地资源，不要使用终结方法。]]></content>
       <categories>
         <category>java</category>
         <category>effectivejava</category>
@@ -434,19 +460,6 @@
         <tag>java</tag>
         <tag>springboot</tag>
         <tag>入门</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[【effective java】7:避免使用终结方法]]></title>
-    <url>%2F2017%2F07%2F17%2Feffectivejava%2Feff-java-7%2F</url>
-    <content type="text"><![CDATA[7:避免使用终结方法终结方法（finalizer）通常是不可预测的，也是很危险的，一般情况下是不必要的。 为什么要避免使用1终结方法的缺点在于不能保证会被及时的执行。从一个对象变得不可达开始，到它的终结方法被执行，所花费的这段时间是任意长的。 所以，注重时间的任务不应该由终结方法来完成，例如，用终结方法来关闭已打开的文件，这是很严重的错误。 2及时的执行终结方法正是垃圾回收算法的一个主要功能，不同的 jvm 的实现方式有所不同，所以在你自己的电脑上的 jvm 可能运行的很好，但是在其他人的 jvm 下可能差别会很大。 3java 语言规范不保证终结方法会被及时的执行，甚至根本就不保证它们会被执行。当一个程序终结的时候，某些已经无法访问的对象上的终结方法却根本没有执行，这是完全有可能的。 4不要被 System.gc System.runFinalization 这两个所诱惑，它们却是增加了终结方法被执行的机会，但是它们也并不能保证终结方法一定会被执行。唯一可以保证终结方法被执行的方法是 System.runFinalizersOnExit 以及 Runtime.runFinalizersOnExit， 然而它们都有致命的缺陷，已经被废弃了。 5如果未被捕捉的异常在终结过程中被抛出来，那么这种异常可以被忽略，并且该对象的终结过程也会终止。未被捕获的异常会使对象处于破坏的状态，如果另一个线程企图使用这种被破坏的对象，则可能发生任何不确定的行为。 6使用终结方法，会有一个严重的性能损失。 如何正确的终止如果一个类中封装的资源（例如文件或者线程）确实需要终止，应该怎么做才能不用编写终结方法呢？ 只需要提供一个显示的终结方法，并要求客户端在每个实例不再有用的时候显示额调用合格方法。 该类必须记录下自己是否已经被终止了。 比如 javaio 中，各个流的 close() 方法。 显示d额终止方法通常与 try-finally 结构结合起来使用。 终结方法有什么好处1当对象的所有者忘记调用前面段落中建议d 显示终止方法时，终结方法可以充当“安全网” 迟一点释放资源总比不释放好。 2第二个用途与本地对等体有关。 本地对等体是一个本地对象，普通对象通过本地方法委托给一个本地对象，因为本地对等体b㐊一个普通d额对象，所以垃圾回收器不会知道他，当它的 java 对等体被回收的时候，他不会被回收。 在本地对等体并不拥有关键资源的情况下，终结方法是”回收“它的最好选择。如果本地对等体有需要及时回收的资源，那么该类就应该提供合适的显示终止方法。 总结总之，除非是作为安全网，或者是为了终止非关键d额本地资源，不要使用终结方法。]]></content>
-      <categories>
-        <category>java</category>
-        <category>effectivejava</category>
-      </categories>
-      <tags>
-        <tag>java</tag>
-        <tag>effectivejava</tag>
       </tags>
   </entry>
   <entry>
@@ -477,19 +490,6 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[【effective java】5:避免创建不必要的对象]]></title>
-    <url>%2F2017%2F07%2F15%2Feffectivejava%2Feff-java-5%2F</url>
-    <content type="text"><![CDATA[5:避免创建不必要的对象1. 总览一般来说，最好能重用对象，而不是在每次需要的时候就创建一个相同功能的新对象。 比如，我们不应该这样写：String s = new String(&quot;string&quot;);，而应该这样写：String s = &quot;string&quot;;。 2.几个好的思想 1.静态工厂方法总是优于构造器。 对于同时提供了静态工厂方法和构造器的不可变类，通常可以使用静态工厂方法而不是构造器，以避免创建不必要的对象。例如，静态工厂方法Boolean.valueOf(String)几乎总是优先于构造器Boolean(String)。 2.除了重用不可变的对象之外，也可以重用那些已知的不会被修改的可变对象。 3.要优先使用基本数据类型，而不是他们的包装类，要当心无意识的自动装箱。 4.通过创建附加对象，提升程序的清晰性、简洁性和功能性，这通常是件好事。 小对象的创建和回收动作是十分廉价的，特别是在现代jvm上更是如此。 5.通过维护自己的对象池来避免创建对象并不是一种好的做法，除非池中的对象是非常重量级的。 6.在提倡使用保护性拷贝的时候，因重用对象而付出的代价要远远大于因重复创建对象而付出的代价。]]></content>
-      <categories>
-        <category>java</category>
-        <category>effectivejava</category>
-      </categories>
-      <tags>
-        <tag>java</tag>
-        <tag>effectivejava</tag>
-      </tags>
-  </entry>
-  <entry>
     <title><![CDATA[【springboot-入门篇】第2篇--springboot的各种配置]]></title>
     <url>%2F2017%2F07%2F15%2Fspring-boot%2F%E3%80%90springboot-%E5%85%A5%E9%97%A8%E7%AF%87%E3%80%91%E7%AC%AC2%E7%AF%87--springboot%E7%9A%84%E5%90%84%E7%A7%8D%E9%85%8D%E7%BD%AE%2F</url>
     <content type="text"><![CDATA[1. 配置文件简介spring boot使用一个全局配置文件：application.properties或者application.yml，放置在src/main/resources目录下或者类路径的/config目录下。 application.properties是我们熟知的键值对配置文件： application.yml是yaml语言的配置文件，yaml是一种以数据为中心的语言，在配置数据的时候具有面向对象的特征。我们以后的代码都会使用yml格式的配置文件。： spring boot 的全局配置文件的作用是对一些默认配置的配置进行修改。后面我们会详细的讲解。 2. pom配置文件（starter） pom，是maven的配置文件，gradel也差不多，因为我一直在用maven，所以就讲maven了。 为了解决大型项目以及一些常用组件jar包过多的问题，spring boot 为我们提供了许多starter pom，每一个pom都已经添加好了对应的依赖，以往我们需要写茫茫多的dependence，但是现在只需要一个starter就可以了，并且spring boot 还为它们提供了默认的配置和自动配置的bean。 2.1 官方starter 2.1.1 应用程序的starters 名称 描述 spring-boot-starter 核心Spring Boot starter，包括自动配置支持，日志和YAML spring-boot-starter-actuator 生产准备的特性，用于帮我们监控和管理应用 spring-boot-starter-amqp 对”高级消息队列协议”的支持，通过spring-rabbit实现 spring-boot-starter-aop 对面向切面编程的支持，包括spring-aop和AspectJ spring-boot-starter-batch 对Spring Batch的支持，包括HSQLDB数据库 spring-boot-starter-cloud-connectors 对Spring Cloud Connectors的支持，简化在云平台下（例如，Cloud Foundry 和Heroku）服务的连接 spring-boot-starter-data-elasticsearch 对Elasticsearch搜索和分析引擎的支持，包括spring-data-elasticsearch spring-boot-starter-data-gemfire 对GemFire分布式数据存储的支持，包括spring-data-gemfire spring-boot-starter-data-jpa 对”Java持久化API”的支持，包括spring-data-jpa，spring-orm和Hibernate spring-boot-starter-data-mongodb 对MongoDB NOSQL数据库的支持，包括spring-data-mongodb spring-boot-starter-data-rest 对通过REST暴露Spring Data仓库的支持，通过spring-data-rest-webmvc实现 spring-boot-starter-data-solr 对Apache Solr搜索平台的支持，包括spring-data-solr spring-boot-starter-freemarker 对FreeMarker模板引擎的支持 spring-boot-starter-groovy-templates 对Groovy模板引擎的支持 spring-boot-starter-hateoas 对基于HATEOAS的RESTful服务的支持，通过spring-hateoas实现 spring-boot-starter-hornetq 对”Java消息服务API”的支持，通过HornetQ实现 spring-boot-starter-integration 对普通spring-integration模块的支持 spring-boot-starter-jdbc 对JDBC数据库的支持 spring-boot-starter-jersey 对Jersey RESTful Web服务框架的支持 spring-boot-starter-jta-atomikos 对JTA分布式事务的支持，通过Atomikos实现 spring-boot-starter-jta-bitronix 对JTA分布式事务的支持，通过Bitronix实现 spring-boot-starter-mail 对javax.mail的支持 spring-boot-starter-mobile 对spring-mobile的支持 spring-boot-starter-mustache 对Mustache模板引擎的支持 spring-boot-starter-redis 对REDIS键值数据存储的支持，包括spring-redis spring-boot-starter-security 对spring-security的支持 spring-boot-starter-social-facebook 对spring-social-facebook的支持 spring-boot-starter-social-linkedin 对spring-social-linkedin的支持 spring-boot-starter-social-twitter 对spring-social-twitter的支持 spring-boot-starter-test 对常用测试依赖的支持，包括JUnit, Hamcrest和Mockito，还有spring-test模块 spring-boot-starter-thymeleaf 对Thymeleaf模板引擎的支持，包括和Spring的集成 spring-boot-starter-velocity 对Velocity模板引擎的支持 spring-boot-starter-web 对全栈web开发的支持， 包括Tomcat和spring-webmvc spring-boot-starter-websocket 对WebSocket开发的支持 spring-boot-starter-ws 对Spring Web服务的支持 2.1.2 spring boot生产准备的starters： 名称 描述 spring-boot-starter-actuator 添加生产准备特性，比如指标和监控 spring-boot-starter-remote-shell 添加远程ssh shell支持 2.1.3 排除或交换具体技术方面的starters 名称 描述 spring-boot-starter-jetty 导入Jetty HTTP引擎（作为Tomcat的替代） spring-boot-starter-log4j 对Log4J日志系统的支持 spring-boot-starter-logging 导入Spring Boot的默认日志系统 spring-boot-starter-tomcat 导入Spring Boot的默认HTTP引擎 spring-boot-starter-undertow 导入Undertow HTTP引擎（作为Tomcat的替代） 2.2 非官方starter也有一些第三方为spring boot 提供了starter： Handlebars Vaadin Apache Camel WRO4J Spring Batch（高级用法） HDIV Jade Templates(Jade4J) Actitivi 这些都可以在github上找到，感兴趣的可以去搜一下。 3. xml配置文件spring boot 提倡零配置，也就是无xml配置，但是在实际项目中，可能有一些要求必须使用xml配置，这时我们可以使用spring提供的@ImportResource 来加载xml配置，比如： 1@ImportResource(&#123;&quot;classpath:some-context.xml&quot;,&quot;classpath:other-context.xml&quot;&#125;) 4. 命令行参数配置上一篇文章中也有提到，spring boot 项目是可以打成jar包的，然后通过java -jar xxx.jar 来执行，我们都知道，main函数是可以接受参数的，同样，spring boot的main函数也可以。 我们可以通过下面的命令来修改Tomcat的端口号：1java -jar xxx.jar --server.port=9090 5. 自定义属性配置5.1 普通配置在写spring项目的时候，我们可以在properties文件中定义一个变量，然后再代码中通过 @PropertySource 指明 properties 文件的位置，然后通过@Value注入相应的值。 在spring boot 中我们同样可以自定义一个变量，因为spring boot中的全局配置文件默认在一个目录下，所以我们可以直接用@Value注入值。 比如，在上一篇文章的demo项目中，我们可以在application.yml文件中这样定义： 12key: hello: hello world 修改DemoApplication.java代码为： 12345678910111213141516@SpringBootApplication(exclude=&#123;DataSourceAutoConfiguration.class,HibernateJpaAutoConfiguration.class&#125;)@RestControllerpublic class DemoApplication &#123; @Value("$&#123;key.hello&#125;") private String hello; public static void main(String[] args) &#123; SpringApplication.run(DemoApplication.class, args); &#125; @RequestMapping("/hello") public String hello()&#123; return hello; &#125;&#125; 运行项目，在浏览器中访问http://localhost:8080/hello： 值被正常的注入进去了。 5.2 类型安全的配置上面的例子中，使用@Value注入每个配置在实际的应用中会显得格外的麻烦，因为配置一般会有很多，用上面的方式就要写好多@Value，并且如果在多个类文件中都使用这个值的话，工作量会更大。所以，需要一种更好的方式。并且，这种方式是有安全隐患的，比如我需要的是一个long类型，但是注入的却是String，这个时候就报错了： 1Failed to convert value of type &apos;java.lang.String&apos; to required type &apos;long&apos;; spring boot 提供了基于类型安全的配置方式，通过@ConfigurationProperties将properties属性和一个bean及其属性关联，从而实现类型安全的配置。 我们来看一下： application.yml:123key: name: cleverfan sex: man 在demo项目中创建一个class： Person.java 12345678910111213141516171819202122@Component@ConfigurationProperties(prefix = &quot;key&quot;)public class Person &#123; private String name; private String sex; public void setName(String name) &#123; this.name = name; &#125; public void setSex(String sex) &#123; this.sex = sex; &#125; public String getName() &#123; return name; &#125; public String getSex() &#123; return sex; &#125;&#125; 修改DemoApplication.java ： 12345678910111213141516@SpringBootApplication(exclude=&#123;DataSourceAutoConfiguration.class,HibernateJpaAutoConfiguration.class&#125;)@RestControllerpublic class DemoApplication &#123; @Autowired private Person person; public static void main(String[] args) &#123; SpringApplication.run(DemoApplication.class, args); &#125; @RequestMapping(&quot;/hello&quot;) public String hello()&#123; return person.getName() + &quot;: &quot; + person.getSex(); &#125;&#125; 启动项目，访问http://localhost:8080/hello： 回到刚刚的问题，如果这个时候我需要的是long，但是给的是String怎么办呢？这里给出一个很简单的处理方式： Person.java123456789101112131415161718192021222324252627@Component@ConfigurationProperties(prefix = &quot;key&quot;)public class Person &#123; private String name; private long sex; public void setName(String name) &#123; this.name = name; &#125; public void setSex(String sex) &#123; try&#123; this.sex = Long.valueOf(sex); &#125;catch (Exception e)&#123; this.sex = 0L; &#125; &#125; public String getName() &#123; return name; &#125; public long getSex() &#123; return sex; &#125;&#125; yml配置文件不变，我们传递的是字符串，这次重启项目，访问http://localhost:8080/hello： 这样就可以简单的保证数据的安全了。 6. 日志配置spring boot 支持Java Util Loggin、Log4J、Log4J2和LogBack作为日志框架，无论使用哪种日志框架，spring boot已为当前使用日志框架的控制台输出及文件输出做好了配置。 默认情况下，spring boot 使用 Logback作为日志框架。可以在配置文件中（yml）修改默认配置文件的配置： 配置日志级别： 12logging: level: debug 配置日志文件 1234logging: org: springframework: web: debug 7. Profile配置Profile 是 spring 用来针对不同的环境对不同的配置提供支持的，比如生成环境，测试环境和开发环境。全局 Profile 使用application-{profile}.yml(例如application-prod.yml)命名。 下面我们做一个演示，我们把demo项目分为生产（prod）和开发（dev）环境，生产环境下端口号为8000，开发环境下为8888。 我们在demo项目的application.yml文件的同级目录下创建两个文件：application-prod.yml: 12server: port: 8000 application-dev.yml: 12server: port: 8888 目录结构是这样的： application.yml1234567891011key: name: cleverfan sex: manlogging: level: debugspring: profiles: active: dev 启动项目： 端口号是8888 修改application.yml： 123spring: profiles: active: prod 重新启动项目： 端口号的8000 证明我们的配置生效了。 配置就先讲到这里，如果有疑问或者错误，请及时与我联系。如果有需要补充的地方，也可以私戳我~]]></content>
@@ -501,6 +501,19 @@
         <tag>java</tag>
         <tag>springboot</tag>
         <tag>配置</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[【effective java】5:避免创建不必要的对象]]></title>
+    <url>%2F2017%2F07%2F15%2Feffectivejava%2Feff-java-5%2F</url>
+    <content type="text"><![CDATA[5:避免创建不必要的对象1. 总览一般来说，最好能重用对象，而不是在每次需要的时候就创建一个相同功能的新对象。 比如，我们不应该这样写：String s = new String(&quot;string&quot;);，而应该这样写：String s = &quot;string&quot;;。 2.几个好的思想 1.静态工厂方法总是优于构造器。 对于同时提供了静态工厂方法和构造器的不可变类，通常可以使用静态工厂方法而不是构造器，以避免创建不必要的对象。例如，静态工厂方法Boolean.valueOf(String)几乎总是优先于构造器Boolean(String)。 2.除了重用不可变的对象之外，也可以重用那些已知的不会被修改的可变对象。 3.要优先使用基本数据类型，而不是他们的包装类，要当心无意识的自动装箱。 4.通过创建附加对象，提升程序的清晰性、简洁性和功能性，这通常是件好事。 小对象的创建和回收动作是十分廉价的，特别是在现代jvm上更是如此。 5.通过维护自己的对象池来避免创建对象并不是一种好的做法，除非池中的对象是非常重量级的。 6.在提倡使用保护性拷贝的时候，因重用对象而付出的代价要远远大于因重复创建对象而付出的代价。]]></content>
+      <categories>
+        <category>java</category>
+        <category>effectivejava</category>
+      </categories>
+      <tags>
+        <tag>java</tag>
+        <tag>effectivejava</tag>
       </tags>
   </entry>
   <entry>
@@ -531,19 +544,6 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[3:用私有构造器或者枚举类型强化Singleton属性]]></title>
-    <url>%2F2017%2F07%2F13%2Feffectivejava%2Feff-java-3%2F</url>
-    <content type="text"><![CDATA[3:用私有构造器或者枚举类型强化Singleton属性1.简介Singleton 指仅仅被实例化一次的类（单例）。Singleton 通常被用来代表那些本质上唯一的系统组件，比如窗口管理器或者文件系统。 2.旧式实现方式在 JDK1.5 发行之前，实现 Singleton 有两种方法： 方法一： 1234class Singletonone &#123; public static final Singletonone SINGLETONONE = new Singletonone(); private Singletonone()&#123;&#125;;&#125; 利用构造器仅被调用一次，用来实例化公有的静态 final 域 Singletonone.SINGLETONONE;可以保证该类对象的全局唯一性。 这种写法可以通过反射来生成第二个实例，如果想要抵御这种攻击，可以修改构造器，在创建第二个对象的时候抛出异常。 方法二： 1234567class Singletontwo &#123; private static final Singletontwo SINGLETONTWO = new Singletontwo(); private Singletontwo()&#123;&#125;; public Singletontwo getInstance()&#123; return SINGLETONTWO; &#125;&#125; 这种叫恶汉式，还有一种懒汉式的方式。但是多线程会有问题。 3.新的方式jdk1.5 以后加入了枚举，我们可以通过枚举来实现。 123enum Singletonthree &#123; SINGLETONTHREE&#125; 写完了。]]></content>
-      <categories>
-        <category>java</category>
-        <category>effectivejava</category>
-      </categories>
-      <tags>
-        <tag>java</tag>
-        <tag>effectivejava</tag>
-      </tags>
-  </entry>
-  <entry>
     <title><![CDATA[【springboot-入门篇】第0篇--spring-boot是什么]]></title>
     <url>%2F2017%2F07%2F13%2Fspring-boot%2F%E3%80%90springboot-%E5%85%A5%E9%97%A8%E7%AF%87%E3%80%91%E7%AC%AC0%E7%AF%87--spring-boot%E6%98%AF%E4%BB%80%E4%B9%88%2F</url>
     <content type="text"><![CDATA[作为一个java程序员，如果你还不知道springboot，那你一定是落后了。 1. 什么是springbootSpring Boot是由Pivotal团队提供的全新框架，其设计目的是用来简化新Spring应用的初始搭建以及开发过程。该框架使用了特定的方式来进行配置，从而使开发人员不再需要定义样板化的配置。通过这种方式，Spring Boot致力于在蓬勃发展的快速应用开发领域（rapid application development）成为领导者。 spring大家都知道，boot是启动的意思。所以，spring boot其实就是一个启动spring项目的一个工具而已。从最根本上来讲，Spring Boot就是一些库的集合，它能够被任意项目的构建系统所使用。 2. 为什么会出现以前在写spring项目的时候，要配置各种xml文件，还记得曾经被ssh框架支配的恐惧。随着spring3，spring4的相继推出，约定大于配置逐渐成为了开发者的共识，大家也渐渐的从写xml转为写各种注解，在spring4的项目里，你甚至可以一行xml都不写。 虽然spring4已经可以做到无xml，但写一个大项目需要茫茫多的包，maven配置要写几百行，也是一件很可怕的事。 现在，快速开发一个网站的平台层出不穷，nodejs，php等虎视眈眈，并且脚本语言渐渐流行了起来（Node JS，Ruby，Groovy，Scala等），spring的开发模式越来越显得笨重。 在这种环境下，spring boot伴随着spring4一起出现了。 3. 可以做什么那么，spring boot可以做什么呢？ spring boot并不是一个全新的框架，它不是spring解决方案的一个替代品，而是spring的一个封装。所以，你以前可以用spring做的事情，现在用spring boot都可以做。 现在流行微服务与分布式系统，springboot就是一个非常好的微服务开发框架，你可以使用它快速的搭建起一个系统。同时，你也可以使用spring cloud（Spring Cloud是一个基于Spring Boot实现的云应用开发工具）来搭建一个分布式的网站。 4. 优点4.1 使编码变得简单 spring boot采用java config的方式，对spring进行配置，并且提供了大量的注解，极大地提高了工作效率。 4.2 使配置变得简单 spring boot提供许多默认配置，当然也提供自定义配置。但是所有spring boot的项目都只有一个配置文件：application.properties/application.yml。用了spring boot，再也不用担心配置出错找不到问题所在了。 4.3 使部署变得简单spring boot内置了三种servlet容器：tomcat，jetty，undertow。 所以，你只需要一个java的运行环境就可以跑spring boot的项目了。spring boot的项目可以打成一个jar包，然后通过java -jar xxx.jar来运行。（spring boot项目的入口是一个main方法，运行该方法即可。 ） 4.4 使监控变得简单spring boot提供了actuator包，可以使用它来对你的应用进行监控。它主要提供了以下功能： 我们将在后续文章中学习它。 5. 相关技术5.1 微服务架构微服务是一种架构风格，一个大型复杂软件应用由一个或多个微服务组成。系统中的各个微服务可被独立部署，各个微服务之间是松耦合的。每个微服务仅关注于完成一件任务并很好地完成该任务。在所有情况下，每个任务代表着一个小的业务能力。 比如我要开发一个购票系统。就可以简单的拆分为用户管理微服务和售票系统微服务。两个服务都可以独立运行，都有自己的数据库，他们之间通过restapi 进行通信。 而spring boot就是搭建微服务的一个很好的选择。 5.2 restfulrestful 是一种api的风格，后面的文章里，会着重讲解。spring boot可以很方便的提供restful 风格的api。 5.3 spring cloud微服务有很多优点，当然也有一些挑战。可以参考这篇文章：微服务实战（一）：微服务架构的优势与不足。 微服务一般都是运行在分布式环境中的，这可不是简单的写一个ssm框架的小程序就可以解决的，其中需要用到很多技术，比如负载均衡，反向代理，服务治理，配置管理，消息总线等，spring cloud提供了这些技术。并且，spring cloud全家桶是基于spring boot的。 之后会专门开一个spring cloud的专题。 6. 总结来总结一下spring boot的特点。 独立运行的Spring项目Spring Boot可以以jar包的形式进行独立的运行，使用：java -jar xx.jar 就可以成功的运行项目，或者在应用项目的主程序中运行main函数即可； 内嵌的Servlet容器我们上面已经讲过。 提供starter简化Manen配置spring boot提供各种starter，其实就是一些spring bao的集合，只不过spring boot帮我们整合起来了而已。 上图只是其中的一部分，还有很多其他的。通过这些starter也可以看得出来，spring boot可以和其他主流的框架无缝集成，比如mybatis等。所以，你不需要担心你想用的技术spring boot不支持。 自动配置Spring，无xml文件Spring Boot会根据我们项目中类路径的jar包/类，为jar包的类进行自动配置Bean，这样一来就大大的简化了我们的配置。当然，这只是Spring考虑到的大多数的使用场景，在一些特殊情况，我们还需要自定义自动配置（就在那唯一的配置文件里，而且它不是xml文件！）。 应用监控Spring Boot提供了基于http、ssh、telnet对运行时的项目进行监控。 springboot 入门篇将会从头开始，介绍spring boot的一些技术及应用，每周至少两篇，欢迎关注。同时，由于我也是一个初学者，文章中难免有一些不正确的地方，希望各位批评指正，共同进步。 spring boot 官网：http://projects.spring.io/spring-boot/spring boot 中文网：https://springcloud.cc/ 参考文章：http://www.csdn.net/article/a/2016-05-12/15838098Spring Boot_百度百科]]></content>
@@ -555,6 +555,19 @@
         <tag>java</tag>
         <tag>springboot</tag>
         <tag>入门</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[3:用私有构造器或者枚举类型强化Singleton属性]]></title>
+    <url>%2F2017%2F07%2F13%2Feffectivejava%2Feff-java-3%2F</url>
+    <content type="text"><![CDATA[3:用私有构造器或者枚举类型强化Singleton属性1.简介Singleton 指仅仅被实例化一次的类（单例）。Singleton 通常被用来代表那些本质上唯一的系统组件，比如窗口管理器或者文件系统。 2.旧式实现方式在 JDK1.5 发行之前，实现 Singleton 有两种方法： 方法一： 1234class Singletonone &#123; public static final Singletonone SINGLETONONE = new Singletonone(); private Singletonone()&#123;&#125;;&#125; 利用构造器仅被调用一次，用来实例化公有的静态 final 域 Singletonone.SINGLETONONE;可以保证该类对象的全局唯一性。 这种写法可以通过反射来生成第二个实例，如果想要抵御这种攻击，可以修改构造器，在创建第二个对象的时候抛出异常。 方法二： 1234567class Singletontwo &#123; private static final Singletontwo SINGLETONTWO = new Singletontwo(); private Singletontwo()&#123;&#125;; public Singletontwo getInstance()&#123; return SINGLETONTWO; &#125;&#125; 这种叫恶汉式，还有一种懒汉式的方式。但是多线程会有问题。 3.新的方式jdk1.5 以后加入了枚举，我们可以通过枚举来实现。 123enum Singletonthree &#123; SINGLETONTHREE&#125; 写完了。]]></content>
+      <categories>
+        <category>java</category>
+        <category>effectivejava</category>
+      </categories>
+      <tags>
+        <tag>java</tag>
+        <tag>effectivejava</tag>
       </tags>
   </entry>
   <entry>
