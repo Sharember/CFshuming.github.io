@@ -83,7 +83,7 @@
 <meta name="keywords" content="java,concurrency,线程,并发">
 <meta property="og:type" content="article">
 <meta property="og:title" content="【java 并发】4. 对象的共享（2）">
-<meta property="og:url" content="http://yoursite.com/2017/07/24/java concurrency/java-concurrency-4/index.html">
+<meta property="og:url" content="http://blog.fanhub.cn/2017/07/24/java concurrency/java-concurrency-4/index.html">
 <meta property="og:site_name" content="舒铭的后花园">
 <meta property="og:description" content="2.发布与溢出发布一个对象是指，使对象能够在当前作用域之外的代码中使用。  比如，将一个执行该对象的引用保存带其他代码可以访问待的地方，或者在某一个非私有的方法中返回该引用，或者将引用传递到其他类的方法中。  许多时候，我们需要确保对象及其内部状态不被发布。而在某些情况下，我们又需要发布某个对象，但如果在发布时要确保线程安全性，则可能需要同步。 发布内部状态可能会破坏封装性，并使得程序难以维持不变">
 <meta property="og:locale" content="zh-Hans">
@@ -120,7 +120,7 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2017/07/24/java concurrency/java-concurrency-4/"/>
+  <link rel="canonical" href="http://blog.fanhub.cn/2017/07/24/java concurrency/java-concurrency-4/"/>
 
 
 
@@ -307,7 +307,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/07/24/java concurrency/java-concurrency-4/">
+    <link itemprop="mainEntityOfPage" href="http://blog.fanhub.cn/2017/07/24/java concurrency/java-concurrency-4/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="CFshuming">
@@ -660,7 +660,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">29</span>
+                  <span class="site-state-item-count">26</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -1293,6 +1293,21 @@
   
 
   
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
 
   
   

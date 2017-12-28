@@ -83,7 +83,7 @@
 <meta name="keywords" content="java,concurrency,线程,并发">
 <meta property="og:type" content="article">
 <meta property="og:title" content="【java 并发】 3. 对象的共享（1）">
-<meta property="og:url" content="http://yoursite.com/2017/07/23/java concurrency/java-concurrency-3/index.html">
+<meta property="og:url" content="http://blog.fanhub.cn/2017/07/23/java concurrency/java-concurrency-3/index.html">
 <meta property="og:site_name" content="舒铭的后花园">
 <meta property="og:description" content="同步的另一个重要的方面是：内存可见性。我们不仅希望放置某个现场正在使用对象状态而另一个线程在同时修改该状态，而且希望确保当一个线程修改了对象状态后，其他线程能够看到发生的状态变化。 1.可见性多线程环境中，如果没有使用同步机制，编译器、处理器以及运行时等都可能对操作的执行顺序进行一些意想不到的调整，这就导致一个线程修改了一个变量，另一个线程不能及时的得知该变量的更新，最终导致意外错误。 1.1 失">
 <meta property="og:locale" content="zh-Hans">
@@ -120,7 +120,7 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2017/07/23/java concurrency/java-concurrency-3/"/>
+  <link rel="canonical" href="http://blog.fanhub.cn/2017/07/23/java concurrency/java-concurrency-3/"/>
 
 
 
@@ -307,7 +307,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/07/23/java concurrency/java-concurrency-3/">
+    <link itemprop="mainEntityOfPage" href="http://blog.fanhub.cn/2017/07/23/java concurrency/java-concurrency-3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="CFshuming">
@@ -503,8 +503,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/07/22/java concurrency/java-concurrency-2/" rel="next" title="【java 并发】2. 线程的安全性">
-                <i class="fa fa-chevron-left"></i> 【java 并发】2. 线程的安全性
+              <a href="/2017/07/23/effectivejava/eff-java-14/" rel="next" title="【effective java】14:在公有类中使用访问方法而非公有域">
+                <i class="fa fa-chevron-left"></i> 【effective java】14:在公有类中使用访问方法而非公有域
               </a>
             
           </div>
@@ -513,8 +513,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2017/07/23/effectivejava/eff-java-14/" rel="prev" title="【effective java】14:在公有类中使用访问方法而非公有域">
-                【effective java】14:在公有类中使用访问方法而非公有域 <i class="fa fa-chevron-right"></i>
+              <a href="/2017/07/24/effectivejava/eff-java-15/" rel="prev" title="【effective java】15:使可变性最小化">
+                【effective java】15:使可变性最小化 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -646,7 +646,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">29</span>
+                  <span class="site-state-item-count">26</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -1279,6 +1279,21 @@
   
 
   
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
 
   
   
