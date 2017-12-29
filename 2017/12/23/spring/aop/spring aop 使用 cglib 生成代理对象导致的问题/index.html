@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="spring,aop,问题排查,cglib," />
+  <meta name="keywords" content="JavaYouShouldKnow,spring,aop,问题排查,cglib," />
 
 
 
@@ -80,7 +80,7 @@
 
 
 <meta name="description" content="问题描述我们有一个需求，需要根据 spring bean 获取到它的接口然后做一些操作，大致逻辑如下： 12345678910111213141516for (Map.Entry&amp;lt;String, Object&amp;gt; entry : serviceBeans.entrySet()) &amp;#123;    Object target = entry.getValue();    Class&amp;lt">
-<meta name="keywords" content="spring,aop,问题排查,cglib">
+<meta name="keywords" content="JavaYouShouldKnow,spring,aop,问题排查,cglib">
 <meta property="og:type" content="article">
 <meta property="og:title" content="spring aop 使用 cglib 生成代理对象导致的问题">
 <meta property="og:url" content="http://blog.fanhub.cn/2017/12/23/spring/aop/spring aop 使用 cglib 生成代理对象导致的问题/index.html">
@@ -88,7 +88,7 @@
 <meta property="og:description" content="问题描述我们有一个需求，需要根据 spring bean 获取到它的接口然后做一些操作，大致逻辑如下： 12345678910111213141516for (Map.Entry&amp;lt;String, Object&amp;gt; entry : serviceBeans.entrySet()) &amp;#123;    Object target = entry.getValue();    Class&amp;lt">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/4047674-d586fb8e8a5da4e3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:updated_time" content="2017-12-22T16:05:04.896Z">
+<meta property="og:updated_time" content="2017-12-29T09:03:17.609Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="spring aop 使用 cglib 生成代理对象导致的问题">
 <meta name="twitter:description" content="问题描述我们有一个需求，需要根据 spring bean 获取到它的接口然后做一些操作，大致逻辑如下： 12345678910111213141516for (Map.Entry&amp;lt;String, Object&amp;gt; entry : serviceBeans.entrySet()) &amp;#123;    Object target = entry.getValue();    Class&amp;lt">
@@ -361,7 +361,18 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/spring/" itemprop="url" rel="index">
+                  <a href="/categories/JavaYouShouldKnow/" itemprop="url" rel="index">
+                    <span itemprop="name">JavaYouShouldKnow</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/JavaYouShouldKnow/spring/" itemprop="url" rel="index">
                     <span itemprop="name">spring</span>
                   </a>
                 </span>
@@ -372,7 +383,7 @@
                 
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/spring/aop/" itemprop="url" rel="index">
+                  <a href="/categories/JavaYouShouldKnow/spring/aop/" itemprop="url" rel="index">
                     <span itemprop="name">aop</span>
                   </a>
                 </span>
@@ -383,7 +394,7 @@
                 
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/spring/aop/cglib/" itemprop="url" rel="index">
+                  <a href="/categories/JavaYouShouldKnow/spring/aop/cglib/" itemprop="url" rel="index">
                     <span itemprop="name">cglib</span>
                   </a>
                 </span>
@@ -548,6 +559,8 @@
       
         <div class="post-tags">
           
+            <a href="/tags/JavaYouShouldKnow/" rel="tag"># JavaYouShouldKnow</a>
+          
             <a href="/tags/spring/" rel="tag"># spring</a>
           
             <a href="/tags/aop/" rel="tag"># aop</a>
@@ -706,7 +719,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">26</span>
+                  <span class="site-state-item-count">27</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -717,7 +730,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">43</span>
+                  <span class="site-state-item-count">44</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
