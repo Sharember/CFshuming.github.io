@@ -1,0 +1,1378 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="JavaYouShouldKnow,security,hash,基础知识,SHA-1," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="本文首发地址： 舒铭的后花园 -&amp;gt; 点击查看原文本文代码地址： 点击查看代码  1. SHA-1算法简介SHA（Secure Hash Algorithm）中文名：安全哈希算法。主要适用于数字签名标准（Digital Signature Standard DSS）里面定义的数字签名算法（Digital Signature Algorithm DSA）。SHA-1 是 SHA 家族中的一员，">
+<meta name="keywords" content="JavaYouShouldKnow,security,hash,基础知识,SHA-1">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【security】Java 与 SHA-1算法">
+<meta property="og:url" content="http://blog.fanhub.cn/2017/12/30/security/【security】Java 与 SHA-1算法/index.html">
+<meta property="og:site_name" content="舒铭的后花园">
+<meta property="og:description" content="本文首发地址： 舒铭的后花园 -&amp;gt; 点击查看原文本文代码地址： 点击查看代码  1. SHA-1算法简介SHA（Secure Hash Algorithm）中文名：安全哈希算法。主要适用于数字签名标准（Digital Signature Standard DSS）里面定义的数字签名算法（Digital Signature Algorithm DSA）。SHA-1 是 SHA 家族中的一员，">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-12-30T16:00:29.681Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="【security】Java 与 SHA-1算法">
+<meta name="twitter:description" content="本文首发地址： 舒铭的后花园 -&amp;gt; 点击查看原文本文代码地址： 点击查看代码  1. SHA-1算法简介SHA（Secure Hash Algorithm）中文名：安全哈希算法。主要适用于数字签名标准（Digital Signature Standard DSS）里面定义的数字签名算法（Digital Signature Algorithm DSA）。SHA-1 是 SHA 家族中的一员，">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://blog.fanhub.cn/2017/12/30/security/【security】Java 与 SHA-1算法/"/>
+
+
+
+
+
+  <title>【security】Java 与 SHA-1算法 | 舒铭的后花园</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">舒铭的后花园</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blog.fanhub.cn/2017/12/30/security/【security】Java 与 SHA-1算法/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="CFshuming">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="舒铭的后花园">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">【security】Java 与 SHA-1算法</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-30T23:46:25+08:00">
+                2017-12-30
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/JavaYouShouldKnow/" itemprop="url" rel="index">
+                    <span itemprop="name">JavaYouShouldKnow</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/JavaYouShouldKnow/security/" itemprop="url" rel="index">
+                    <span itemprop="name">security</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/JavaYouShouldKnow/security/hash/" itemprop="url" rel="index">
+                    <span itemprop="name">hash</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/JavaYouShouldKnow/security/hash/SHA-1/" itemprop="url" rel="index">
+                    <span itemprop="name">SHA-1</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-comment-o"></i>
+              </span>
+              
+                <a href="/2017/12/30/security/【security】Java 与 SHA-1算法/#SOHUCS" itemprop="discussionUrl">
+                  <span id="changyan_count_unit" class="post-comments-count hc-comment-count" data-xid="2017/12/30/security/【security】Java 与 SHA-1算法/" itemprop="commentsCount"></span>
+                </a>
+              
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-eye">本文总阅读量:</i>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>本文首发地址： 舒铭的后花园 -&gt; <a href="blog.fanhub.cn/2017/12/30/security/【security】Java%20与%20SHA-1算法/">点击查看原文</a><br>本文代码地址： <a href="https://github.com/CFshuming/JavaYouShouldKnow/blob/master/security/src/test/java/cn/fanhub/jysk/security/hash/sha/SHA1Test.java" target="_blank" rel="external">点击查看代码</a></p>
+</blockquote>
+<h2 id="1-SHA-1算法简介"><a href="#1-SHA-1算法简介" class="headerlink" title="1. SHA-1算法简介"></a>1. SHA-1算法简介</h2><p>SHA（Secure Hash Algorithm）中文名：安全哈希算法。主要适用于数字签名标准（Digital Signature Standard DSS）里面定义的数字签名算法（Digital Signature Algorithm DSA）。SHA-1 是 SHA 家族中的一员，由 SHA-0 发展而来。对于长度小于 2^64 位的消息，SHA-1 会产生一个 160 位的消息摘要，散列值通常的呈现形式为 40 个十六进制数。</p>
+<p>SHA-1有如下特性：不可以从消息摘要中复原信息；两个不同的消息不会产生同样的消息摘要。</p>
+<h2 id="2-SHA-0-和-SHA-1"><a href="#2-SHA-0-和-SHA-1" class="headerlink" title="2. SHA-0 和 SHA-1"></a>2. SHA-0 和 SHA-1</h2><p>最初载明的算法于1993年发布，称做安全散列标准（Secure Hash Standard），FIPS PUB 180。这个版本现在常被称为 SHA-0。它在发布之后很快就被 NSA 撤回，并且由 1995 年发布的修订版本 FIPS PUB 180-1（通常称为 SHA-1）取代。SHA-1 和 SHA-0 的算法只在压缩函数的消息转换部分差了一个比特的循环位移。根据 NSA 的说法，它修正了一个在原始算法中会降低散列安全性的弱点。然而 NSA 并没有提供任何进一步的解释或证明该弱点已被修正。而后SHA-0 和 SHA-1 的弱点相继被攻破，SHA-1 似乎是显得比 SHA-0 有抵抗性，这多少证实了<br>NSA 当初修正算法以增进安全性的声明。</p>
+<p>目前 SHA-0 和 SHA-1 都已经被破解，所以它们都不再是安全的数字签名算法。自2010年以来，许多组织建议用 SHA-2 或 SHA-3 来替换SHA-1。Microsoft 、Google 以及 Mozilla 都宣布，它们旗下的浏览器将在 2017 年前停止接受使用 SHA-1 算法签名的 SSL 证书。</p>
+<h2 id="3-SHA-1-算法描述"><a href="#3-SHA-1-算法描述" class="headerlink" title="3. SHA-1 算法描述"></a>3. SHA-1 算法描述</h2><p>在SHA1算法中，我们必须把原始消息（字符串，文件等）转换成位字符串。SHA1算法只接受位作为输入。假设我们对字符串“abc”产生消息摘要。首先，我们将它转换成位字符串如下：</p>
+<p>01100001 01100010 01100011<br>―――――――――――――<br>‘a’=97   ‘b’=98   ‘c’=99</p>
+<p>这个位字符串的长度为24。下面我们需要5个步骤来计算。</p>
+<h3 id="3-1-补位"><a href="#3-1-补位" class="headerlink" title="3.1 补位"></a>3.1 补位</h3><p>消息必须进行补位，以使其长度在对 512 取模以后的余数是 448。也就是说，<code>（补位后的消息长度）% 512 = 448</code>。即使长度已经满足对 512 取模后余数是448，补位也必须要进行。</p>
+<p>补位是这样进行的：先补一个1，然后再补0，直到长度满足对 512 取模后余数是<br> 448。总而言之，补位是至少补一位，最多补 512 位。还是以前面的 “abc” 为例显示补位的过程。</p>
+<p>原始信息： 01100001 01100010 01100011</p>
+<p>补位第一步：01100001 01100010 01100011 <strong>1</strong>    (首先补一个“1”)</p>
+<p>补位第二步：01100001 01100010 01100011 10…..0    (然后补 423 个“0”)</p>
+<p>我们可以把最后补位完成后的数据用16进制写成下面的样子</p>
+<p>61626380 00000000 00000000 00000000</p>
+<p>00000000 00000000 00000000 00000000</p>
+<p>00000000 00000000 00000000 00000000</p>
+<p>00000000 00000000</p>
+<p>现在，数据的长度是 448 了，符合<code>（补位后的消息长度）% 512 = 448</code>，我们可以进行下一步操作。</p>
+<h3 id="3-2-补长度"><a href="#3-2-补长度" class="headerlink" title="3.2 补长度"></a>3.2 补长度</h3><p>所谓的补长度是将原始数据的长度补到已经进行了补位操作的消息后面。通常用一个 64 位的数据来表示原始消息的长度。如果消息长度不大于 512，那么第一个字就是0。在进行了补长度的操作以后，整个消息就变成下面这样了（16进制格式）</p>
+<p>61626380 00000000 00000000 00000000</p>
+<p>00000000 00000000 00000000 00000000</p>
+<p>00000000 00000000 00000000 00000000</p>
+<p>00000000 00000000 00000000 00000018</p>
+<p>如果原始的消息长度超过了 512，我们需要将它补成 512 的倍数。然后我们把整个消息分成一个一个 512 位的数据块，分别处理每一个数据块，从而得到消息摘要。</p>
+<h3 id="3-3-使用的常量"><a href="#3-3-使用的常量" class="headerlink" title="3.3 使用的常量"></a>3.3 使用的常量</h3><p>一系列的常量字K(0), K(1), … , K(79)，如果以16进制给出。它们如下：</p>
+<p>Kt = 0x5A827999  (0 &lt;= t &lt;= 19)</p>
+<p>Kt = 0x6ED9EBA1 (20 &lt;= t &lt;= 39)</p>
+<p>Kt = 0x8F1BBCDC (40 &lt;= t &lt;= 59)</p>
+<p>Kt = 0xCA62C1D6 (60 &lt;= t &lt;= 79).</p>
+<h3 id="3-4-需要使用的函数"><a href="#3-4-需要使用的函数" class="headerlink" title="3.4 需要使用的函数"></a>3.4 需要使用的函数</h3><p>在 SHA-1 中我们需要一系列的函数。每个函数ft (0 &lt;= t &lt;= 79)都操作 32 位字<br> B，C，D 并且产生 32 位字作为输出。ft(B,C,D) 可以如下定义</p>
+<p>ft(B,C,D) = (B AND C) OR ((NOT B) AND D) ( 0 &lt;= t &lt;= 19)</p>
+<p>ft(B,C,D) = B XOR C XOR D              (20 &lt;= t &lt;= 39)</p>
+<p>ft(B,C,D) = (B AND C) OR (B AND D) OR (C AND D) (40 &lt;= t &lt;= 59)</p>
+<p>ft(B,C,D) = B XOR C XOR D                     (60 &lt;= t &lt;= 79).</p>
+<h3 id="3-5-计算消息摘要"><a href="#3-5-计算消息摘要" class="headerlink" title="3.5 计算消息摘要"></a>3.5 计算消息摘要</h3><p>必须使用进行了补位和补长度后的消息来计算消息摘要。计算需要两个缓冲区，每个都由 5 个 32 位的字组成，还需要一个 80 个 32 位字的缓冲区。第一个 5 个字的缓冲区被标识为 A，B，C，D，E。第一个 5 个字的缓冲区被标识为 H0, H1, H2, H3, H4。80 个字的缓冲区被标识为 W0, W1,…, W79</p>
+<p>另外还需要一个一个字的 TEMP 缓冲区。</p>
+<p>为了产生消息摘要，在第 4 部分中定义的 16 个字的数据块 M1, M2,…, Mn会依次进行处理，处理每个数据块 Mi 包含 80 个步骤。</p>
+<p>在处理每个数据块之前，缓冲区 {Hi} 被初始化为下面的值（16进制）</p>
+<p>H0 = 0x67452301</p>
+<p>H1 = 0xEFCDAB89</p>
+<p>H2 = 0x98BADCFE</p>
+<p>H3 = 0x10325476</p>
+<p>H4 = 0xC3D2E1F0. </p>
+<p>现在开始处理 M1, M2, … , Mn。为了处理 Mi,需要进行下面的步骤</p>
+<p>(1). 将 Mi 分成 16 个字 W0, W1, … , W15,  W0 是最左边的字</p>
+<p>(2). 对于 t = 16 到 79 令 Wt = S1(Wt-3 XOR Wt-8 XOR Wt- 14 XOR Wt-16).</p>
+<p>(3). 令 A = H0, B = H1, C = H2, D = H3, E = H4.</p>
+<p>(4) 对于 t = 0 到 79，执行下面的循环</p>
+<p>TEMP = S5(A) + ft(B,C,D) + E + Wt + Kt;</p>
+<p>E = D; D = C; C = S30(B); B = A; A = TEMP;</p>
+<p>(5). 令 H0 = H0 + A, H1 = H1 + B, H2 = H2 + C, H3 = H3 + D, H4 = H4 + E.<br>在处理完所有的 Mn, 后，消息摘要是一个160位的字符串，以下面的顺序标识<br>H0 H1 H2 H3 H4。</p>
+<h2 id="4-在-Java-中使用-SHA-1"><a href="#4-在-Java-中使用-SHA-1" class="headerlink" title="4. 在 Java 中使用 SHA-1"></a>4. 在 Java 中使用 SHA-1</h2><h3 id="4-1-使用-jdk-提供的函数。"><a href="#4-1-使用-jdk-提供的函数。" class="headerlink" title="4.1 使用 jdk 提供的函数。"></a>4.1 使用 jdk 提供的函数。</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SHA1Jdk</span> </span>&#123;</div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">byte</span>[] encode(String str) &#123;</div><div class="line">        <span class="keyword">if</span> (str == <span class="keyword">null</span>) &#123;</div><div class="line">            <span class="keyword">return</span> <span class="keyword">null</span>;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">try</span> &#123;</div><div class="line">            MessageDigest messageDigest = MessageDigest.getInstance(<span class="string">"SHA1"</span>);</div><div class="line">            messageDigest.update(str.getBytes());</div><div class="line">            <span class="keyword">return</span> messageDigest.digest();</div><div class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</div><div class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(e);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">encodeAndEncodeHexString</span><span class="params">(String str)</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> Hex.encodeHexString(encode(str));</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>测试：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">    <span class="meta">@Test</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">SHA1JdkTest</span><span class="params">()</span> </span>&#123;</div><div class="line">        System.out.println(<span class="string">"+--------------------SHA1Jdk.encode------------------------+"</span>);</div><div class="line">        <span class="keyword">for</span> (<span class="keyword">byte</span> b : SHA1Jdk.encode(testStr)) &#123;</div><div class="line">            System.out.print(b);</div><div class="line">        &#125;</div><div class="line">        System.out.println();System.out.println();</div><div class="line"></div><div class="line">        System.out.println(<span class="string">"+--------------------SHA1Jdk.encodeAndEncodeHexString------------------------+"</span>);</div><div class="line">        System.out.println(SHA1Jdk.encodeAndEncodeHexString(testStr));</div><div class="line">        System.out.println();</div><div class="line">    &#125;</div><div class="line"></div><div class="line"><span class="comment">/*</span></div><div class="line"><span class="comment">     +--------------------SHA1Jdk.encode------------------------+</span></div><div class="line"><span class="comment">     -87-1036254716-127106-70623711312080-62108-100-48-40-99</span></div><div class="line"><span class="comment"></span></div><div class="line"><span class="comment">     +--------------------SHA1Jdk.encodeAndEncodeHexString------------------------+</span></div><div class="line"><span class="comment">     a9993e364706816aba3e25717850c26c9cd0d89d</span></div><div class="line"><span class="comment">*/</span></div></pre></td></tr></table></figure>
+<p>上面是获得 sha-1 摘要对应的的字节数组，下面是字节数组对应的十六进制字符串。</p>
+<h3 id="4-2-使用-commons-codec-工具类"><a href="#4-2-使用-commons-codec-工具类" class="headerlink" title="4.2 使用 commons-codec 工具类"></a>4.2 使用 commons-codec 工具类</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SHA1CommonCodec</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">sha1Hex</span><span class="params">(String str)</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> DigestUtils.sha1Hex(str.getBytes());</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">byte</span>[] sha1(String str) &#123;</div><div class="line">        <span class="keyword">return</span> DigestUtils.sha1(str.getBytes());</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">sha1AndEncodeHexString</span> <span class="params">(String str)</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> Hex.encodeHexString(DigestUtils.sha1(str.getBytes()));</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>测试</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line">    <span class="meta">@Test</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">SHA1CommonCodecTest</span><span class="params">()</span> </span>&#123;</div><div class="line">        System.out.println(<span class="string">"+--------------------SHA1CommonCodec.sha1Hex------------------------+"</span>);</div><div class="line">        System.out.println(SHA1CommonCodec.sha1Hex(testStr));</div><div class="line">        System.out.println();</div><div class="line"></div><div class="line">        System.out.println(<span class="string">"+--------------------SHA1CommonCodec.sha1------------------------+"</span>);</div><div class="line">        <span class="keyword">for</span> (<span class="keyword">byte</span> b : SHA1CommonCodec.sha1(testStr)) &#123;</div><div class="line">            System.out.print(b);</div><div class="line">        &#125;</div><div class="line">        System.out.println(); System.out.println();</div><div class="line"></div><div class="line">        System.out.println(<span class="string">"+--------------------SHA1CommonCodec.sha1AndEncodeHexString------------------------+"</span>);</div><div class="line">        System.out.println(SHA1CommonCodec.sha1AndEncodeHexString(testStr));</div><div class="line">        System.out.println();</div><div class="line">    &#125;</div><div class="line"></div><div class="line"><span class="comment">/*</span></div><div class="line"><span class="comment">+--------------------SHA1CommonCodec.sha1Hex------------------------+</span></div><div class="line"><span class="comment">a9993e364706816aba3e25717850c26c9cd0d89d</span></div><div class="line"><span class="comment"></span></div><div class="line"><span class="comment">+--------------------SHA1CommonCodec.sha1------------------------+</span></div><div class="line"><span class="comment">-87-1036254716-127106-70623711312080-62108-100-48-40-99</span></div><div class="line"><span class="comment"></span></div><div class="line"><span class="comment">+--------------------SHA1CommonCodec.sha1AndEncodeHexString------------------------+</span></div><div class="line"><span class="comment">a9993e364706816aba3e25717850c26c9cd0d89d</span></div><div class="line"><span class="comment">*/</span></div></pre></td></tr></table></figure>
+<p>上面的例子告诉我们：<code>sha1Hex</code> = <code>sha1</code> + <code>encodeHexString</code>，也就是说，<code>sha1</code> 返回的是字节数组，<code>encodeHexString</code> 是将字节数组转成十六进制字符串的方法。</p>
+<h2 id="5-自己实现-SHA-1"><a href="#5-自己实现-SHA-1" class="headerlink" title="5. 自己实现 SHA-1"></a>5. 自己实现 SHA-1</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div><div class="line">143</div><div class="line">144</div><div class="line">145</div><div class="line">146</div><div class="line">147</div><div class="line">148</div><div class="line">149</div><div class="line">150</div><div class="line">151</div><div class="line">152</div><div class="line">153</div><div class="line">154</div><div class="line">155</div><div class="line">156</div><div class="line">157</div><div class="line">158</div><div class="line">159</div><div class="line">160</div><div class="line">161</div><div class="line">162</div><div class="line">163</div><div class="line">164</div><div class="line">165</div><div class="line">166</div><div class="line">167</div><div class="line">168</div><div class="line">169</div><div class="line">170</div><div class="line">171</div><div class="line">172</div><div class="line">173</div><div class="line">174</div><div class="line">175</div><div class="line">176</div><div class="line">177</div><div class="line">178</div><div class="line">179</div><div class="line">180</div><div class="line">181</div><div class="line">182</div><div class="line">183</div><div class="line">184</div><div class="line">185</div><div class="line">186</div><div class="line">187</div><div class="line">188</div><div class="line">189</div><div class="line">190</div><div class="line">191</div><div class="line">192</div><div class="line">193</div><div class="line">194</div><div class="line">195</div><div class="line">196</div><div class="line">197</div><div class="line">198</div><div class="line">199</div><div class="line">200</div><div class="line">201</div><div class="line">202</div><div class="line">203</div><div class="line">204</div><div class="line">205</div><div class="line">206</div><div class="line">207</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SHA1Self</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">int</span>[] abcde = &#123;</div><div class="line">            <span class="number">0x67452301</span>, <span class="number">0xefcdab89</span>, <span class="number">0x98badcfe</span>, <span class="number">0x10325476</span>, <span class="number">0xc3d2e1f0</span></div><div class="line">    &#125;;</div><div class="line">    <span class="comment">// 摘要数据存储数组</span></div><div class="line">    <span class="keyword">private</span> <span class="keyword">int</span>[] digestInt = <span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">5</span>];</div><div class="line">    <span class="comment">// 计算过程中的临时数据存储数组</span></div><div class="line">    <span class="keyword">private</span> <span class="keyword">int</span>[] tmpData = <span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">80</span>];</div><div class="line">    <span class="comment">// 计算sha-1摘要</span></div><div class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">int</span> <span class="title">process_input_bytes</span><span class="params">(<span class="keyword">byte</span>[] bytedata)</span> </span>&#123;</div><div class="line">        <span class="comment">// 初试化常量</span></div><div class="line">        System.arraycopy(abcde, <span class="number">0</span>, digestInt, <span class="number">0</span>, abcde.length);</div><div class="line">        <span class="comment">// 格式化输入字节数组，补10及长度数据</span></div><div class="line">        <span class="keyword">byte</span>[] newbyte = byteArrayFormatData(bytedata);</div><div class="line">        <span class="comment">// 获取数据摘要计算的数据单元个数</span></div><div class="line">        <span class="keyword">int</span> MCount = newbyte.length / <span class="number">64</span>;</div><div class="line">        <span class="comment">// 循环对每个数据单元进行摘要计算</span></div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> pos = <span class="number">0</span>; pos &lt; MCount; pos++) &#123;</div><div class="line">            <span class="comment">// 将每个单元的数据转换成16个整型数据，并保存到tmpData的前16个数组元素中</span></div><div class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; <span class="number">16</span>; j++) &#123;</div><div class="line">                tmpData[j] = byteArrayToInt(newbyte, (pos * <span class="number">64</span>) + (j * <span class="number">4</span>));</div><div class="line">            &#125;</div><div class="line">            <span class="comment">// 摘要计算函数</span></div><div class="line">            encrypt();</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> <span class="number">20</span>;</div><div class="line">    &#125;</div><div class="line">    <span class="comment">// 格式化输入字节数组格式</span></div><div class="line">    <span class="keyword">private</span> <span class="keyword">byte</span>[] byteArrayFormatData(<span class="keyword">byte</span>[] bytedata) &#123;</div><div class="line">        <span class="comment">// 补0数量</span></div><div class="line">        <span class="keyword">int</span> zeros = <span class="number">0</span>;</div><div class="line">        <span class="comment">// 补位后总位数</span></div><div class="line">        <span class="keyword">int</span> size = <span class="number">0</span>;</div><div class="line">        <span class="comment">// 原始数据长度</span></div><div class="line">        <span class="keyword">int</span> n = bytedata.length;</div><div class="line">        <span class="comment">// 模64后的剩余位数</span></div><div class="line">        <span class="keyword">int</span> m = n % <span class="number">64</span>;</div><div class="line">        <span class="comment">// 计算添加0的个数以及添加10后的总长度</span></div><div class="line">        <span class="keyword">if</span> (m &lt; <span class="number">56</span>) &#123;</div><div class="line">            zeros = <span class="number">55</span> - m;</div><div class="line">            size = n - m + <span class="number">64</span>;</div><div class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (m == <span class="number">56</span>) &#123;</div><div class="line">            zeros = <span class="number">63</span>;</div><div class="line">            size = n + <span class="number">8</span> + <span class="number">64</span>;</div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line">            zeros = <span class="number">63</span> - m + <span class="number">56</span>;</div><div class="line">            size = (n + <span class="number">64</span>) - m + <span class="number">64</span>;</div><div class="line">        &#125;</div><div class="line">        <span class="comment">// 补位后生成的新数组内容</span></div><div class="line">        <span class="keyword">byte</span>[] newbyte = <span class="keyword">new</span> <span class="keyword">byte</span>[size];</div><div class="line">        <span class="comment">// 复制数组的前面部分</span></div><div class="line">        System.arraycopy(bytedata, <span class="number">0</span>, newbyte, <span class="number">0</span>, n);</div><div class="line">        <span class="comment">// 获得数组Append数据元素的位置</span></div><div class="line">        <span class="keyword">int</span> l = n;</div><div class="line">        <span class="comment">// 补1操作</span></div><div class="line">        newbyte[l++] = (<span class="keyword">byte</span>) <span class="number">0x80</span>;</div><div class="line">        <span class="comment">// 补0操作</span></div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; zeros; i++) &#123;</div><div class="line">            newbyte[l++] = (<span class="keyword">byte</span>) <span class="number">0x00</span>;</div><div class="line">        &#125;</div><div class="line">        <span class="comment">// 计算数据长度，补数据长度位共8字节，长整型</span></div><div class="line">        <span class="keyword">long</span> N = (<span class="keyword">long</span>) n * <span class="number">8</span>;</div><div class="line">        <span class="keyword">byte</span> h8 = (<span class="keyword">byte</span>) (N &amp; <span class="number">0xFF</span>);</div><div class="line">        <span class="keyword">byte</span> h7 = (<span class="keyword">byte</span>) ((N &gt;&gt; <span class="number">8</span>) &amp; <span class="number">0xFF</span>);</div><div class="line">        <span class="keyword">byte</span> h6 = (<span class="keyword">byte</span>) ((N &gt;&gt; <span class="number">16</span>) &amp; <span class="number">0xFF</span>);</div><div class="line">        <span class="keyword">byte</span> h5 = (<span class="keyword">byte</span>) ((N &gt;&gt; <span class="number">24</span>) &amp; <span class="number">0xFF</span>);</div><div class="line">        <span class="keyword">byte</span> h4 = (<span class="keyword">byte</span>) ((N &gt;&gt; <span class="number">32</span>) &amp; <span class="number">0xFF</span>);</div><div class="line">        <span class="keyword">byte</span> h3 = (<span class="keyword">byte</span>) ((N &gt;&gt; <span class="number">40</span>) &amp; <span class="number">0xFF</span>);</div><div class="line">        <span class="keyword">byte</span> h2 = (<span class="keyword">byte</span>) ((N &gt;&gt; <span class="number">48</span>) &amp; <span class="number">0xFF</span>);</div><div class="line">        <span class="keyword">byte</span> h1 = (<span class="keyword">byte</span>) (N &gt;&gt; <span class="number">56</span>);</div><div class="line">        newbyte[l++] = h1;</div><div class="line">        newbyte[l++] = h2;</div><div class="line">        newbyte[l++] = h3;</div><div class="line">        newbyte[l++] = h4;</div><div class="line">        newbyte[l++] = h5;</div><div class="line">        newbyte[l++] = h6;</div><div class="line">        newbyte[l++] = h7;</div><div class="line">        newbyte[l++] = h8;</div><div class="line">        <span class="keyword">return</span> newbyte;</div><div class="line">    &#125;</div><div class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">int</span> <span class="title">f1</span><span class="params">(<span class="keyword">int</span> x, <span class="keyword">int</span> y, <span class="keyword">int</span> z)</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> (x &amp; y) | (~x &amp; z);</div><div class="line">    &#125;</div><div class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">int</span> <span class="title">f2</span><span class="params">(<span class="keyword">int</span> x, <span class="keyword">int</span> y, <span class="keyword">int</span> z)</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> x ^ y ^ z;</div><div class="line">    &#125;</div><div class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">int</span> <span class="title">f3</span><span class="params">(<span class="keyword">int</span> x, <span class="keyword">int</span> y, <span class="keyword">int</span> z)</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> (x &amp; y) | (x &amp; z) | (y &amp; z);</div><div class="line">    &#125;</div><div class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">int</span> <span class="title">f4</span><span class="params">(<span class="keyword">int</span> x, <span class="keyword">int</span> y)</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> (x &lt;&lt; y) | x &gt;&gt;&gt; (<span class="number">32</span> - y);</div><div class="line">    &#125;</div><div class="line">    <span class="comment">// 单元摘要计算函数</span></div><div class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">encrypt</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">16</span>; i &lt;= <span class="number">79</span>; i++) &#123;</div><div class="line">            tmpData[i] = f4(tmpData[i - <span class="number">3</span>] ^ tmpData[i - <span class="number">8</span>] ^ tmpData[i - <span class="number">14</span>] ^</div><div class="line">                    tmpData[i - <span class="number">16</span>], <span class="number">1</span>);</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">int</span>[] tmpabcde = <span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">5</span>];</div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i1 = <span class="number">0</span>; i1 &lt; tmpabcde.length; i1++) &#123;</div><div class="line">            tmpabcde[i1] = digestInt[i1];</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt;= <span class="number">19</span>; j++) &#123;</div><div class="line">            <span class="keyword">int</span> tmp = f4(tmpabcde[<span class="number">0</span>], <span class="number">5</span>) +</div><div class="line">                    f1(tmpabcde[<span class="number">1</span>], tmpabcde[<span class="number">2</span>], tmpabcde[<span class="number">3</span>]) + tmpabcde[<span class="number">4</span>] +</div><div class="line">                    tmpData[j] + <span class="number">0x5a827999</span>;</div><div class="line">            tmpabcde[<span class="number">4</span>] = tmpabcde[<span class="number">3</span>];</div><div class="line">            tmpabcde[<span class="number">3</span>] = tmpabcde[<span class="number">2</span>];</div><div class="line">            tmpabcde[<span class="number">2</span>] = f4(tmpabcde[<span class="number">1</span>], <span class="number">30</span>);</div><div class="line">            tmpabcde[<span class="number">1</span>] = tmpabcde[<span class="number">0</span>];</div><div class="line">            tmpabcde[<span class="number">0</span>] = tmp;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> k = <span class="number">20</span>; k &lt;= <span class="number">39</span>; k++) &#123;</div><div class="line">            <span class="keyword">int</span> tmp = f4(tmpabcde[<span class="number">0</span>], <span class="number">5</span>) +</div><div class="line">                    f2(tmpabcde[<span class="number">1</span>], tmpabcde[<span class="number">2</span>], tmpabcde[<span class="number">3</span>]) + tmpabcde[<span class="number">4</span>] +</div><div class="line">                    tmpData[k] + <span class="number">0x6ed9eba1</span>;</div><div class="line">            tmpabcde[<span class="number">4</span>] = tmpabcde[<span class="number">3</span>];</div><div class="line">            tmpabcde[<span class="number">3</span>] = tmpabcde[<span class="number">2</span>];</div><div class="line">            tmpabcde[<span class="number">2</span>] = f4(tmpabcde[<span class="number">1</span>], <span class="number">30</span>);</div><div class="line">            tmpabcde[<span class="number">1</span>] = tmpabcde[<span class="number">0</span>];</div><div class="line">            tmpabcde[<span class="number">0</span>] = tmp;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> l = <span class="number">40</span>; l &lt;= <span class="number">59</span>; l++) &#123;</div><div class="line">            <span class="keyword">int</span> tmp = f4(tmpabcde[<span class="number">0</span>], <span class="number">5</span>) +</div><div class="line">                    f3(tmpabcde[<span class="number">1</span>], tmpabcde[<span class="number">2</span>], tmpabcde[<span class="number">3</span>]) + tmpabcde[<span class="number">4</span>] +</div><div class="line">                    tmpData[l] + <span class="number">0x8f1bbcdc</span>;</div><div class="line">            tmpabcde[<span class="number">4</span>] = tmpabcde[<span class="number">3</span>];</div><div class="line">            tmpabcde[<span class="number">3</span>] = tmpabcde[<span class="number">2</span>];</div><div class="line">            tmpabcde[<span class="number">2</span>] = f4(tmpabcde[<span class="number">1</span>], <span class="number">30</span>);</div><div class="line">            tmpabcde[<span class="number">1</span>] = tmpabcde[<span class="number">0</span>];</div><div class="line">            tmpabcde[<span class="number">0</span>] = tmp;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> m = <span class="number">60</span>; m &lt;= <span class="number">79</span>; m++) &#123;</div><div class="line">            <span class="keyword">int</span> tmp = f4(tmpabcde[<span class="number">0</span>], <span class="number">5</span>) +</div><div class="line">                    f2(tmpabcde[<span class="number">1</span>], tmpabcde[<span class="number">2</span>], tmpabcde[<span class="number">3</span>]) + tmpabcde[<span class="number">4</span>] +</div><div class="line">                    tmpData[m] + <span class="number">0xca62c1d6</span>;</div><div class="line">            tmpabcde[<span class="number">4</span>] = tmpabcde[<span class="number">3</span>];</div><div class="line">            tmpabcde[<span class="number">3</span>] = tmpabcde[<span class="number">2</span>];</div><div class="line">            tmpabcde[<span class="number">2</span>] = f4(tmpabcde[<span class="number">1</span>], <span class="number">30</span>);</div><div class="line">            tmpabcde[<span class="number">1</span>] = tmpabcde[<span class="number">0</span>];</div><div class="line">            tmpabcde[<span class="number">0</span>] = tmp;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i2 = <span class="number">0</span>; i2 &lt; tmpabcde.length; i2++) &#123;</div><div class="line">            digestInt[i2] = digestInt[i2] + tmpabcde[i2];</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> n = <span class="number">0</span>; n &lt; tmpData.length; n++) &#123;</div><div class="line">            tmpData[n] = <span class="number">0</span>;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="comment">// 4字节数组转换为整数</span></div><div class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">int</span> <span class="title">byteArrayToInt</span><span class="params">(<span class="keyword">byte</span>[] bytedata, <span class="keyword">int</span> i)</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> ((bytedata[i] &amp; <span class="number">0xff</span>) &lt;&lt; <span class="number">24</span>) | ((bytedata[i + <span class="number">1</span>] &amp; <span class="number">0xff</span>) &lt;&lt; <span class="number">16</span>) |</div><div class="line">                ((bytedata[i + <span class="number">2</span>] &amp; <span class="number">0xff</span>) &lt;&lt; <span class="number">8</span>) | (bytedata[i + <span class="number">3</span>] &amp; <span class="number">0xff</span>);</div><div class="line">    &#125;</div><div class="line">    <span class="comment">// 整数转换为4字节数组</span></div><div class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">intToByteArray</span><span class="params">(<span class="keyword">int</span> intValue, <span class="keyword">byte</span>[] byteData, <span class="keyword">int</span> i)</span> </span>&#123;</div><div class="line">        byteData[i] = (<span class="keyword">byte</span>) (intValue &gt;&gt;&gt; <span class="number">24</span>);</div><div class="line">        byteData[i + <span class="number">1</span>] = (<span class="keyword">byte</span>) (intValue &gt;&gt;&gt; <span class="number">16</span>);</div><div class="line">        byteData[i + <span class="number">2</span>] = (<span class="keyword">byte</span>) (intValue &gt;&gt;&gt; <span class="number">8</span>);</div><div class="line">        byteData[i + <span class="number">3</span>] = (<span class="keyword">byte</span>) intValue;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">// 计算sha-1摘要，返回相应的字节数组</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">byte</span>[] getDigestOfBytes(<span class="keyword">byte</span>[] byteData) &#123;</div><div class="line">        process_input_bytes(byteData);</div><div class="line">        <span class="keyword">byte</span>[] digest = <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">20</span>];</div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; digestInt.length; i++) &#123;</div><div class="line">            intToByteArray(digestInt[i], digest, i * <span class="number">4</span>);</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> digest;</div><div class="line">    &#125;</div><div class="line">    <span class="comment">// 计算sha-1摘要，返回相应的十六进制字符串</span></div><div class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getDigestOfString</span><span class="params">(<span class="keyword">byte</span>[] byteData)</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> ShaUtil.byteArrayToHexString(getDigestOfBytes(byteData));</div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// ShaUtil 其实就是 CommonCodec.encodeHexString 的功能。</span></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ShaUtil</span> </span>&#123;</div><div class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">static</span> <span class="keyword">char</span>[] UPPER_DIGIT = &#123;</div><div class="line">            <span class="string">'0'</span>, <span class="string">'1'</span>, <span class="string">'2'</span>, <span class="string">'3'</span>, <span class="string">'4'</span>, <span class="string">'5'</span>, <span class="string">'6'</span>, <span class="string">'7'</span>, <span class="string">'8'</span>, <span class="string">'9'</span>, <span class="string">'A'</span>, <span class="string">'B'</span>, <span class="string">'C'</span>,</div><div class="line">            <span class="string">'D'</span>, <span class="string">'E'</span>, <span class="string">'F'</span></div><div class="line">    &#125;;</div><div class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">static</span> <span class="keyword">char</span>[] LOWER_DIGIT = &#123;</div><div class="line">            <span class="string">'0'</span>, <span class="string">'1'</span>, <span class="string">'2'</span>, <span class="string">'3'</span>, <span class="string">'4'</span>, <span class="string">'5'</span>, <span class="string">'6'</span>, <span class="string">'7'</span>, <span class="string">'8'</span>, <span class="string">'9'</span>, <span class="string">'a'</span>, <span class="string">'b'</span>, <span class="string">'c'</span>,</div><div class="line">            <span class="string">'d'</span>, <span class="string">'e'</span>, <span class="string">'f'</span></div><div class="line">    &#125;;</div><div class="line">    <span class="comment">// 将字节转换为十六进制字符串</span></div><div class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> String <span class="title">byteToHexString</span><span class="params">(<span class="keyword">byte</span> ib, <span class="keyword">boolean</span> useUpper)</span> </span>&#123;</div><div class="line">        <span class="keyword">char</span>[] Digit = useUpper ? UPPER_DIGIT : LOWER_DIGIT;</div><div class="line"></div><div class="line">        <span class="keyword">char</span>[] ob = <span class="keyword">new</span> <span class="keyword">char</span>[<span class="number">2</span>];</div><div class="line">        ob[<span class="number">0</span>] = Digit[(ib &gt;&gt;&gt; <span class="number">4</span>) &amp; <span class="number">0X0F</span>];</div><div class="line">        ob[<span class="number">1</span>] = Digit[ib &amp; <span class="number">0X0F</span>];</div><div class="line">        <span class="keyword">return</span> <span class="keyword">new</span> String(ob);</div><div class="line">    &#125;</div><div class="line">    <span class="comment">// 将字节数组转换为十六进制字符串</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">byteArrayToHexString</span><span class="params">(<span class="keyword">byte</span>[] byteArray)</span> </span>&#123;</div><div class="line">        StringBuilder strDigest = <span class="keyword">new</span> StringBuilder();</div><div class="line">        <span class="keyword">for</span> (<span class="keyword">byte</span> b : byteArray) &#123;</div><div class="line">            strDigest.append(byteToHexString(b, <span class="keyword">false</span>));</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> strDigest.toString();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>测试：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">    <span class="meta">@Test</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">SHA1SelfTest</span><span class="params">()</span> </span>&#123;</div><div class="line">        SHA1Self sha1Self = <span class="keyword">new</span> SHA1Self();</div><div class="line">        System.out.println(<span class="string">"+--------------------SHA1Self.getDigestOfBytes------------------------+"</span>);</div><div class="line">        <span class="keyword">for</span> (<span class="keyword">byte</span> b : sha1Self.getDigestOfBytes(testStr.getBytes())) &#123;</div><div class="line">            System.out.print(b);</div><div class="line">        &#125;</div><div class="line">        System.out.println();System.out.println();</div><div class="line"></div><div class="line">        System.out.println(<span class="string">"+--------------------SHA1Self.getDigestOfString by ShaUtil------------------------+"</span>);</div><div class="line">        System.out.println(sha1Self.getDigestOfString(testStr.getBytes()));</div><div class="line">        System.out.println();</div><div class="line"></div><div class="line">        System.out.println(<span class="string">"+--------------------SHA1Self.getDigestOfString by common-codec encodeHexString------------------------+"</span>);</div><div class="line">        System.out.println(Hex.encodeHexString(sha1Self.getDigestOfBytes(testStr.getBytes())));</div><div class="line">        System.out.println();</div><div class="line">    &#125;</div><div class="line"><span class="comment">/*</span></div><div class="line"><span class="comment">     +--------------------SHA1Self.getDigestOfBytes------------------------+</span></div><div class="line"><span class="comment">     -87-1036254716-127106-70623711312080-62108-100-48-40-99</span></div><div class="line"><span class="comment"></span></div><div class="line"><span class="comment">     +--------------------SHA1Self.getDigestOfString by ShaUtil------------------------+</span></div><div class="line"><span class="comment">     a9993e364706816aba3e25717850c26c9cd0d89d</span></div><div class="line"><span class="comment"></span></div><div class="line"><span class="comment">     +--------------------SHA1Self.getDigestOfString by common-codec encodeHexString------------------------+</span></div><div class="line"><span class="comment">     a9993e364706816aba3e25717850c26c9cd0d89d</span></div><div class="line"><span class="comment">*/</span></div></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>坚持原创技术分享，您的支持将鼓励我继续创作！</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/uploads/weixin.JPG" alt="CFshuming 微信支付"/>
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/uploads/zhifubao.JPG" alt="CFshuming 支付宝"/>
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/JavaYouShouldKnow/" rel="tag"># JavaYouShouldKnow</a>
+          
+            <a href="/tags/security/" rel="tag"># security</a>
+          
+            <a href="/tags/hash/" rel="tag"># hash</a>
+          
+            <a href="/tags/基础知识/" rel="tag"># 基础知识</a>
+          
+            <a href="/tags/SHA-1/" rel="tag"># SHA-1</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/12/23/spring/aop/spring aop 使用 cglib 生成代理对象导致的问题/" rel="next" title="spring aop 使用 cglib 生成代理对象导致的问题">
+                <i class="fa fa-chevron-left"></i> spring aop 使用 cglib 生成代理对象导致的问题
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        
+  <div class="bdsharebuttonbox">
+    <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+    <a href="#" class="bds_douban" data-cmd="douban" title="分享到豆瓣网"></a>
+    <a href="#" class="bds_sqq" data-cmd="sqq" title="分享到QQ好友"></a>
+    <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间"></a>
+    <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+    <a href="#" class="bds_tieba" data-cmd="tieba" title="分享到百度贴吧"></a>
+    <a href="#" class="bds_twi" data-cmd="twi" title="分享到Twitter"></a>
+    <a href="#" class="bds_fbook" data-cmd="fbook" title="分享到Facebook"></a>
+    <a href="#" class="bds_more" data-cmd="more"></a>
+    <a class="bds_count" data-cmd="count"></a>
+  </div>
+  <script>
+    window._bd_share_config = {
+      "common": {
+        "bdText": "",
+        "bdMini": "2",
+        "bdMiniList": false,
+        "bdPic": ""
+      },
+      "share": {
+        "bdSize": "16",
+        "bdStyle": "0"
+      },
+      "image": {
+        "viewList": ["tsina", "douban", "sqq", "qzone", "weixin", "twi", "fbook"],
+        "viewText": "分享到：",
+        "viewSize": "16"
+      }
+    }
+  </script>
+
+<script>
+  with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='//bdimg.share.baidu.com/static/api/js/share.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="SOHUCS"></div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">CFshuming</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">45</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">30</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">48</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/CFshuming" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="chengfan818@qq.com" target="_blank" title="E-Mail">
+                    
+                      <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="http://blog.csdn.net/qq_31655965" target="_blank" title="CSDN">
+                    
+                      <i class="fa fa-fw fa-rss"></i>CSDN</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="http://www.jianshu.com/u/8dc5811b228f" target="_blank" title="简书">
+                    
+                      <i class="fa fa-fw fa-book"></i>简书</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-SHA-1算法简介"><span class="nav-number">1.</span> <span class="nav-text">1. SHA-1算法简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-SHA-0-和-SHA-1"><span class="nav-number">2.</span> <span class="nav-text">2. SHA-0 和 SHA-1</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-SHA-1-算法描述"><span class="nav-number">3.</span> <span class="nav-text">3. SHA-1 算法描述</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-补位"><span class="nav-number">3.1.</span> <span class="nav-text">3.1 补位</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-补长度"><span class="nav-number">3.2.</span> <span class="nav-text">3.2 补长度</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-使用的常量"><span class="nav-number">3.3.</span> <span class="nav-text">3.3 使用的常量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-4-需要使用的函数"><span class="nav-number">3.4.</span> <span class="nav-text">3.4 需要使用的函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-5-计算消息摘要"><span class="nav-number">3.5.</span> <span class="nav-text">3.5 计算消息摘要</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-在-Java-中使用-SHA-1"><span class="nav-number">4.</span> <span class="nav-text">4. 在 Java 中使用 SHA-1</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-使用-jdk-提供的函数。"><span class="nav-number">4.1.</span> <span class="nav-text">4.1 使用 jdk 提供的函数。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-使用-commons-codec-工具类"><span class="nav-number">4.2.</span> <span class="nav-text">4.2 使用 commons-codec 工具类</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-自己实现-SHA-1"><span class="nav-number">5.</span> <span class="nav-text">5. 自己实现 SHA-1</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">CFshuming</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.3</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user">本站访客数:</i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye">本站总访问量:</i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+  
+    <script type="text/javascript">
+    (function(){
+      var appid = 'cyt8Eo1xq';
+      var conf = 'f5f331174d31bcb21b3bec1b41eaae54';
+      var width = window.innerWidth || document.documentElement.clientWidth;
+      if (width < 960) {
+      window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>'); } else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){
+        window.changyan.api.config({appid:appid,conf:conf})});
+      }
+    })();
+    </script>
+    <script type="text/javascript" src="https://assets.changyan.sohu.com/upload/plugins/plugins.count.js"></script>
+  
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
