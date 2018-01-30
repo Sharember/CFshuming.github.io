@@ -303,7 +303,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.fanhub.cn/2017/07/19/effectivejava/eff-java-9/">
+    <link itemprop="mainEntityOfPage" href="http://blog.fanhub.cn/2017/07/20/effectivejava/eff-java-16/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="CFshuming">
@@ -322,7 +322,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/07/19/effectivejava/eff-java-9/" itemprop="url">【effective java】9:覆盖equals时总要覆盖hashcode</a></h1>
+                <a class="post-title-link" href="/2017/07/20/effectivejava/eff-java-16/" itemprop="url">【effective java】16:复合优先于继承</a></h1>
         
 
         <div class="post-meta">
@@ -334,8 +334,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-19T20:46:25+08:00">
-                2017-07-19
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-20T20:46:25+08:00">
+                2017-07-20
               </time>
             
 
@@ -387,8 +387,8 @@
                 <i class="fa fa-comment-o"></i>
               </span>
               
-                <a href="/2017/07/19/effectivejava/eff-java-9/#SOHUCS" itemprop="discussionUrl">
-                  <span id="url::http://blog.fanhub.cn/2017/07/19/effectivejava/eff-java-9/" class="cy_cmt_count" data-xid="2017/07/19/effectivejava/eff-java-9/" itemprop="commentsCount" ></span>
+                <a href="/2017/07/20/effectivejava/eff-java-16/#SOHUCS" itemprop="discussionUrl">
+                  <span id="url::http://blog.fanhub.cn/2017/07/20/effectivejava/eff-java-16/" class="cy_cmt_count" data-xid="2017/07/20/effectivejava/eff-java-16/" itemprop="commentsCount" ></span>
                 </a>
               
             
@@ -418,12 +418,13 @@
       
         
           
-          9:覆盖equals时总要覆盖hashcode1.hashcode 通用约定
-1.在应用程序执行期间，只要对象的 equals 方法的比较嘈杂所用到的信息没有被修改，那么对这同一个对象调用多次 hashcode 方法都必须始终如一的返回同一个函数。在同一个应用程序的多次执行过过程中，每次执行所返回的
+          前言继承是实现代码重用的有力手段，但它并不永远都是最好的选择，使用不当会使软件变得很脆弱。
+在包的内部使用继承是非常安全的，在那里，子类和超类都处在同一个程序员的控制之下。对于专门为了继承而设计、并且具有很好文档说明的类来说，使用继承也是非常安全的。
+然而，对于普通的具体类进行垮包边界的继承，则是非
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2017/07/19/effectivejava/eff-java-9/#more" rel="contents">
+            <a class="btn" href="/2017/07/20/effectivejava/eff-java-16/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -597,6 +598,177 @@ qq交流群 563636006 新建的，就我一个。
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2017/07/19/spring-boot/spring-boot-资料整合/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blog.fanhub.cn/2017/07/19/effectivejava/eff-java-9/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="CFshuming">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="舒铭的后花园">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/07/19/effectivejava/eff-java-9/" itemprop="url">【effective java】9:覆盖equals时总要覆盖hashcode</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-19T20:46:25+08:00">
+                2017-07-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index">
+                    <span itemprop="name">java</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java/effectivejava/" itemprop="url" rel="index">
+                    <span itemprop="name">effectivejava</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-comment-o"></i>
+              </span>
+              
+                <a href="/2017/07/19/effectivejava/eff-java-9/#SOHUCS" itemprop="discussionUrl">
+                  <span id="url::http://blog.fanhub.cn/2017/07/19/effectivejava/eff-java-9/" class="cy_cmt_count" data-xid="2017/07/19/effectivejava/eff-java-9/" itemprop="commentsCount" ></span>
+                </a>
+              
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+          9:覆盖equals时总要覆盖hashcode1.hashcode 通用约定
+1.在应用程序执行期间，只要对象的 equals 方法的比较嘈杂所用到的信息没有被修改，那么对这同一个对象调用多次 hashcode 方法都必须始终如一的返回同一个函数。在同一个应用程序的多次执行过过程中，每次执行所返回的
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2017/07/19/effectivejava/eff-java-9/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -979,179 +1151,6 @@ hibernate是数据访问解决技术的霸主之一，使用了O/R映射技术�
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.fanhub.cn/2017/07/17/effectivejava/eff-java-7/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="CFshuming">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="舒铭的后花园">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/07/17/effectivejava/eff-java-7/" itemprop="url">【effective java】7:避免使用终结方法</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-17T20:46:25+08:00">
-                2017-07-17
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/java/" itemprop="url" rel="index">
-                    <span itemprop="name">java</span>
-                  </a>
-                </span>
-
-                
-                
-                  ， 
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/java/effectivejava/" itemprop="url" rel="index">
-                    <span itemprop="name">effectivejava</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-              <span class="post-meta-divider">|</span>
-              <span class="post-meta-item-icon">
-                <i class="fa fa-comment-o"></i>
-              </span>
-              
-                <a href="/2017/07/17/effectivejava/eff-java-7/#SOHUCS" itemprop="discussionUrl">
-                  <span id="url::http://blog.fanhub.cn/2017/07/17/effectivejava/eff-java-7/" class="cy_cmt_count" data-xid="2017/07/17/effectivejava/eff-java-7/" itemprop="commentsCount" ></span>
-                </a>
-              
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-          7:避免使用终结方法终结方法（finalizer）通常是不可预测的，也是很危险的，一般情况下是不必要的。
-为什么要避免使用1终结方法的缺点在于不能保证会被及时的执行。从一个对象变得不可达开始，到它的终结方法被执行，所花费的这段时间是任意长的。
-
-所以，注重时间的任务不应该由终结方法来完成，例如，用终
-          ...
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2017/07/17/effectivejava/eff-java-7/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1202,7 +1201,7 @@ hibernate是数据访问解决技术的霸主之一，使用了O/R映射技术�
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">46</span>
+                  <span class="site-state-item-count">47</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -1213,7 +1212,7 @@ hibernate是数据访问解决技术的霸主之一，使用了O/R映射技术�
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">32</span>
+                  <span class="site-state-item-count">33</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -1224,7 +1223,7 @@ hibernate是数据访问解决技术的霸主之一，使用了O/R映射技术�
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">51</span>
+                  <span class="site-state-item-count">52</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
