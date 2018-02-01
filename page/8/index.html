@@ -303,7 +303,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.fanhub.cn/2017/07/17/effectivejava/eff-java-7/">
+    <link itemprop="mainEntityOfPage" href="http://blog.fanhub.cn/2017/07/18/effectivejava/eff-java-8/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="CFshuming">
@@ -322,7 +322,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/07/17/effectivejava/eff-java-7/" itemprop="url">【effective java】7:避免使用终结方法</a></h1>
+                <a class="post-title-link" href="/2017/07/18/effectivejava/eff-java-8/" itemprop="url">【effective java】8:覆盖 equals 时请遵守通用规定</a></h1>
         
 
         <div class="post-meta">
@@ -334,8 +334,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-17T20:46:25+08:00">
-                2017-07-17
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-18T20:46:25+08:00">
+                2017-07-18
               </time>
             
 
@@ -387,8 +387,8 @@
                 <i class="fa fa-comment-o"></i>
               </span>
               
-                <a href="/2017/07/17/effectivejava/eff-java-7/#SOHUCS" itemprop="discussionUrl">
-                  <span id="url::http://blog.fanhub.cn/2017/07/17/effectivejava/eff-java-7/" class="cy_cmt_count" data-xid="2017/07/17/effectivejava/eff-java-7/" itemprop="commentsCount" ></span>
+                <a href="/2017/07/18/effectivejava/eff-java-8/#SOHUCS" itemprop="discussionUrl">
+                  <span id="url::http://blog.fanhub.cn/2017/07/18/effectivejava/eff-java-8/" class="cy_cmt_count" data-xid="2017/07/18/effectivejava/eff-java-8/" itemprop="commentsCount" ></span>
                 </a>
               
             
@@ -418,14 +418,15 @@
       
         
           
-          7:避免使用终结方法终结方法（finalizer）通常是不可预测的，也是很危险的，一般情况下是不必要的。
-为什么要避免使用1终结方法的缺点在于不能保证会被及时的执行。从一个对象变得不可达开始，到它的终结方法被执行，所花费的这段时间是任意长的。
-
-所以，注重时间的任务不应该由终结方法来完成，例如，用终
+          8: 覆盖 equals 时请遵守通用规定1.覆盖 equals 后，需要满足的条件
+1.类的每个实例本质上都是唯一的
+2.不关心是否提供了“逻辑相等”的测试功能
+3.超类已经覆盖了 equals，从超类继承过来d额行为对于子类也是合适的
+4.类是私有的或者包私有的，可以确定它的 equals 方法
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2017/07/17/effectivejava/eff-java-7/#more" rel="contents">
+            <a class="btn" href="/2017/07/18/effectivejava/eff-java-8/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -649,7 +650,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.fanhub.cn/2017/07/16/effectivejava/eff-java-6/">
+    <link itemprop="mainEntityOfPage" href="http://blog.fanhub.cn/2017/07/17/effectivejava/eff-java-7/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="CFshuming">
@@ -668,7 +669,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/07/16/effectivejava/eff-java-6/" itemprop="url">【effective java】6:消除过期的对象引用</a></h1>
+                <a class="post-title-link" href="/2017/07/17/effectivejava/eff-java-7/" itemprop="url">【effective java】7:避免使用终结方法</a></h1>
         
 
         <div class="post-meta">
@@ -680,8 +681,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-16T20:46:25+08:00">
-                2017-07-16
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-17T20:46:25+08:00">
+                2017-07-17
               </time>
             
 
@@ -733,8 +734,8 @@
                 <i class="fa fa-comment-o"></i>
               </span>
               
-                <a href="/2017/07/16/effectivejava/eff-java-6/#SOHUCS" itemprop="discussionUrl">
-                  <span id="url::http://blog.fanhub.cn/2017/07/16/effectivejava/eff-java-6/" class="cy_cmt_count" data-xid="2017/07/16/effectivejava/eff-java-6/" itemprop="commentsCount" ></span>
+                <a href="/2017/07/17/effectivejava/eff-java-7/#SOHUCS" itemprop="discussionUrl">
+                  <span id="url::http://blog.fanhub.cn/2017/07/17/effectivejava/eff-java-7/" class="cy_cmt_count" data-xid="2017/07/17/effectivejava/eff-java-7/" itemprop="commentsCount" ></span>
                 </a>
               
             
@@ -764,12 +765,14 @@
       
         
           
-          java 有自己的垃圾回收机制，当你用完一个对象之后，它会被自动回收，这看起来有点不可思议，并且很容易让你觉得你自己再也不需要考虑内存管理的事了。显然，这是一种错误的想法。
-1. 过期引用1.1 介绍如果一个栈是先增长，然后再收缩，那么，从栈中弹出来的对象将不会被当做垃圾回收，即使使用栈的程序不再引
+          7:避免使用终结方法终结方法（finalizer）通常是不可预测的，也是很危险的，一般情况下是不必要的。
+为什么要避免使用1终结方法的缺点在于不能保证会被及时的执行。从一个对象变得不可达开始，到它的终结方法被执行，所花费的这段时间是任意长的。
+
+所以，注重时间的任务不应该由终结方法来完成，例如，用终
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2017/07/16/effectivejava/eff-java-6/#more" rel="contents">
+            <a class="btn" href="/2017/07/17/effectivejava/eff-java-7/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -994,7 +997,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.fanhub.cn/2017/07/15/spring-boot/【springboot-入门篇】第2篇--springboot的各种配置/">
+    <link itemprop="mainEntityOfPage" href="http://blog.fanhub.cn/2017/07/16/effectivejava/eff-java-6/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="CFshuming">
@@ -1013,7 +1016,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/07/15/spring-boot/【springboot-入门篇】第2篇--springboot的各种配置/" itemprop="url">【springboot-入门篇】第2篇--springboot的各种配置</a></h1>
+                <a class="post-title-link" href="/2017/07/16/effectivejava/eff-java-6/" itemprop="url">【effective java】6:消除过期的对象引用</a></h1>
         
 
         <div class="post-meta">
@@ -1025,8 +1028,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-15T20:46:25+08:00">
-                2017-07-15
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-16T20:46:25+08:00">
+                2017-07-16
               </time>
             
 
@@ -1059,8 +1062,8 @@
                 
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/java/springboot/" itemprop="url" rel="index">
-                    <span itemprop="name">springboot</span>
+                  <a href="/categories/java/effectivejava/" itemprop="url" rel="index">
+                    <span itemprop="name">effectivejava</span>
                   </a>
                 </span>
 
@@ -1078,8 +1081,8 @@
                 <i class="fa fa-comment-o"></i>
               </span>
               
-                <a href="/2017/07/15/spring-boot/【springboot-入门篇】第2篇--springboot的各种配置/#SOHUCS" itemprop="discussionUrl">
-                  <span id="url::http://blog.fanhub.cn/2017/07/15/spring-boot/【springboot-入门篇】第2篇--springboot的各种配置/" class="cy_cmt_count" data-xid="2017/07/15/spring-boot/【springboot-入门篇】第2篇--springboot的各种配置/" itemprop="commentsCount" ></span>
+                <a href="/2017/07/16/effectivejava/eff-java-6/#SOHUCS" itemprop="discussionUrl">
+                  <span id="url::http://blog.fanhub.cn/2017/07/16/effectivejava/eff-java-6/" class="cy_cmt_count" data-xid="2017/07/16/effectivejava/eff-java-6/" itemprop="commentsCount" ></span>
                 </a>
               
             
@@ -1109,13 +1112,12 @@
       
         
           
-          1. 配置文件简介spring boot使用一个全局配置文件：application.properties或者application.yml，放置在src/main/resources目录下或者类路径的/config目录下。
-application.properties是我们熟知的键值对配置文件：
-
+          java 有自己的垃圾回收机制，当你用完一个对象之后，它会被自动回收，这看起来有点不可思议，并且很容易让你觉得你自己再也不需要考虑内存管理的事了。显然，这是一种错误的想法。
+1. 过期引用1.1 介绍如果一个栈是先增长，然后再收缩，那么，从栈中弹出来的对象将不会被当做垃圾回收，即使使用栈的程序不再引
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2017/07/15/spring-boot/【springboot-入门篇】第2篇--springboot的各种配置/#more" rel="contents">
+            <a class="btn" href="/2017/07/16/effectivejava/eff-java-6/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1203,7 +1205,7 @@ application.properties是我们熟知的键值对配置文件：
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">47</span>
+                  <span class="site-state-item-count">48</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

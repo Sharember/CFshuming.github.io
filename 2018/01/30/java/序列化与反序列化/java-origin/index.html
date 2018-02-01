@@ -82,14 +82,14 @@
 <meta name="description" content="1. 序列化介绍序列化是将对象的状态信息转换为可存储或可传输的形式的过程，简而言之，把对象转换为字节数组的过程称之为对象的序列化。 反序列化即序列化的逆过程。把字节数组恢复为对象的过程称为对象的反序列化。 2. 序列化能帮助我们解决那些问题 通过将对象序列化为字节数组，使得不共享内存、通过网络连接的系统之间能够进行对象的传输。  通过将对象序列化为字节数组，能够将对象永久存储到存储设备。  解决远">
 <meta name="keywords" content="分布式,序列化与反序列化">
 <meta property="og:type" content="article">
-<meta property="og:title" content="【序列化与反序列化】1\. java 原生序列化方式">
+<meta property="og:title" content="【序列化与反序列化】1. java 原生序列化方式">
 <meta property="og:url" content="http://blog.fanhub.cn/2018/01/30/java/序列化与反序列化/java-origin/index.html">
 <meta property="og:site_name" content="舒铭的后花园">
 <meta property="og:description" content="1. 序列化介绍序列化是将对象的状态信息转换为可存储或可传输的形式的过程，简而言之，把对象转换为字节数组的过程称之为对象的序列化。 反序列化即序列化的逆过程。把字节数组恢复为对象的过程称为对象的反序列化。 2. 序列化能帮助我们解决那些问题 通过将对象序列化为字节数组，使得不共享内存、通过网络连接的系统之间能够进行对象的传输。  通过将对象序列化为字节数组，能够将对象永久存储到存储设备。  解决远">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-01-30T15:01:31.631Z">
+<meta property="og:updated_time" content="2018-02-01T13:13:38.526Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="【序列化与反序列化】1\. java 原生序列化方式">
+<meta name="twitter:title" content="【序列化与反序列化】1. java 原生序列化方式">
 <meta name="twitter:description" content="1. 序列化介绍序列化是将对象的状态信息转换为可存储或可传输的形式的过程，简而言之，把对象转换为字节数组的过程称之为对象的序列化。 反序列化即序列化的逆过程。把字节数组恢复为对象的过程称为对象的反序列化。 2. 序列化能帮助我们解决那些问题 通过将对象序列化为字节数组，使得不共享内存、通过网络连接的系统之间能够进行对象的传输。  通过将对象序列化为字节数组，能够将对象永久存储到存储设备。  解决远">
 
 
@@ -126,7 +126,7 @@
 
 
 
-  <title>【序列化与反序列化】1\. java 原生序列化方式 | 舒铭的后花园</title>
+  <title>【序列化与反序列化】1. java 原生序列化方式 | 舒铭的后花园</title>
   
 
 
@@ -324,7 +324,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">【序列化与反序列化】1\. java 原生序列化方式</h1>
+          <h1 class="post-title" itemprop="name headline">【序列化与反序列化】1. java 原生序列化方式</h1>
         
 
         <div class="post-meta">
@@ -470,7 +470,7 @@
 <p>结果：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">null</span></div><div class="line"><span class="number">123</span></div><div class="line">------model2--------</div><div class="line">name</div><div class="line"><span class="number">123</span></div></pre></td></tr></table></figure>
 <p>可以看到，添加 writeObject() 与 readObject() 方法后，transient 字段也被正确序列化了。</p>
-<h3 id="点击查看源码"><a href="#点击查看源码" class="headerlink" title="点击查看源码"></a><a href="https://github.com/CFshuming/JavaYouShouldKnow/tree/master/rpc/src/main/java/cn/fanhub/rpc/serialization" target="_blank" rel="external">点击查看源码</a></h3>
+<h3 id="点击查看源码"><a href="#点击查看源码" class="headerlink" title="点击查看源码"></a><a href="https://github.com/CFshuming/JavaYouShouldKnow/tree/master/javabase/src/main/java/cn/fanhub/serialization/java" target="_blank" rel="external">点击查看源码</a></h3>
       
     </div>
     
@@ -540,6 +540,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/02/01/java/序列化与反序列化/xml/" rel="prev" title="【序列化与反序列化】2. xml 序列化方式">
+                【序列化与反序列化】2. xml 序列化方式 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -659,7 +663,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">47</span>
+                  <span class="site-state-item-count">48</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

@@ -1,7 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title><![CDATA[【序列化与反序列化】1\. java 原生序列化方式]]></title>
+    <title><![CDATA[【序列化与反序列化】2. xml 序列化方式]]></title>
+    <url>%2F2018%2F02%2F01%2Fjava%2F%E5%BA%8F%E5%88%97%E5%8C%96%E4%B8%8E%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%2Fxml%2F</url>
+    <content type="text"><![CDATA[1. java 内置 xml 序列化方式简介。xml 是一种语言无关的序列化方式，java 内置了 java bean 与 xml 互相转换的工具，简单的来看一下他们的使用方法： 核心代码： 123456789101112131415161718192021public void saveToXML(Object o) throws IOException &#123; File xmlFile = new File("file/out/object.xml"); if (!xmlFile.exists()) &#123; xmlFile.createNewFile(); &#125; FileOutputStream ofs = new FileOutputStream(xmlFile); XMLEncoder xe = new XMLEncoder(ofs); xe.writeObject(o); xe.close(); ofs.close();&#125;public Object getObjectFromXML(String path) throws IOException &#123; File xmlFile = new File(path); FileInputStream in = new FileInputStream(xmlFile); XMLDecoder xd = new XMLDecoder(in); Object o = xd.readObject(); xd.close(); in.close(); return o;&#125; 一个是将 object 序列化为 xml，并存到一个 .xml 文件中，另一个方法是从 .xml 文件中读取数据，反序列化为 object。 我们来测试一下： 1234567@Testpublic void saveToXML() throws Exception &#123; User user = new User(); user.setAge(18); user.setUserName("jack"); javaXml.saveToXML(user);&#125; 生成的 object.xml 文件如下： 1234567891011&lt;?xml version="1.0" encoding="UTF-8"?&gt;&lt;java version="1.8.0_152" class="java.beans.XMLDecoder"&gt; &lt;object class="cn.fanhub.javabase.xml.User"&gt; &lt;void property="age"&gt; &lt;int&gt;18&lt;/int&gt; &lt;/void&gt; &lt;void property="userName"&gt; &lt;string&gt;jack&lt;/string&gt; &lt;/void&gt; &lt;/object&gt;&lt;/java&gt; 试试反序列化： 1234567 @Test public void getObjectFromXML() throws Exception &#123; System.out.println(((User) javaXml.getObjectFromXML("file/out/object.xml")).getUserName()); &#125;// 结果：// jack 反序列化成功 2. xStream 简介xStream 是一个 xml 序列化框架。XStream 在运行时使用 Java 反射机制对要进行序列化的对象树的结构进行探索，并不需要对对象作出修改。XStream 可以序列化内部字段，包括 private 和 final 字段，并且支持非公开类以及内部类。 在缺省情况下，XStream 不需要配置映射关系，对象和字段将映射为同名 XML 元素。但是当对象和字段名与 XML 中的元素名不同时，XStream 支持指定别名。XStream 支持以方法调用的方式，或是Java 注解的方式指定别名。 XStream 在进行数据类型转换时，使用系统缺省的类型转换器。同时，也支持用户自定义的类型转换器。 来试一下用 sStream 序列化 java bean： 核心代码： 12345678910111213public void saveToXML(Object o) throws IOException &#123; XStream xStream = new XStream(new DomDriver()); File xmlFile = new File("file/out/xStream-object.xml"); FileOutputStream ofs = new FileOutputStream(xmlFile); xStream.toXML(o, ofs); ofs.close();&#125;public Object getFromObject(String path) throws IOException &#123; FileInputStream inputStream = new FileInputStream(new File(path)); XStream xStream = new XStream(new DomDriver()); return xStream.fromXML(inputStream);&#125; 功能与上面的一样，我们来测试一下： 1234567@Testpublic void saveToXML() throws Exception &#123; User user = new User(); user.setAge(18); user.setUserName("jack"); xStreamXML.saveToXML(user);&#125; xStream-object.xml 的内容： 1234&lt;cn.fanhub.javabase.xml.User&gt; &lt;userName&gt;jack&lt;/userName&gt; &lt;age&gt;18&lt;/age&gt;&lt;/cn.fanhub.javabase.xml.User&gt; 这个就是 xStream 与 原生 java xml api 的不同： xStream 序列化出来的 xml 更加简洁。 反序列化测试: 123456 @Test public void getFromObject() throws Exception &#123; System.out.println(((User) xStreamXML.getFromObject("file/out/xStream-object.xml")).getUserName()); &#125;// 结果：// jack 反序列化成功。 这里不会详细介绍 java xml api 以及 xSream 的全部功能，只是做一个简单的介绍，如果有深入的需求，请自行学习。 3. 使用 xml 完成序列化。3.1 首先是基础接口123456789101112131415161718public interface MySerializer &#123; /** * 序列化 * @param obj * @param &lt;T&gt; * @return */ &lt;T&gt; byte[] serialize(T obj); /** * 反序列化 * @param data * @param clazz * @param &lt;T&gt; * @return */ &lt;T&gt; T deserialize(byte[] data, Class&lt;T&gt; clazz);&#125; 3.2 java 原生 API 序列化实现 实现 12345678910111213141516171819public class JavaXMLSerializer implements MySerializer &#123; @Override public &lt;T&gt; byte[] serialize(T obj) &#123; ByteArrayOutputStream outputStream = new ByteArrayOutputStream(); XMLEncoder xmlEncoder = new XMLEncoder(outputStream, "utf-8", true, 0); xmlEncoder.writeObject(obj); xmlEncoder.close(); return outputStream.toByteArray(); &#125; @Override @SuppressWarnings("unchecked") public &lt;T&gt; T deserialize(byte[] data, Class&lt;T&gt; clazz) &#123; XMLDecoder xmlDecoder = new XMLDecoder(new ByteArrayInputStream(data)); Object obj = xmlDecoder.readObject(); xmlDecoder.close(); return (T) obj; &#125;&#125; 测试 1234567891011121314 @Test public void testJavaXML() &#123; JavaXMLSerializer javaXMLSerializer = new JavaXMLSerializer(); JavaSerializerModel serializerModel = new JavaSerializerModel(); JavaSerializerModel model = javaXMLSerializer.deserialize(javaXMLSerializer.serialize(serializerModel), JavaSerializerModel.class); System.out.println(model.getName()); System.out.println(model.getPhone()); System.out.println(model.getDate()); &#125;/**name123Mon Jan 01 01:01:01 CST 2018*/ 可以发现，java 原生 api 可以序列化 transient 字段。 3.3 xStream 实现序列化 实现 12345678910111213141516public class XStreamXMLSerializer implements MySerializer&#123; private static final XStream X_STREAM = new XStream(new DomDriver()); @Override public &lt;T&gt; byte[] serialize(T obj) &#123; return X_STREAM.toXML(obj).getBytes(); &#125; @Override @SuppressWarnings("unchecked") public &lt;T&gt; T deserialize(byte[] data, Class&lt;T&gt; clazz) &#123; String xml = new String(data); return (T) X_STREAM.fromXML(xml); &#125;&#125; 测试 123456789101112131415161718192021 @Test public void testXStreamXML() &#123; XStreamXMLSerializer xstreamXMLSerializer = new XStreamXMLSerializer(); JavaSerializerModel serializerModel = new JavaSerializerModel(); JavaSerializerModel model = xstreamXMLSerializer.deserialize(xstreamXMLSerializer.serialize(serializerModel), JavaSerializerModel.class); System.out.println(model.getName()); System.out.println(model.getPhone()); System.out.println("----2-----"); JavaSerializerModel2 serializerModel2 = new JavaSerializerModel2(); JavaSerializerModel2 model2 = xstreamXMLSerializer.deserialize(xstreamXMLSerializer.serialize(serializerModel2), JavaSerializerModel2.class); System.out.println(model2.getName()); System.out.println(model2.getPhone()); &#125;/**null123----2-----name123*/ 可以看到，xStream 默认不会序列化 transient 字段，需要手动实现 writeObject() 和 readObject() 方法。 JavaSerializerModel2 和 JavaSerializerModel 可以参考上一篇文章。 4. 小结xml 序列化的优势在于可读性好，利于调试。由于 xml 具有语言无关性，所以可以用于异构系统之间的数据交换协议，我们熟知的 webservice 协议就是采用 xml 格式对数据进行序列化的。但是因为使用标签来表示数据，导致序列化后码流大，而且效率不高。适用于对性能要求不高，且 qps 较低的系统进行数据交换时使用，比如一些公司内部的系统。 xml 序列化与反序列化有很多中方式，并不是只有文中提到的两种！ 点击查看源码]]></content>
+      <categories>
+        <category>分布式</category>
+        <category>序列化与反序列化</category>
+      </categories>
+      <tags>
+        <tag>分布式</tag>
+        <tag>序列化与反序列化</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[【序列化与反序列化】1. java 原生序列化方式]]></title>
     <url>%2F2018%2F01%2F30%2Fjava%2F%E5%BA%8F%E5%88%97%E5%8C%96%E4%B8%8E%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%2Fjava-origin%2F</url>
     <content type="text"><![CDATA[1. 序列化介绍序列化是将对象的状态信息转换为可存储或可传输的形式的过程，简而言之，把对象转换为字节数组的过程称之为对象的序列化。 反序列化即序列化的逆过程。把字节数组恢复为对象的过程称为对象的反序列化。 2. 序列化能帮助我们解决那些问题 通过将对象序列化为字节数组，使得不共享内存、通过网络连接的系统之间能够进行对象的传输。 通过将对象序列化为字节数组，能够将对象永久存储到存储设备。 解决远程接口调用 jvm 之间内存无法共享的问题。 3. 评价序列化算法优劣的两个指标 序列化后码流的大小。 序列化本身的速度以及系统资源开销的大小（包括内存、cpu 等）。 4. java 默认的序列化方式。4.1 先定义一个公共接口1234567891011121314151617181920package cn.fanhub.rpc.serialization.base;public interface MySerializer &#123; /** * 序列化 * @param obj * @param &lt;T&gt; * @return */ &lt;T&gt; byte[] serialize(T obj); /** * 反序列化 * @param data * @param clazz * @param &lt;T&gt; * @return */ &lt;T&gt; T deserialize(byte[] data, Class&lt;T&gt; clazz);&#125; 4.2 使用 java 原生的方式实现该接口12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455package cn.fanhub.rpc.serialization;import cn.fanhub.rpc.serialization.base.JavaSerializerModel;import cn.fanhub.rpc.serialization.base.JavaSerializerModel2;import cn.fanhub.rpc.serialization.base.MySerializer;import java.io.ByteArrayInputStream;import java.io.ByteArrayOutputStream;import java.io.IOException;import java.io.ObjectInputStream;import java.io.ObjectOutputStream;public class JavaSerialization implements MySerializer&#123; @Override public &lt;T&gt; byte[] serialize(T obj) &#123; ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream(); try &#123; ObjectOutputStream objectOutputStream = new ObjectOutputStream(byteArrayOutputStream); objectOutputStream.writeObject(obj); objectOutputStream.close(); &#125; catch (IOException e) &#123; e.printStackTrace(); &#125; return byteArrayOutputStream.toByteArray(); &#125; @Override public &lt;T&gt; T deserialize(byte[] data, Class&lt;T&gt; clazz) &#123; ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(data); try &#123; ObjectInputStream objectInputStream= new ObjectInputStream(byteArrayInputStream); return (T) objectInputStream.readObject(); &#125; catch (Exception e) &#123; throw new RuntimeException(); &#125; &#125; public static void main(String[] args) &#123; JavaSerialization javaSerialization = new JavaSerialization(); JavaSerializerModel serializerModel = new JavaSerializerModel(); JavaSerializerModel model = javaSerialization.deserialize(javaSerialization.serialize(serializerModel), JavaSerializerModel.class); System.out.println(model.getName()); System.out.println(model.getPhone()); System.out.println("------model2--------"); JavaSerializerModel2 serializerModel2 = new JavaSerializerModel2(); JavaSerializerModel2 model2 = javaSerialization.deserialize(javaSerialization.serialize(serializerModel2), JavaSerializerModel2.class); System.out.println(model2.getName()); System.out.println(model2.getPhone()); &#125;&#125; java 的序列化主要是通过 OutputStream 与 InputStream 来实现的，被序列化的类需要实现 java.io.Serializable 接口。 上述的实现代码是使用 java 进行序列化与反序列化的通用代码。 4.3 关于 java 序列化的其他知识点 序列化时，只对对象的状态进行保存，而不管对象的方法。 当一个父类实现序列化时，子类自动实现序列化，不需要显示的实现 Serializable 接口。 当一个对象的实例变量引用其他对象，序列化该对象时也把引用对象进行序列化。 当某个字段被声明为 transient 后，默认的序列化机制会忽略该字段。 当某个字段被声明为 transient 后，如果想序列化该字段，需在类中添加 writeObject() 与 readObject() 方法。 4.4 测试 JavaSerializerModel.java 123456789101112131415161718192021222324package cn.fanhub.rpc.serialization.base;import java.io.Serializable;public class JavaSerializerModel implements Serializable &#123; private transient String name = "name"; private String phone = "123"; public String getName() &#123; return name; &#125; public void setName(String name) &#123; this.name = name; &#125; public String getPhone() &#123; return phone; &#125; public void setPhone(String phone) &#123; this.phone = phone; &#125;&#125; JavaSerializerModel2.java 123456789101112131415161718192021222324package cn.fanhub.rpc.serialization.base;import java.io.Serializable;public class JavaSerializerModel implements Serializable &#123; private transient String name = "name"; private String phone = "123"; public String getName() &#123; return name; &#125; public void setName(String name) &#123; this.name = name; &#125; public String getPhone() &#123; return phone; &#125; public void setPhone(String phone) &#123; this.phone = phone; &#125;&#125; Main 12345678910111213141516public static void main(String[] args) &#123; JavaSerialization javaSerialization = new JavaSerialization(); JavaSerializerModel serializerModel = new JavaSerializerModel(); JavaSerializerModel model = javaSerialization.deserialize(javaSerialization.serialize(serializerModel), JavaSerializerModel.class); System.out.println(model.getName()); System.out.println(model.getPhone()); System.out.println("------model2--------"); JavaSerializerModel2 serializerModel2 = new JavaSerializerModel2(); JavaSerializerModel2 model2 = javaSerialization.deserialize(javaSerialization.serialize(serializerModel2), JavaSerializerModel2.class); System.out.println(model2.getName()); System.out.println(model2.getPhone());&#125; 结果： 12345null123------model2--------name123 可以看到，添加 writeObject() 与 readObject() 方法后，transient 字段也被正确序列化了。 点击查看源码]]></content>
       <categories>
@@ -322,21 +335,6 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[【java 并发】 3. 对象的共享（1）]]></title>
-    <url>%2F2017%2F07%2F23%2Fjava%20concurrency%2Fjava-concurrency-3%2F</url>
-    <content type="text"><![CDATA[同步的另一个重要的方面是：内存可见性。我们不仅希望放置某个现场正在使用对象状态而另一个线程在同时修改该状态，而且希望确保当一个线程修改了对象状态后，其他线程能够看到发生的状态变化。 1.可见性多线程环境中，如果没有使用同步机制，编译器、处理器以及运行时等都可能对操作的执行顺序进行一些意想不到的调整，这就导致一个线程修改了一个变量，另一个线程不能及时的得知该变量的更新，最终导致意外错误。 1.1 失效数据当一个数据被一个线程改变，而另一个线程读取到了修改前的值，就出现了失效数据。 1.2 非原子的64位操作java 内存模型要求，变量的读取操作和写入操作都必须是原子操作。对于 java 中的 double 和 long 来说，他们都是64位的。jvm 允许将64位的读操作或者写操作分解为两个32位操作。当读取一个非 volatite 类型的 long 变量时，如果对该变量的读操作和写操作是在两个不同的线程中执行的，那么很可能会读到某个值的高32位和另一个值的低32位。 因此，除非用 volatile 来声明或者用锁来保护，否则在多线程环境中，long 和 double 都是不安全的。 1.3 加锁与可见性内置锁可以用于确保某个线程以一种可预测的方式来查看另一个线程的执行结果。这样可以确保某个线程写入该变量的值对于其他线程来说都是可见的。 加锁的行为不仅仅局限于互斥行为，还包括内存可见性。 1.4 volatile 变量java 语言提供了一种稍弱的同步机制，即 volatile 变量，用来确保将变量的更新操作通知到其他线程。 volatile 变量不会被缓存在寄存器或者对其他处理器不可见的地方，因此在读取 volatile 类型的变量时总会返回最新写入的值。 从内存的角度看，写入 volatile 变量相当于退出同步代码块，而读取 volatile 变量就相当于读取同步代码块。 并不建议过度依赖 volatile 变量提供可见性。因为这样的代码相对于加锁来说更脆弱，也更难理解。]]></content>
-      <categories>
-        <category>java</category>
-        <category>concurrency</category>
-      </categories>
-      <tags>
-        <tag>java</tag>
-        <tag>concurrency</tag>
-        <tag>线程</tag>
-        <tag>并发</tag>
-      </tags>
-  </entry>
-  <entry>
     <title><![CDATA[【effective java】14:在公有类中使用访问方法而非公有域]]></title>
     <url>%2F2017%2F07%2F23%2Feffectivejava%2Feff-java-14%2F</url>
     <content type="text"><![CDATA[14:在公有类中使用访问方法而非公有域就是提供 get set 方法]]></content>
@@ -350,16 +348,18 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[【effective java】13:使类和成员的可访问性最小化]]></title>
-    <url>%2F2017%2F07%2F22%2Feffectivejava%2Feff-java-13%2F</url>
-    <content type="text"><![CDATA[13:使类和成员的可访问性最小化1. 简介要区别设计良好的模块与设计不好的模块，最重要的因素在于，这个模块对于外部的其他模块而言，是否隐藏其内部数据和其他实现细节。 设计良好的模块会隐藏所有的实现细节，把它的 API 与它的实现清晰的隔离开来。然后模块之间只通过它们的 API 进行通信，一个模块不需要知道其他模块的内部工作情况。 这个概念被称为信息隐藏。 2. 尽可能的使每个类或者成员不被外界访问 对于顶层的类和接口，只有两种肯的访问级别：包私有的和公有的。 如果一个包级私有的顶层类只是在某一个类的内部被用到，就应该考虑使它成为唯一使用它的那个类的私有嵌套类。 不能为了测试而将类、接口或者成员变成包的导出的 API 的一部分。当然，一般以没必要这么做，因为可以让测试作为被测试的包的一部分来运行。 实例域绝对不能是公有的。静态域也一样。 长度非零的数组总是可变的，所以，类具有公有的静态 final 数组域，或者返回这种数组域的方法，这几乎总是错误的。]]></content>
+    <title><![CDATA[【java 并发】 3. 对象的共享（1）]]></title>
+    <url>%2F2017%2F07%2F23%2Fjava%20concurrency%2Fjava-concurrency-3%2F</url>
+    <content type="text"><![CDATA[同步的另一个重要的方面是：内存可见性。我们不仅希望放置某个现场正在使用对象状态而另一个线程在同时修改该状态，而且希望确保当一个线程修改了对象状态后，其他线程能够看到发生的状态变化。 1.可见性多线程环境中，如果没有使用同步机制，编译器、处理器以及运行时等都可能对操作的执行顺序进行一些意想不到的调整，这就导致一个线程修改了一个变量，另一个线程不能及时的得知该变量的更新，最终导致意外错误。 1.1 失效数据当一个数据被一个线程改变，而另一个线程读取到了修改前的值，就出现了失效数据。 1.2 非原子的64位操作java 内存模型要求，变量的读取操作和写入操作都必须是原子操作。对于 java 中的 double 和 long 来说，他们都是64位的。jvm 允许将64位的读操作或者写操作分解为两个32位操作。当读取一个非 volatite 类型的 long 变量时，如果对该变量的读操作和写操作是在两个不同的线程中执行的，那么很可能会读到某个值的高32位和另一个值的低32位。 因此，除非用 volatile 来声明或者用锁来保护，否则在多线程环境中，long 和 double 都是不安全的。 1.3 加锁与可见性内置锁可以用于确保某个线程以一种可预测的方式来查看另一个线程的执行结果。这样可以确保某个线程写入该变量的值对于其他线程来说都是可见的。 加锁的行为不仅仅局限于互斥行为，还包括内存可见性。 1.4 volatile 变量java 语言提供了一种稍弱的同步机制，即 volatile 变量，用来确保将变量的更新操作通知到其他线程。 volatile 变量不会被缓存在寄存器或者对其他处理器不可见的地方，因此在读取 volatile 类型的变量时总会返回最新写入的值。 从内存的角度看，写入 volatile 变量相当于退出同步代码块，而读取 volatile 变量就相当于读取同步代码块。 并不建议过度依赖 volatile 变量提供可见性。因为这样的代码相对于加锁来说更脆弱，也更难理解。]]></content>
       <categories>
         <category>java</category>
-        <category>effectivejava</category>
+        <category>concurrency</category>
       </categories>
       <tags>
         <tag>java</tag>
-        <tag>effectivejava</tag>
+        <tag>concurrency</tag>
+        <tag>线程</tag>
+        <tag>并发</tag>
       </tags>
   </entry>
   <entry>
@@ -391,6 +391,19 @@
       </tags>
   </entry>
   <entry>
+    <title><![CDATA[【effective java】13:使类和成员的可访问性最小化]]></title>
+    <url>%2F2017%2F07%2F22%2Feffectivejava%2Feff-java-13%2F</url>
+    <content type="text"><![CDATA[13:使类和成员的可访问性最小化1. 简介要区别设计良好的模块与设计不好的模块，最重要的因素在于，这个模块对于外部的其他模块而言，是否隐藏其内部数据和其他实现细节。 设计良好的模块会隐藏所有的实现细节，把它的 API 与它的实现清晰的隔离开来。然后模块之间只通过它们的 API 进行通信，一个模块不需要知道其他模块的内部工作情况。 这个概念被称为信息隐藏。 2. 尽可能的使每个类或者成员不被外界访问 对于顶层的类和接口，只有两种肯的访问级别：包私有的和公有的。 如果一个包级私有的顶层类只是在某一个类的内部被用到，就应该考虑使它成为唯一使用它的那个类的私有嵌套类。 不能为了测试而将类、接口或者成员变成包的导出的 API 的一部分。当然，一般以没必要这么做，因为可以让测试作为被测试的包的一部分来运行。 实例域绝对不能是公有的。静态域也一样。 长度非零的数组总是可变的，所以，类具有公有的静态 final 数组域，或者返回这种数组域的方法，这几乎总是错误的。]]></content>
+      <categories>
+        <category>java</category>
+        <category>effectivejava</category>
+      </categories>
+      <tags>
+        <tag>java</tag>
+        <tag>effectivejava</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[【effective java】12:考虑实现Comparable接口]]></title>
     <url>%2F2017%2F07%2F22%2Feffectivejava%2Feff-java-12%2F</url>
     <content type="text"><![CDATA[12:考虑实现Comparable接口简介一旦实现了 Comparable 接口，他就可以和许多反省算法以及依赖于该接口的集合实现进行协作。 java 平台类库中的所有值类都实现了 Comparable 接口。如果你正在编写一个值类，它具有非常明显的内在排序关系，比如按字母排序、按数值顺序或者时间排序，那你就应该坚决考虑实现这个接口。 几个建议与约定 1.实现者必须确保所有的 x 和 y 都满足 sgn(x.compareTo(y)) == -sgn(y.compareTo(x))。 2.实现者还必须保证这个比较关系是可传递的：x.compareTo(y) &gt; 0 &amp;&amp; y.compareTo(z) &gt; 0 =&gt; x.compareTo(z) &gt; 0。 3.实现者必须保证 x.compareTo(y) == 0 暗示着所有的 z 都满足 sgn(x.compareTo(z)) == sgn(y.compareTo(z)) 强烈建议： (x.compareTo(y) == 0) == (x.equals(y))，但是这并非绝对必要。一般来说，如果违反了这个条件，都应该予以说明。推荐使用这样的说法：”注意，该类具有内在的排序功能，但是与 equals 不一致“。]]></content>
@@ -407,6 +420,19 @@
     <title><![CDATA[【effective java】11:谨慎的覆盖clone]]></title>
     <url>%2F2017%2F07%2F21%2Feffectivejava%2Feff-java-11%2F</url>
     <content type="text"><![CDATA[11:谨慎的覆盖clone略]]></content>
+      <categories>
+        <category>java</category>
+        <category>effectivejava</category>
+      </categories>
+      <tags>
+        <tag>java</tag>
+        <tag>effectivejava</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[【effective java】16:复合优先于继承]]></title>
+    <url>%2F2017%2F07%2F20%2Feffectivejava%2Feff-java-16%2F</url>
+    <content type="text"><![CDATA[前言继承是实现代码重用的有力手段，但它并不永远都是最好的选择，使用不当会使软件变得很脆弱。 在包的内部使用继承是非常安全的，在那里，子类和超类都处在同一个程序员的控制之下。对于专门为了继承而设计、并且具有很好文档说明的类来说，使用继承也是非常安全的。 然而，对于普通的具体类进行垮包边界的继承，则是非常危险的。 这里说的继承，不包括实现接口。 ##]]></content>
       <categories>
         <category>java</category>
         <category>effectivejava</category>
@@ -445,9 +471,9 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[【effective java】16:复合优先于继承]]></title>
-    <url>%2F2017%2F07%2F20%2Feffectivejava%2Feff-java-16%2F</url>
-    <content type="text"><![CDATA[前言继承是实现代码重用的有力手段，但它并不永远都是最好的选择，使用不当会使软件变得很脆弱。 在包的内部使用继承是非常安全的，在那里，子类和超类都处在同一个程序员的控制之下。对于专门为了继承而设计、并且具有很好文档说明的类来说，使用继承也是非常安全的。 然而，对于普通的具体类进行垮包边界的继承，则是非常危险的。 这里说的继承，不包括实现接口。 ##]]></content>
+    <title><![CDATA[【effective java】9:覆盖equals时总要覆盖hashcode]]></title>
+    <url>%2F2017%2F07%2F19%2Feffectivejava%2Feff-java-9%2F</url>
+    <content type="text"><![CDATA[9:覆盖equals时总要覆盖hashcode1.hashcode 通用约定 1.在应用程序执行期间，只要对象的 equals 方法的比较嘈杂所用到的信息没有被修改，那么对这同一个对象调用多次 hashcode 方法都必须始终如一的返回同一个函数。在同一个应用程序的多次执行过过程中，每次执行所返回的整数可以不一致。 2.如果两个对象根据 equals 方法的毕竟是相等的，那么调用这两个对象中任意一个对象的 hashcode 方法都必须产出同样的整数结果。 3.如果两个对象根据 equals 方法比较是不相等的，那么调用这两个对象中任意一个对象的 hashcode 方法，产生的结果可以相同也可以不同。但是你应该知道，给不相等的对象产生不一样的 hash 值，有可能提高散列表的性能。 2.尽可能给不相等的对象产生不一样的 hash 值的简单方法 1.把某个非零的常数值，比如17，保存在一个名为 result 的 int 类型变量中。 2.对于对象中每个关键域 f（指 equals 方法中涉及的每个域），完成以下步骤： a.为该域计算 int 类型的散列码c： 如果该域是 boolean 类型，计算 （f ? 1 : 0）。 如果该域是 byte、char、short 或者 int 类型，计算 （int）f。 如果该域是 long 类型，计算 (int)(f ^ (f &gt;&gt;&gt; 32))。 如果该域是 float 类型，计算 Float.floatToIntBits(f)。 如果该域是 double 类型，计算 Double.doubleToLongBits(f),然后按照上面第三步，为得到的 long 类型值计算散列值。 如果该域是一个对象引用，并且该类的 equals 方法通过递归的调用 equals 的方式来比较这个域，则同样为这个域递归的调用 hashcode。如果需要更复杂d额比较，则为这个域计算一个”范式“，然后针对这个范式调用 hashcode。如果这个域的值为 null，则返回0。 如果该域s回一个数组，则要吧每一个元素当做单独的域来处理。也就是说，递归地应用上述规则。如果数组中的每个元素都很重要，可以利用 Arrays.hashCode 方法。 b.按照下面的公式，把 a 中计算得到的散列码 c 合并到 result 中： result = 31 * result + c; 3.返回 result。 4.写完 hashcode 方法以后，判断一下是否满足三个条件。 在散列码计算过程中，可以把冗余域排除在外。 3.几点注意 如果一个类是不可变的，并且计算散列码的开销也比较大，就应该考虑把散列码缓存在对象内部，而不是每次请求都重新计算。 不要试图从散列码计算中排除掉一个对象的关键部分来提高性能。]]></content>
       <categories>
         <category>java</category>
         <category>effectivejava</category>
@@ -469,19 +495,6 @@
         <tag>java</tag>
         <tag>springboot</tag>
         <tag>资料整理</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[【effective java】9:覆盖equals时总要覆盖hashcode]]></title>
-    <url>%2F2017%2F07%2F19%2Feffectivejava%2Feff-java-9%2F</url>
-    <content type="text"><![CDATA[9:覆盖equals时总要覆盖hashcode1.hashcode 通用约定 1.在应用程序执行期间，只要对象的 equals 方法的比较嘈杂所用到的信息没有被修改，那么对这同一个对象调用多次 hashcode 方法都必须始终如一的返回同一个函数。在同一个应用程序的多次执行过过程中，每次执行所返回的整数可以不一致。 2.如果两个对象根据 equals 方法的毕竟是相等的，那么调用这两个对象中任意一个对象的 hashcode 方法都必须产出同样的整数结果。 3.如果两个对象根据 equals 方法比较是不相等的，那么调用这两个对象中任意一个对象的 hashcode 方法，产生的结果可以相同也可以不同。但是你应该知道，给不相等的对象产生不一样的 hash 值，有可能提高散列表的性能。 2.尽可能给不相等的对象产生不一样的 hash 值的简单方法 1.把某个非零的常数值，比如17，保存在一个名为 result 的 int 类型变量中。 2.对于对象中每个关键域 f（指 equals 方法中涉及的每个域），完成以下步骤： a.为该域计算 int 类型的散列码c： 如果该域是 boolean 类型，计算 （f ? 1 : 0）。 如果该域是 byte、char、short 或者 int 类型，计算 （int）f。 如果该域是 long 类型，计算 (int)(f ^ (f &gt;&gt;&gt; 32))。 如果该域是 float 类型，计算 Float.floatToIntBits(f)。 如果该域是 double 类型，计算 Double.doubleToLongBits(f),然后按照上面第三步，为得到的 long 类型值计算散列值。 如果该域是一个对象引用，并且该类的 equals 方法通过递归的调用 equals 的方式来比较这个域，则同样为这个域递归的调用 hashcode。如果需要更复杂d额比较，则为这个域计算一个”范式“，然后针对这个范式调用 hashcode。如果这个域的值为 null，则返回0。 如果该域s回一个数组，则要吧每一个元素当做单独的域来处理。也就是说，递归地应用上述规则。如果数组中的每个元素都很重要，可以利用 Arrays.hashCode 方法。 b.按照下面的公式，把 a 中计算得到的散列码 c 合并到 result 中： result = 31 * result + c; 3.返回 result。 4.写完 hashcode 方法以后，判断一下是否满足三个条件。 在散列码计算过程中，可以把冗余域排除在外。 3.几点注意 如果一个类是不可变的，并且计算散列码的开销也比较大，就应该考虑把散列码缓存在对象内部，而不是每次请求都重新计算。 不要试图从散列码计算中排除掉一个对象的关键部分来提高性能。]]></content>
-      <categories>
-        <category>java</category>
-        <category>effectivejava</category>
-      </categories>
-      <tags>
-        <tag>java</tag>
-        <tag>effectivejava</tag>
       </tags>
   </entry>
   <entry>
@@ -513,19 +526,6 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[【effective java】7:避免使用终结方法]]></title>
-    <url>%2F2017%2F07%2F17%2Feffectivejava%2Feff-java-7%2F</url>
-    <content type="text"><![CDATA[7:避免使用终结方法终结方法（finalizer）通常是不可预测的，也是很危险的，一般情况下是不必要的。 为什么要避免使用1终结方法的缺点在于不能保证会被及时的执行。从一个对象变得不可达开始，到它的终结方法被执行，所花费的这段时间是任意长的。 所以，注重时间的任务不应该由终结方法来完成，例如，用终结方法来关闭已打开的文件，这是很严重的错误。 2及时的执行终结方法正是垃圾回收算法的一个主要功能，不同的 jvm 的实现方式有所不同，所以在你自己的电脑上的 jvm 可能运行的很好，但是在其他人的 jvm 下可能差别会很大。 3java 语言规范不保证终结方法会被及时的执行，甚至根本就不保证它们会被执行。当一个程序终结的时候，某些已经无法访问的对象上的终结方法却根本没有执行，这是完全有可能的。 4不要被 System.gc System.runFinalization 这两个所诱惑，它们却是增加了终结方法被执行的机会，但是它们也并不能保证终结方法一定会被执行。唯一可以保证终结方法被执行的方法是 System.runFinalizersOnExit 以及 Runtime.runFinalizersOnExit， 然而它们都有致命的缺陷，已经被废弃了。 5如果未被捕捉的异常在终结过程中被抛出来，那么这种异常可以被忽略，并且该对象的终结过程也会终止。未被捕获的异常会使对象处于破坏的状态，如果另一个线程企图使用这种被破坏的对象，则可能发生任何不确定的行为。 6使用终结方法，会有一个严重的性能损失。 如何正确的终止如果一个类中封装的资源（例如文件或者线程）确实需要终止，应该怎么做才能不用编写终结方法呢？ 只需要提供一个显示的终结方法，并要求客户端在每个实例不再有用的时候显示额调用合格方法。 该类必须记录下自己是否已经被终止了。 比如 javaio 中，各个流的 close() 方法。 显示d额终止方法通常与 try-finally 结构结合起来使用。 终结方法有什么好处1当对象的所有者忘记调用前面段落中建议d 显示终止方法时，终结方法可以充当“安全网” 迟一点释放资源总比不释放好。 2第二个用途与本地对等体有关。 本地对等体是一个本地对象，普通对象通过本地方法委托给一个本地对象，因为本地对等体b㐊一个普通d额对象，所以垃圾回收器不会知道他，当它的 java 对等体被回收的时候，他不会被回收。 在本地对等体并不拥有关键资源的情况下，终结方法是”回收“它的最好选择。如果本地对等体有需要及时回收的资源，那么该类就应该提供合适的显示终止方法。 总结总之，除非是作为安全网，或者是为了终止非关键d额本地资源，不要使用终结方法。]]></content>
-      <categories>
-        <category>java</category>
-        <category>effectivejava</category>
-      </categories>
-      <tags>
-        <tag>java</tag>
-        <tag>effectivejava</tag>
-      </tags>
-  </entry>
-  <entry>
     <title><![CDATA[【springboot-入门篇】第4篇-spring-boot-使用servlet，filter，listener和interceptor]]></title>
     <url>%2F2017%2F07%2F17%2Fspring-boot%2F%E3%80%90springboot-%E5%85%A5%E9%97%A8%E7%AF%87%E3%80%91%E7%AC%AC4%E7%AF%87-spring-boot-%E4%BD%BF%E7%94%A8servlet%EF%BC%8Cfilter%EF%BC%8Clistener%E5%92%8Cinterceptor%2F</url>
     <content type="text"><![CDATA[上一篇我们学习了 spring boot 利用Controller响应数据与响应页面。 一般的Web开发使用 Controller 基本上可以完成大部分需求，但是有的时候我们还是会用到 Servlet、Filter、Listener 等等。 在spring boot中添加自己的Servlet、Filter、Listener有两种方法 代码注册: 通过ServletRegistrationBean、 FilterRegistrationBean 和ServletListenerRegistrationBean 获得控制。 注解注册: 在SpringBootApplication 上使用@ServletComponentScan注解后，Servlet、Filter、Listener 可以直接通过 @WebServlet、@WebFilter、@WebListener 注解自动注册，无需其他代码。 spring boot 中注册servlet代码注册 创建Servlet类：AaServlet.java。 123456789101112131415public class AaServlet extends HttpServlet &#123; @Override protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException &#123; System.out.println(&quot;doGet&quot;); doPost(req, resp); &#125; @Override protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException &#123; System.out.println(&quot;doPost()&quot;); resp.setContentType(&quot;text/html&quot;); PrintWriter out = resp.getWriter(); out.println(&quot;&lt;h1&gt;AaServlet&lt;/h1&gt;&quot;); &#125;&#125; 通过ServletRegistrationBean注册。 1234567//Project2Application.java @Bean public ServletRegistrationBean AaServletRegistration() &#123; ServletRegistrationBean registration = new ServletRegistrationBean(new AaServlet()); registration.addUrlMappings(&quot;/a&quot;); return registration; &#125; 运行测试。 访问：http://localhost:8080/a 注解注册 创建Servlet类：BbServlet.java。 1234567891011121314151617@WebServlet(urlPatterns = &quot;/b&quot;)public class BbServlet extends HttpServlet &#123; @Override protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException &#123; System.out.println(&quot;doGet&quot;); doPost(req, resp); &#125; @Override protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException &#123; System.out.println(&quot;doPost()&quot;); resp.setContentType(&quot;text/html&quot;); PrintWriter out = resp.getWriter(); out.println(&quot;&lt;h1&gt;BbServlet&lt;/h1&gt;&quot;); &#125;&#125; 添加注解@ServletComponentScan。 12345678910111213141516@ServletComponentScan@SpringBootApplicationpublic class Project2Application &#123; public static void main(String[] args) &#123; SpringApplication.run(Project2Application.class, args); &#125; @Bean public ServletRegistrationBean AaServletRegistration() &#123; ServletRegistrationBean registration = new ServletRegistrationBean(new AaServlet()); registration.addUrlMappings(&quot;/a&quot;); return registration; &#125;&#125; 运行测试。 访问：http://localhost:8080/b filter 和 listener的注册和servlet一样。这里就不多说了。 接下来说一下拦截器。 自定义拦截器Spring提供了HandlerInterceptor（拦截器）。它的功能跟过滤器类似，但是提供更精细的的控制能力：在request被响应之前、request被响应之后、视图渲染之前以及request全部结束之后。我们不能通过拦截器修改request内容，但是可以通过抛出异常（或者返回false）来暂停request的执行。 spring boot提供了一些拦截器，我们可以直接拿来使用，比如： ConversionServiceExposingInterceptor CorsInterceptor LocaleChangeInterceptor PathExposingHandlerInterceptor ResourceUrlProviderExposingInterceptor ThemeChangeInterceptor UriTemplateVariablesHandlerInterceptor UserRoleAuthorizationInterceptor 我们也可以自己定义拦截器，定义拦截器的步骤大致分为： 1、创建我们自己的拦截器类并实现 HandlerInterceptor 接口。 2、创建一个Java类继承WebMvcConfigurerAdapter，并重写addInterceptors 方法。3、实例化我们自定义的拦截器，然后将对像手动添加到拦截器链中（在addInterceptors方法中添加）。 我们来亲自试一下： 创建我们自己的拦截器 123456789101112131415161718192021222324//MyInterceptor2public class MyInterceptor1 implements HandlerInterceptor &#123; @Override public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception &#123; System.out.println(&quot;MyInterceptor1==========&gt;在请求处理之前进行调用（Controller方法调用之前）&quot;); return true;// 只有返回true才会继续向下执行，返回false取消当前请求 &#125; @Override public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception &#123; System.out.println(&quot;MyInterceptor1==========&gt;请求处理之后进行调用，但是在视图被渲染之前（Controller方法调用之后）&quot;); &#125; @Override public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception &#123; System.out.println(&quot;MyInterceptor1==========&gt;在整个请求结束之后被调用，也就是在DispatcherServlet 渲染了对应的视图之后执行（主要是用于进行资源清理工作）&quot;); &#125;&#125; 123456789101112131415161718192021222324//MyInterceptor2public class MyInterceptor2 implements HandlerInterceptor &#123; @Override public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception &#123; System.out.println(&quot;MyInterceptor2==========&gt;在请求处理之前进行调用（Controller方法调用之前）&quot;); return true;// 只有返回true才会继续向下执行，返回false取消当前请求 &#125; @Override public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception &#123; System.out.println(&quot;MyInterceptor2==========&gt;请求处理之后进行调用，但是在视图被渲染之前（Controller方法调用之后）&quot;); &#125; @Override public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception &#123; System.out.println(&quot;MyInterceptor2==========&gt;在整个请求结束之后被调用，也就是在DispatcherServlet 渲染了对应的视图之后执行（主要是用于进行资源清理工作）&quot;); &#125;&#125; 创建一个Java类继承WebMvcConfigurerAdapter，并重写addInterceptors 方法,添加拦截器。 123456789101112131415//MyWebAppConfigurer@Configurationpublic class MyWebAppConfigurer extends WebMvcConfigurerAdapter &#123; @Override public void addInterceptors(InterceptorRegistry registry) &#123; // 多个拦截器组成一个拦截器链 // addPathPatterns 用于添加拦截规则 // excludePathPatterns 用户排除拦截 registry.addInterceptor(new MyInterceptor1()).addPathPatterns(&quot;/**&quot;); registry.addInterceptor(new MyInterceptor2()).addPathPatterns(&quot;/**&quot;); super.addInterceptors(registry); &#125;&#125; 测试：运行项目，随便访问一个路径，比如http://localhost:8080/test 浏览器会报错，不用管，看控制台。 拦截器已经起作用了。 值得注意的是：只有经过DispatcherServlet 的请求，才会走拦截器链，我们自定义的Servlet 请求是不会被拦截的，比如我们自定义的Servlet地址是不会被拦截器拦截的。 但是过滤器不同。不管是属于哪个Servlet 只要复合过滤器的过滤规则，过滤器都会拦截。 本篇文章就先介绍到这里，如果哪里讲的不明白，请及时与我联系。 参考文章：Spring Boot 拦截器]]></content>
@@ -540,9 +540,9 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[【effective java】6:消除过期的对象引用]]></title>
-    <url>%2F2017%2F07%2F16%2Feffectivejava%2Feff-java-6%2F</url>
-    <content type="text"><![CDATA[java 有自己的垃圾回收机制，当你用完一个对象之后，它会被自动回收，这看起来有点不可思议，并且很容易让你觉得你自己再也不需要考虑内存管理的事了。显然，这是一种错误的想法。 1. 过期引用1.1 介绍如果一个栈是先增长，然后再收缩，那么，从栈中弹出来的对象将不会被当做垃圾回收，即使使用栈的程序不再引用这些对象，它们也不会被回收。这是因为，在栈内部维护着对这些对象的过期引用。 所谓的过期引用，是指永远也不会再被解除的引用。 1.2 修复这类问题的修复很简单：一旦对象已经过期，只需要请看这些引用就好了： 123456public Object pop() &#123; if (size == 0) throw new EmptyStackException(); Object result = elements[--size]; elements[size] == null; return result;&#125; 除了释放过期引用，清空过期引用的另一个好处是，如果它们以后又被错误的使用，程序就会立即抛出空指针异常，而不是让错误悄悄的潜下去。 1.3 注意 请空对象引用应该是一种例外而不是一种规范行为。消除过期引用最好的方法是让包含该引用的变量结束其生命周期。 一般而言，只要类是自己管理内存，那么就应该警惕内存泄漏问题。 2. 其他导致内存泄漏的原因2.1 缓存。一旦你把对象引用放到缓存中，他就很容易被遗忘掉，从而使得他不再被使用后的很长一段时间内仍然留在缓存中。 解决方案之一是，可以使用 WeakHashMap 代表缓存 只有当所需要的缓存项的生命周期是由该键的外部引用而不是值决定时，WeakHashMap 才有用处。 2.2 监听器和其回调如果你实现了一个 API，客户端在这个 API 中注册回调，却没有显示的取消回调，那么除非你采取了某些动作，否则他们就会积聚。 确保回调被立即被当做垃圾回收的最佳方法是只把他们保存在弱引用中，例如，只将他们保存成 WeakHashMap 中的键。]]></content>
+    <title><![CDATA[【effective java】7:避免使用终结方法]]></title>
+    <url>%2F2017%2F07%2F17%2Feffectivejava%2Feff-java-7%2F</url>
+    <content type="text"><![CDATA[7:避免使用终结方法终结方法（finalizer）通常是不可预测的，也是很危险的，一般情况下是不必要的。 为什么要避免使用1终结方法的缺点在于不能保证会被及时的执行。从一个对象变得不可达开始，到它的终结方法被执行，所花费的这段时间是任意长的。 所以，注重时间的任务不应该由终结方法来完成，例如，用终结方法来关闭已打开的文件，这是很严重的错误。 2及时的执行终结方法正是垃圾回收算法的一个主要功能，不同的 jvm 的实现方式有所不同，所以在你自己的电脑上的 jvm 可能运行的很好，但是在其他人的 jvm 下可能差别会很大。 3java 语言规范不保证终结方法会被及时的执行，甚至根本就不保证它们会被执行。当一个程序终结的时候，某些已经无法访问的对象上的终结方法却根本没有执行，这是完全有可能的。 4不要被 System.gc System.runFinalization 这两个所诱惑，它们却是增加了终结方法被执行的机会，但是它们也并不能保证终结方法一定会被执行。唯一可以保证终结方法被执行的方法是 System.runFinalizersOnExit 以及 Runtime.runFinalizersOnExit， 然而它们都有致命的缺陷，已经被废弃了。 5如果未被捕捉的异常在终结过程中被抛出来，那么这种异常可以被忽略，并且该对象的终结过程也会终止。未被捕获的异常会使对象处于破坏的状态，如果另一个线程企图使用这种被破坏的对象，则可能发生任何不确定的行为。 6使用终结方法，会有一个严重的性能损失。 如何正确的终止如果一个类中封装的资源（例如文件或者线程）确实需要终止，应该怎么做才能不用编写终结方法呢？ 只需要提供一个显示的终结方法，并要求客户端在每个实例不再有用的时候显示额调用合格方法。 该类必须记录下自己是否已经被终止了。 比如 javaio 中，各个流的 close() 方法。 显示d额终止方法通常与 try-finally 结构结合起来使用。 终结方法有什么好处1当对象的所有者忘记调用前面段落中建议d 显示终止方法时，终结方法可以充当“安全网” 迟一点释放资源总比不释放好。 2第二个用途与本地对等体有关。 本地对等体是一个本地对象，普通对象通过本地方法委托给一个本地对象，因为本地对等体b㐊一个普通d额对象，所以垃圾回收器不会知道他，当它的 java 对等体被回收的时候，他不会被回收。 在本地对等体并不拥有关键资源的情况下，终结方法是”回收“它的最好选择。如果本地对等体有需要及时回收的资源，那么该类就应该提供合适的显示终止方法。 总结总之，除非是作为安全网，或者是为了终止非关键d额本地资源，不要使用终结方法。]]></content>
       <categories>
         <category>java</category>
         <category>effectivejava</category>
@@ -564,6 +564,19 @@
         <tag>java</tag>
         <tag>springboot</tag>
         <tag>controller</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[【effective java】6:消除过期的对象引用]]></title>
+    <url>%2F2017%2F07%2F16%2Feffectivejava%2Feff-java-6%2F</url>
+    <content type="text"><![CDATA[java 有自己的垃圾回收机制，当你用完一个对象之后，它会被自动回收，这看起来有点不可思议，并且很容易让你觉得你自己再也不需要考虑内存管理的事了。显然，这是一种错误的想法。 1. 过期引用1.1 介绍如果一个栈是先增长，然后再收缩，那么，从栈中弹出来的对象将不会被当做垃圾回收，即使使用栈的程序不再引用这些对象，它们也不会被回收。这是因为，在栈内部维护着对这些对象的过期引用。 所谓的过期引用，是指永远也不会再被解除的引用。 1.2 修复这类问题的修复很简单：一旦对象已经过期，只需要请看这些引用就好了： 123456public Object pop() &#123; if (size == 0) throw new EmptyStackException(); Object result = elements[--size]; elements[size] == null; return result;&#125; 除了释放过期引用，清空过期引用的另一个好处是，如果它们以后又被错误的使用，程序就会立即抛出空指针异常，而不是让错误悄悄的潜下去。 1.3 注意 请空对象引用应该是一种例外而不是一种规范行为。消除过期引用最好的方法是让包含该引用的变量结束其生命周期。 一般而言，只要类是自己管理内存，那么就应该警惕内存泄漏问题。 2. 其他导致内存泄漏的原因2.1 缓存。一旦你把对象引用放到缓存中，他就很容易被遗忘掉，从而使得他不再被使用后的很长一段时间内仍然留在缓存中。 解决方案之一是，可以使用 WeakHashMap 代表缓存 只有当所需要的缓存项的生命周期是由该键的外部引用而不是值决定时，WeakHashMap 才有用处。 2.2 监听器和其回调如果你实现了一个 API，客户端在这个 API 中注册回调，却没有显示的取消回调，那么除非你采取了某些动作，否则他们就会积聚。 确保回调被立即被当做垃圾回收的最佳方法是只把他们保存在弱引用中，例如，只将他们保存成 WeakHashMap 中的键。]]></content>
+      <categories>
+        <category>java</category>
+        <category>effectivejava</category>
+      </categories>
+      <tags>
+        <tag>java</tag>
+        <tag>effectivejava</tag>
       </tags>
   </entry>
   <entry>
@@ -594,19 +607,6 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[【effective java】4:通过私有构造器强化不可实例化的能力]]></title>
-    <url>%2F2017%2F07%2F14%2Feffectivejava%2Feff-java-4%2F</url>
-    <content type="text"><![CDATA[4:通过私有构造器强化不可实例化的能力1.背景有的时候，你可能需要只包含静态方法和静态域的类。这些类的名声很不好，因为有些人在面向对象的语言中滥用这样的类来编写过程化的程序，尽管如此，他们也确实有他们特有的用处。 2.方案我们可以利用用这种类，以java.lang.Math 或者 java.util.Arrays 的方式，把基本类型的值或者数组类型上的相关方法组织起来。 我们也可以通过 java.util.Collections 的方式，把实现特定接口的对象上的静态方法（包括工厂方法）组织起来。 最后还可以利用这种类，吧 final 类上的方法组织起来，以取代扩展该类的做法。 3.问题这样的工具类不希望被实例化，实例对它没有任何意义。然而，在缺少显示构造器的情况下，编译器会自动提供一个公有的、无参的缺省构造器。用户可以利用这个构造器创建出工具类的实例。这种被无意识实例化的类是不应该的。 4.解决解决方案很简单，就是手动将无参构造器私有化： 12345public class Test &#123; private Test() &#123; throw new AcertionError(); &#125;&#125; 5.副作用这种做法会使得他的子类不能被实例化。因为子类的所有构造器都会显示或者隐式的调用父类的构造器，这种情况下，子类就没有可用的父类构造器了。]]></content>
-      <categories>
-        <category>java</category>
-        <category>effectivejava</category>
-      </categories>
-      <tags>
-        <tag>java</tag>
-        <tag>effectivejava</tag>
-      </tags>
-  </entry>
-  <entry>
     <title><![CDATA[【springboot-入门篇】第1篇--第一个spring-boot程序（多种搭建方式）]]></title>
     <url>%2F2017%2F07%2F14%2Fspring-boot%2F%E3%80%90springboot-%E5%85%A5%E9%97%A8%E7%AF%87%E3%80%91%E7%AC%AC1%E7%AF%87--%E7%AC%AC%E4%B8%80%E4%B8%AAspring-boot%E7%A8%8B%E5%BA%8F%EF%BC%88%E5%A4%9A%E7%A7%8D%E6%90%AD%E5%BB%BA%E6%96%B9%E5%BC%8F%EF%BC%89%2F</url>
     <content type="text"><![CDATA[学习一个新技术，先别管他的原理啊，流程啊，怎么组织代码啊什么的。直接从官网或者博客抄一个小demo，自己亲自跑一遍，然后再去看那一堆让人头皮发麻的讲解，就能相对容易的看懂了。 初学者的态度应该是：不要问我为什么，反正我就是可以这样运行！ 1. 创建一个spring boot项目可以使用哪些工具1.1 使用start.spring.io这是一个网站，可以在这个网站选择你需要的组件，然后会自动生成一个项目文件，你可以将它下载到本地，然后使用你常用的编译器打开就好。（它是下面三种方法的基础） 1.2 使用Spring Tool Suite(STS)STS是eclipse的一个插件，可以方便eclipse用户进行spring boot的开发。 1.3 使用Intellij IDEAIDEA 集成了spring boot（也是一个插件），idea对新技术的支持比较快，而且是最好用的java编译器（我认为的）。推荐大家使用它进行开发，教程可以参考我写的文章。 1.4 使用Spring boot CLISpring boot的命令行工具，可以很方便的操作spring项目。 接下来会逐一演示这四种方法。 2. 实战：创建第一个spring boot项目2.1 使用start.spring.io 打开这个网站，设置你的项目，选择需要的dependencies。然后点击生成项目。就可以把项目下载到本地了。 下载下来的就是一个maven项目，你可以使用你熟悉的ide打开它，然后进行代码的编写。 2.2 使用Spring Tool Suite(STS)首先，你需要安装这个插件。 安装好后，选择创建一个spring stater项目： 项目设置： 看到了么，start.spring.io O.O 版本和依赖选择： 完成 2.3 使用Intellij IDEA 选择spring initializr，然后选择jdk版本，点next。可以发现，idea的这个插件其实用的也是start.spring.io。 接下来配置你的项目： 选择你需要的依赖和版本： 设置项目名和位置： 完成： 2.4 使用Spring boot CLI2.4.1 下载安装：(当前最新版1.5.3) 方法1，手动安装，下载下面的压缩包，提供两种压缩格式。 spring-boot-cli-1.5.3.RELEASE-bin.zipspring-boot-cli-1.5.3.RELEASE-bin.tar.gz 下载完成后，遵循解压后的存档里的INSTALL.txt操作指南进行安装。一般而言，在.zip文件的bin/目录下存在一个spring脚本（Windows下是spring.bat），或者使用java -jar来运行一个.jar文件（该脚本会帮你确定classpath被正确设置）。 方法2，使用SDKMAN安装SDKMAN! (The Software Development Kit Manager) 可以用来管理多种有许多版本的sdk，包括groovy和spring boot cli。可以通过 sdkman.io来获得sdkman，然后通过它来安装cli。：123$ sdk install springboot$ spring --versionSpring Boot v1.5.3.RELEASE 你也可以通过配置，来获取其他版本的CLI:1234$ sdk install springboot dev /path/to/spring-boot/spring-boot-cli/target/spring-boot-cli-1.5.3.RELEASE-bin/spring-1.5.3.RELEASE/$ sdk default springboot dev$ spring --versionSpring CLI v1.5.3.RELEASE 方法3，如果你是mac用户，可以使用Homebrew： 123$ brew tap pivotal/tap$ brew install springboot// 会安装到/usr/local/bin 方法4，mac用户也可以使用MacPorts安装： 1$ sudo port install spring-boot-cli 命令行实现： Spring Boot CLI启动脚本为BASH和zsh shells提供完整的命令行实现。你可以在任何shell中source脚本（名称也是spring），或将它放到你个人或系统范围的bash实现初始化中。在一个Debian系统里，系统范围的脚本位于/shell-completion/bash下，当一个新的shell启动时该目录下的所有脚本都被执行。想要手动运行该脚本，例如，你已经使用GVM进行安装了： 123$ . ~/.gvm/springboot/current/shell-completion/bash/spring$ spring grab help jar run test version 如果你使用Homebrew或MacPorts安装Spring Boot CLI，命令行实现脚本会自动注册到你的shell。 恩，上面撤了一堆，都是安装CLI的方式，翻译自官网，选一种方式安装就好了。安装成功后： 2.4.2 创建一个项目： 输入命令： 123$ mkdir demo$ cd demo$ spring init -d=web -g=com.example -a=demo --package-name=com.example --name=demo -x -d（dependencies 依赖包）-g（Group Id）-a（Artifact Id）–package-name（Package name）–name（Project name）-x（Extract compatible archives） 更多详情可以输入spring help init查看。 查看结果： 和之前的创建方式得到的是一样的。 无论哪种创建方式都是要访问https://start.spring.io来获取模板工程代码。所以甚至可以使用CURL或HTTPie这些第三方工具来创建。当然。。创建个工程而已，没必要这么麻烦，直接idea不就好了？ 3. 编写代码及代码核心部分的分析创建好工程了，接下来，我们简单的写一个小demo。 3.1 简单的小demo。打开DemoApplication.java 修改代码为： 12345678910111213@SpringBootApplication(exclude=&#123;DataSourceAutoConfiguration.class,HibernateJpaAutoConfiguration.class&#125;) //移除自动注入数据源@RestController // 添加了一个注解public class DemoApplication &#123; public static void main(String[] args) &#123; SpringApplication.run(DemoApplication.class, args); &#125; //添加了一个方法 @RequestMapping(&quot;/hello&quot;) public String hello()&#123; return &quot;no hello world&quot;; &#125;&#125; 直接运行这个main方法： 浏览器访问http://localhost:8080/hello： 大功告成。第一个spring boot项目完成。 3.2 代码简单讲解12@SpringBootApplication(exclude=&#123;DataSourceAutoConfiguration.class,HibernateJpaAutoConfiguration.class&#125;) //移除自动注入数据源 现在新版本的springboot会自动注入数据源，所以需要在application配置文件里写你的数据库信息，但是我们暂时用不到它，所以先把这个功能移除，不然会报错。 1@RestController 这个一个组合注解，相当于@ResponseBody和@Controller，controller大家都知道，ResponseBody注解将内容或对象作为 HTTP 响应正文返回。 123public static void main(String[] args) &#123; SpringApplication.run(DemoApplication.class, args);&#125; 这个就是spring boot的入口。关于这个方法，我们以后会详细讲解。 1234@RequestMapping(&quot;/hello&quot;)public String hello()&#123; return &quot;no hello world&quot;;&#125; 写过springmvc的应该都懂吧，我就不多说了。由于只是演示，所以我就把它放在入口类中了，规范点应该自己写controller类的。 4. 小结创建一个spring boot的项目是非常方便的，由于start.spring.io的存在，你可以使用任何你喜欢的ide来快速开发spring boot项目。 从创建到运行，你会发现，我们没有创建任何一个xml，也没有多余的配置。创建好项目以后，写一个controller就可以运行了，非常的方便。 后面和数据库对接，做安全验证的时候你会发现，原来一切都可以这么简单。 本篇文章到这里就结束了。如果文章内容有错误，请及时与我联系。]]></content>
@@ -618,6 +618,19 @@
         <tag>java</tag>
         <tag>springboot</tag>
         <tag>项目搭建</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[【effective java】4:通过私有构造器强化不可实例化的能力]]></title>
+    <url>%2F2017%2F07%2F14%2Feffectivejava%2Feff-java-4%2F</url>
+    <content type="text"><![CDATA[4:通过私有构造器强化不可实例化的能力1.背景有的时候，你可能需要只包含静态方法和静态域的类。这些类的名声很不好，因为有些人在面向对象的语言中滥用这样的类来编写过程化的程序，尽管如此，他们也确实有他们特有的用处。 2.方案我们可以利用用这种类，以java.lang.Math 或者 java.util.Arrays 的方式，把基本类型的值或者数组类型上的相关方法组织起来。 我们也可以通过 java.util.Collections 的方式，把实现特定接口的对象上的静态方法（包括工厂方法）组织起来。 最后还可以利用这种类，吧 final 类上的方法组织起来，以取代扩展该类的做法。 3.问题这样的工具类不希望被实例化，实例对它没有任何意义。然而，在缺少显示构造器的情况下，编译器会自动提供一个公有的、无参的缺省构造器。用户可以利用这个构造器创建出工具类的实例。这种被无意识实例化的类是不应该的。 4.解决解决方案很简单，就是手动将无参构造器私有化： 12345public class Test &#123; private Test() &#123; throw new AcertionError(); &#125;&#125; 5.副作用这种做法会使得他的子类不能被实例化。因为子类的所有构造器都会显示或者隐式的调用父类的构造器，这种情况下，子类就没有可用的父类构造器了。]]></content>
+      <categories>
+        <category>java</category>
+        <category>effectivejava</category>
+      </categories>
+      <tags>
+        <tag>java</tag>
+        <tag>effectivejava</tag>
       </tags>
   </entry>
   <entry>
