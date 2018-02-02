@@ -1,6 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[【序列化与反序列化】3. json 与 hession 序列化方式]]></title>
+    <url>%2F2018%2F02%2F02%2Fjava%2F%E5%BA%8F%E5%88%97%E5%8C%96%E4%B8%8E%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%2Fjson-hession%2F</url>
+    <content type="text"><![CDATA[1. 使用 json 进行序列化###1.1 json 序列化方式简介 json 大家都知道，常用的 json 库有： Gson Jackson fastjson fastjson 效率最高，Gson 和 Jackson 相对稳定一点。这里我们选择使用 fastjson 进行序列化。 1.2 实现12345678910@Overridepublic &lt;T&gt; byte[] serialize(T obj) &#123; JSON.DEFFAULT_DATE_FORMAT = "yyyy-MM-dd HH:mm:ss"; return JSON.toJSONString(obj, SerializerFeature.WriteDateUseDateFormat).getBytes();&#125;@Overridepublic &lt;T&gt; T deserialize(byte[] data, Class&lt;T&gt; clazz) &#123; return JSON.parseObject(new String(data), clazz);&#125; 1.3测试123456789101112131415 @Test public void testJson() &#123; JsonSerializer jsonSerializer = new JsonSerializer(); JavaSerializerModel serializerModel = new JavaSerializerModel(); JavaSerializerModel model = jsonSerializer.deserialize(jsonSerializer.serialize(serializerModel), JavaSerializerModel.class); System.out.println(model.getName()); System.out.println(model.getPhone()); System.out.println(model.getDate()); &#125;/**name123Mon Jan 01 01:01:01 CST 2018*/ 序列化与反序列化成功。 2. 使用 hession 进行序列化2.1 hession 简介hession 是一个支持跨语言传输的二进制序列化协议。相对于 java 默认的序列化机制，hession 具有更好的性能与易用性，而且支持多种不同的语言。 2.2 使用 hession 实现序列化123456789101112131415161718192021222324252627282930@Overridepublic &lt;T&gt; byte[] serialize(T obj) &#123; if (obj == null) &#123; throw new NullPointerException(); &#125; try &#123; ByteArrayOutputStream outputStream = new ByteArrayOutputStream(); HessianOutput output = new HessianOutput(outputStream); output.writeObject(obj); return outputStream.toByteArray(); &#125; catch (IOException e) &#123; throw new RuntimeException(); &#125;&#125;@Override@SuppressWarnings("unchecked")public &lt;T&gt; T deserialize(byte[] data, Class&lt;T&gt; clazz) &#123; if (data == null) &#123; throw new NullPointerException(); &#125; try &#123; ByteArrayInputStream inputStream = new ByteArrayInputStream(data); HessianInput input = new HessianInput(inputStream); return ((T) input.readObject()); &#125; catch (IOException e) &#123; throw new RuntimeException(); &#125;&#125; 2.3 测试12345678910111213141516171819202122 @Test public void testHession() &#123; HessionSerializer hessionSerializer = new HessionSerializer(); JavaSerializerModel serializerModel = new JavaSerializerModel(); JavaSerializerModel model = hessionSerializer.deserialize(hessionSerializer.serialize(serializerModel), JavaSerializerModel.class); System.out.println(model.getName()); System.out.println(model.getPhone()); System.out.println("----2-----"); JavaSerializerModel2 serializerModel2 = new JavaSerializerModel2(); JavaSerializerModel2 model2 = hessionSerializer.deserialize(hessionSerializer.serialize(serializerModel2), JavaSerializerModel2.class); System.out.println(model2.getName()); System.out.println(model2.getPhone()); &#125;/**null123----2-----null123*/ 可以看到，hession 是不会序列化 transient 字段的，自定义 writeObject 也没用。 很多细节没有去研究，感觉暂时用不到 hession 协议，用到的时候再说。。 点击查看源码]]></content>
+      <categories>
+        <category>分布式</category>
+        <category>序列化与反序列化</category>
+      </categories>
+      <tags>
+        <tag>分布式</tag>
+        <tag>序列化与反序列化</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[【序列化与反序列化】2. xml 序列化方式]]></title>
     <url>%2F2018%2F02%2F01%2Fjava%2F%E5%BA%8F%E5%88%97%E5%8C%96%E4%B8%8E%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%2Fxml%2F</url>
     <content type="text"><![CDATA[1. java 内置 xml 序列化方式简介。xml 是一种语言无关的序列化方式，java 内置了 java bean 与 xml 互相转换的工具，简单的来看一下他们的使用方法： 核心代码： 123456789101112131415161718192021public void saveToXML(Object o) throws IOException &#123; File xmlFile = new File("file/out/object.xml"); if (!xmlFile.exists()) &#123; xmlFile.createNewFile(); &#125; FileOutputStream ofs = new FileOutputStream(xmlFile); XMLEncoder xe = new XMLEncoder(ofs); xe.writeObject(o); xe.close(); ofs.close();&#125;public Object getObjectFromXML(String path) throws IOException &#123; File xmlFile = new File(path); FileInputStream in = new FileInputStream(xmlFile); XMLDecoder xd = new XMLDecoder(in); Object o = xd.readObject(); xd.close(); in.close(); return o;&#125; 一个是将 object 序列化为 xml，并存到一个 .xml 文件中，另一个方法是从 .xml 文件中读取数据，反序列化为 object。 我们来测试一下： 1234567@Testpublic void saveToXML() throws Exception &#123; User user = new User(); user.setAge(18); user.setUserName("jack"); javaXml.saveToXML(user);&#125; 生成的 object.xml 文件如下： 1234567891011&lt;?xml version="1.0" encoding="UTF-8"?&gt;&lt;java version="1.8.0_152" class="java.beans.XMLDecoder"&gt; &lt;object class="cn.fanhub.javabase.xml.User"&gt; &lt;void property="age"&gt; &lt;int&gt;18&lt;/int&gt; &lt;/void&gt; &lt;void property="userName"&gt; &lt;string&gt;jack&lt;/string&gt; &lt;/void&gt; &lt;/object&gt;&lt;/java&gt; 试试反序列化： 1234567 @Test public void getObjectFromXML() throws Exception &#123; System.out.println(((User) javaXml.getObjectFromXML("file/out/object.xml")).getUserName()); &#125;// 结果：// jack 反序列化成功 2. xStream 简介xStream 是一个 xml 序列化框架。XStream 在运行时使用 Java 反射机制对要进行序列化的对象树的结构进行探索，并不需要对对象作出修改。XStream 可以序列化内部字段，包括 private 和 final 字段，并且支持非公开类以及内部类。 在缺省情况下，XStream 不需要配置映射关系，对象和字段将映射为同名 XML 元素。但是当对象和字段名与 XML 中的元素名不同时，XStream 支持指定别名。XStream 支持以方法调用的方式，或是Java 注解的方式指定别名。 XStream 在进行数据类型转换时，使用系统缺省的类型转换器。同时，也支持用户自定义的类型转换器。 来试一下用 sStream 序列化 java bean： 核心代码： 12345678910111213public void saveToXML(Object o) throws IOException &#123; XStream xStream = new XStream(new DomDriver()); File xmlFile = new File("file/out/xStream-object.xml"); FileOutputStream ofs = new FileOutputStream(xmlFile); xStream.toXML(o, ofs); ofs.close();&#125;public Object getFromObject(String path) throws IOException &#123; FileInputStream inputStream = new FileInputStream(new File(path)); XStream xStream = new XStream(new DomDriver()); return xStream.fromXML(inputStream);&#125; 功能与上面的一样，我们来测试一下： 1234567@Testpublic void saveToXML() throws Exception &#123; User user = new User(); user.setAge(18); user.setUserName("jack"); xStreamXML.saveToXML(user);&#125; xStream-object.xml 的内容： 1234&lt;cn.fanhub.javabase.xml.User&gt; &lt;userName&gt;jack&lt;/userName&gt; &lt;age&gt;18&lt;/age&gt;&lt;/cn.fanhub.javabase.xml.User&gt; 这个就是 xStream 与 原生 java xml api 的不同： xStream 序列化出来的 xml 更加简洁。 反序列化测试: 123456 @Test public void getFromObject() throws Exception &#123; System.out.println(((User) xStreamXML.getFromObject("file/out/xStream-object.xml")).getUserName()); &#125;// 结果：// jack 反序列化成功。 这里不会详细介绍 java xml api 以及 xSream 的全部功能，只是做一个简单的介绍，如果有深入的需求，请自行学习。 3. 使用 xml 完成序列化。3.1 首先是基础接口123456789101112131415161718public interface MySerializer &#123; /** * 序列化 * @param obj * @param &lt;T&gt; * @return */ &lt;T&gt; byte[] serialize(T obj); /** * 反序列化 * @param data * @param clazz * @param &lt;T&gt; * @return */ &lt;T&gt; T deserialize(byte[] data, Class&lt;T&gt; clazz);&#125; 3.2 java 原生 API 序列化实现 实现 12345678910111213141516171819public class JavaXMLSerializer implements MySerializer &#123; @Override public &lt;T&gt; byte[] serialize(T obj) &#123; ByteArrayOutputStream outputStream = new ByteArrayOutputStream(); XMLEncoder xmlEncoder = new XMLEncoder(outputStream, "utf-8", true, 0); xmlEncoder.writeObject(obj); xmlEncoder.close(); return outputStream.toByteArray(); &#125; @Override @SuppressWarnings("unchecked") public &lt;T&gt; T deserialize(byte[] data, Class&lt;T&gt; clazz) &#123; XMLDecoder xmlDecoder = new XMLDecoder(new ByteArrayInputStream(data)); Object obj = xmlDecoder.readObject(); xmlDecoder.close(); return (T) obj; &#125;&#125; 测试 1234567891011121314 @Test public void testJavaXML() &#123; JavaXMLSerializer javaXMLSerializer = new JavaXMLSerializer(); JavaSerializerModel serializerModel = new JavaSerializerModel(); JavaSerializerModel model = javaXMLSerializer.deserialize(javaXMLSerializer.serialize(serializerModel), JavaSerializerModel.class); System.out.println(model.getName()); System.out.println(model.getPhone()); System.out.println(model.getDate()); &#125;/**name123Mon Jan 01 01:01:01 CST 2018*/ 可以发现，java 原生 api 可以序列化 transient 字段。 3.3 xStream 实现序列化 实现 12345678910111213141516public class XStreamXMLSerializer implements MySerializer&#123; private static final XStream X_STREAM = new XStream(new DomDriver()); @Override public &lt;T&gt; byte[] serialize(T obj) &#123; return X_STREAM.toXML(obj).getBytes(); &#125; @Override @SuppressWarnings("unchecked") public &lt;T&gt; T deserialize(byte[] data, Class&lt;T&gt; clazz) &#123; String xml = new String(data); return (T) X_STREAM.fromXML(xml); &#125;&#125; 测试 123456789101112131415161718192021 @Test public void testXStreamXML() &#123; XStreamXMLSerializer xstreamXMLSerializer = new XStreamXMLSerializer(); JavaSerializerModel serializerModel = new JavaSerializerModel(); JavaSerializerModel model = xstreamXMLSerializer.deserialize(xstreamXMLSerializer.serialize(serializerModel), JavaSerializerModel.class); System.out.println(model.getName()); System.out.println(model.getPhone()); System.out.println("----2-----"); JavaSerializerModel2 serializerModel2 = new JavaSerializerModel2(); JavaSerializerModel2 model2 = xstreamXMLSerializer.deserialize(xstreamXMLSerializer.serialize(serializerModel2), JavaSerializerModel2.class); System.out.println(model2.getName()); System.out.println(model2.getPhone()); &#125;/**null123----2-----name123*/ 可以看到，xStream 默认不会序列化 transient 字段，需要手动实现 writeObject() 和 readObject() 方法。 JavaSerializerModel2 和 JavaSerializerModel 可以参考上一篇文章。 4. 小结xml 序列化的优势在于可读性好，利于调试。由于 xml 具有语言无关性，所以可以用于异构系统之间的数据交换协议，我们熟知的 webservice 协议就是采用 xml 格式对数据进行序列化的。但是因为使用标签来表示数据，导致序列化后码流大，而且效率不高。适用于对性能要求不高，且 qps 较低的系统进行数据交换时使用，比如一些公司内部的系统。 xml 序列化与反序列化有很多中方式，并不是只有文中提到的两种！ 点击查看源码]]></content>
@@ -253,8 +266,8 @@
         <tag>network</tag>
         <tag>计算机网络</tag>
         <tag>网络</tag>
-        <tag>读书笔记</tag>
         <tag>协议</tag>
+        <tag>读书笔记</tag>
       </tags>
   </entry>
   <entry>
@@ -307,19 +320,6 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[【effective java】15:使可变性最小化]]></title>
-    <url>%2F2017%2F07%2F24%2Feffectivejava%2Feff-java-15%2F</url>
-    <content type="text"><![CDATA[15:使可变性最小化使用不可变类的理由不可变类只是其实例不能被修改的类。不可变的类比可变类更加易于设计、实现和使用。它们不容易出错，且更加安全。 使类变成不可变类的几个规则 1.不要提供任何会修改对象状态的方法。 2.保证类不会被扩展。 3.使所有的域都是 final 的。 4.使所有的域都是私有的。 5.确保对于任何可变组建的互斥访问。 几个优点 1.不可变对象本质上是线程安全的，它们不要求同步 2.不可变类可以提供一些静态工厂，它们把频繁的请求的实例缓存起来，从而当现有实例可以符合请求的时候，就不必创建新的实例。 3.“不可变对象可以被自由的共享” ==&gt; 永远不需要进行保护性拷贝。 4.不仅可以共享不可变对象，甚至也可以共享它们的内部信息。 5.不可变对象为其他对象提供了大量的构件，无论是可变的还是不可变的。 缺点 1.对于每一个不同的值都需要一个单独的对象 设计方案 1.使类是 final 的。 2.让类的所有构造器都是私有的或者包级私有的并添加公有的静态工厂来代替公有构造器。 3.坚决不要为每个 get 方法都提供一个 set 方法。 4.构造器应该创建完全初始化的对象，不要在构造器或者静态工厂之外再提供公有的初始化方法，除非有令人信服的理由必须这么做。 5.如果有的类不能做成不可变的，扔应该尽可能的限制它的可变性。 6.如果不可变类要实现 Serilizable 接口，并且它包含一个或者多个指向可变对象的域，就必须提供一个显示的 readObject 或者 readResolve 方法。（或者使用 ObjectOutputStream.writeUnshared 和 ObjectInputStream.readUnshared 方法）]]></content>
-      <categories>
-        <category>java</category>
-        <category>effectivejava</category>
-      </categories>
-      <tags>
-        <tag>java</tag>
-        <tag>effectivejava</tag>
-      </tags>
-  </entry>
-  <entry>
     <title><![CDATA[【java 并发】4. 对象的共享（2）]]></title>
     <url>%2F2017%2F07%2F24%2Fjava%20concurrency%2Fjava-concurrency-4%2F</url>
     <content type="text"><![CDATA[2.发布与溢出发布一个对象是指，使对象能够在当前作用域之外的代码中使用。 比如，将一个执行该对象的引用保存带其他代码可以访问待的地方，或者在某一个非私有的方法中返回该引用，或者将引用传递到其他类的方法中。 许多时候，我们需要确保对象及其内部状态不被发布。而在某些情况下，我们又需要发布某个对象，但如果在发布时要确保线程安全性，则可能需要同步。 发布内部状态可能会破坏封装性，并使得程序难以维持不变性条件。 例如，如果在对象构造完成之前就发布该对象，就会破坏线程安全性。 当某个不应该发布的对象被发布时，这种情况就被称为逸出。 2.1 发布对象的几种情况 将对象的引用保存到一个公有的静态变量中。 12345public static Set&lt;Secret&gt; knownSecrets;public void initialize() &#123; knownSecrets = new HashSet&lt;Secret&gt;();&#125; 当发布某个变量的时候，可能会间接的发布其他对象。 如果将一个 Secret 对象添加到集合 knownSecrets 中，那么同样会发布这个对象。 如果从非私有方法中返回一个引用，那么同样会发布返回时的对象。 发布一个内部的类实例。 2.2 几个要点 当发布一个对象时，在该对象的非死有余中引用的所有对象同样会被发布。 当某个对象逸出后，你必须假设有某个类或者线程可能会误用该对象，并作出相应的处理。 不要在构造函数中使 this 逸出。 在构造函数中创建线程并没有错误，但最好不要立即启动它，而是通过一个 start 或者 initialize 方法来启动。]]></content>
@@ -332,6 +332,19 @@
         <tag>concurrency</tag>
         <tag>线程</tag>
         <tag>并发</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[【effective java】15:使可变性最小化]]></title>
+    <url>%2F2017%2F07%2F24%2Feffectivejava%2Feff-java-15%2F</url>
+    <content type="text"><![CDATA[15:使可变性最小化使用不可变类的理由不可变类只是其实例不能被修改的类。不可变的类比可变类更加易于设计、实现和使用。它们不容易出错，且更加安全。 使类变成不可变类的几个规则 1.不要提供任何会修改对象状态的方法。 2.保证类不会被扩展。 3.使所有的域都是 final 的。 4.使所有的域都是私有的。 5.确保对于任何可变组建的互斥访问。 几个优点 1.不可变对象本质上是线程安全的，它们不要求同步 2.不可变类可以提供一些静态工厂，它们把频繁的请求的实例缓存起来，从而当现有实例可以符合请求的时候，就不必创建新的实例。 3.“不可变对象可以被自由的共享” ==&gt; 永远不需要进行保护性拷贝。 4.不仅可以共享不可变对象，甚至也可以共享它们的内部信息。 5.不可变对象为其他对象提供了大量的构件，无论是可变的还是不可变的。 缺点 1.对于每一个不同的值都需要一个单独的对象 设计方案 1.使类是 final 的。 2.让类的所有构造器都是私有的或者包级私有的并添加公有的静态工厂来代替公有构造器。 3.坚决不要为每个 get 方法都提供一个 set 方法。 4.构造器应该创建完全初始化的对象，不要在构造器或者静态工厂之外再提供公有的初始化方法，除非有令人信服的理由必须这么做。 5.如果有的类不能做成不可变的，扔应该尽可能的限制它的可变性。 6.如果不可变类要实现 Serilizable 接口，并且它包含一个或者多个指向可变对象的域，就必须提供一个显示的 readObject 或者 readResolve 方法。（或者使用 ObjectOutputStream.writeUnshared 和 ObjectInputStream.readUnshared 方法）]]></content>
+      <categories>
+        <category>java</category>
+        <category>effectivejava</category>
+      </categories>
+      <tags>
+        <tag>java</tag>
+        <tag>effectivejava</tag>
       </tags>
   </entry>
   <entry>
@@ -363,19 +376,6 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[DNS域名解析过程（不考虑负载均衡等复杂情况）]]></title>
-    <url>%2F2017%2F07%2F22%2Fweb%2Fweb-dns%2F</url>
-    <content type="text"><![CDATA[DNS域名解析过程（不考虑负载均衡等复杂情况）在浏览器中输入：www.abc.com 会发生哪些事情呢？ 1.浏览器检查缓存中有没有该域名对应的解析过的ip地址，如果有，解析过程结束。 浏览器缓存域名是有限制的，不仅缓存的大小有限制，缓存的时间也有限制。缓存时间可以通过TTL属性来控制。这个缓存时间太长或者太短都不好，如果缓存时间太长，一旦域名对应的ip地址变化了，会导致客户端无法正常访问到相应的服务。如果设置的时间太短，会导致用户要频繁的进行域名解析。现在大部分域名解析服务中，默认的TTL时间是10分钟。 2.浏览器会查找本地操作系统的缓存中有没有这个域名对应的DNS解析结果。 操作系统也会有一个域名解析的过程，也就是我们熟知的host文件。例如，我们在测试的时候，可以将一个域名解析到一台测试服务器上，这样不用修改仍和代码就能测试到单独服务器上的代码。 正是因为有这种本地DNS解析的过程，所以黑客就有可能通过修改你的host文件来把特定的域名解析到他指定的ip地址上，导致这些域名被劫持。 3.浏览器会把这个域名发送给LDNS（本地区域名服务器），看看该服务器的缓存有没有结果。 怎么知道LDNS的地址呢？我们自己电脑的网络配置中都会有“DNS服务器”地址这一项（可能不止一个），这个就是LDNS，即本地域名服务器。 这个DNS通常都是提供给你本地互联网接入的一个DNS服务，如果你在学校接入的互联网，那这个DNS服务器肯定在你的学校，如果你是在小区里接入的互联网，那DNS就是共给你接入互联网的服务提供商，即电信或者联通。当然，你也可以自己设置LDNS域名，比如114.114.114.114. 这个专门的域名解析服务器性能都会很好，一般都会缓存域名解析的结果，大约80%的域名解析打这里就已经完成了。 4.LNDS依旧没有命中，直接到ROOT Server域名服务器请求解析。 5.根域名服务器返回给本地域名服务器一个所查寻域的主域名服务器（gTLD Server）地址。 gTLD 是国际顶级域名服务器，如.com、.cn、.org等 6.本地域名服务器（LDNS）再向上一步中的gTLD服务器发送请求。 7.接受请求的gTLD服务器查找并返回此域名对应的Name Server域名服务器的地址。 这个Name Server通常是你注册的域名服务器，比如你在阿里云买了一个域名，那么这个域名解析的热舞就由阿里云提供的服务器来完成。 8.Name Server域名服务器会查询存储的域名和IP的映射关系表,返回给gTLD Server。 正常情况下，会返回IP地址和TTL. 9.gTLD Server返回该域名的IP地址和TTL值给LDNS。 LDNS会将得到的信息进行缓存。 10.LDNS把解析的结果返回给用户（浏览器），用户根据TTL值缓存在本地缓存系统中，域名解析结束。]]></content>
-      <categories>
-        <category>web</category>
-        <category>dns</category>
-      </categories>
-      <tags>
-        <tag>web</tag>
-        <tag>dns</tag>
-      </tags>
-  </entry>
-  <entry>
     <title><![CDATA[【java 并发】2. 线程的安全性]]></title>
     <url>%2F2017%2F07%2F22%2Fjava%20concurrency%2Fjava-concurrency-2%2F</url>
     <content type="text"><![CDATA[要编写线程安全的代码，其核心在于要对状态访问操作进行管理，特别是对共享的和可变的状态的访问。 共享，意味着变量可以由多个线程同时访问。 可变，意味着变量的值在其生命周期内可以发生变化。 java 中主要的同步机制是synchronized 关键字，它提供一种独占的加锁方式。但“同步”这个术语还包括 volatile 类型的变量，显式锁以及原子变量。 1. 什么是线程安全性当多个线程访问某个类时，这个类始终都能表现出正确的行为，那么就称这个类是线程安全的。 无状态对象一定是线程安全的。 无状态对象：既不包含任何域，也不包含任何对其他类中域的引用，计算中过程中的临时状态仅存在于线程栈上的局部变量中，并且只能由正在执行的线程访问。 比如： 大多数 Servlet 类 都是无状态的，从而极大地降低了在实现 Servlet 线程安全性时的复杂性，只有当 Servlet 在处理请求时需要保存一些信息，线程安全性才会成为一个问题。 2. 原子性静态条件（RaceCondition）：在并发编程中，由于不恰当的执行顺序而出现不正确的结果的情况。 2.1 竞态条件当某个计算的正确性取决于多个线程的交替执行顺序时，就会发生竞态条件。 正确的结果取决于运气。 最常见的竞态条件是“先检查后执行（Check-Then-Act）”。比如懒加载（延迟初始化）。 2.2 延迟初始化12345678910public class LazyInitCase &#123; private ExpensiveObj instance = null; public ExpensiveObj getInstance() &#123; if (instance == null) &#123; instance = new ExpensiveObj(); &#125; return instance; &#125;&#125; 在多线程环境下，这样写就有可能出现错误。 与大多数并发错误一样，竞态条件并不总是会产生错误，还需要执行了某种不恰当的顺序。 2.3 复合操作我们将“先检查后执行”以及“读取-修改-写入”等操作统称为复合操作。为了达到线程安全，复合操作需要是原子操作。 原子操作：要么不执行，要么一次性执行完毕。 java.util.concurrent.atomic 中提供了一些原子变量类。 3. 加锁机制3.1 内置锁每个java对象 都可以用作一个实现同步的锁，这些锁被称为内置锁或者监视器锁。 java的内置锁相当于一种互斥锁。 3.2 重入如果一个锁是可重入的，那么当一个线程试图获得一个已经由他自己持有的锁，这个请求会成功。内置锁是可重入的。 重入，意味着获取锁的操作的粒度是“线程”，而不是“调用”。 重入进一步提升了加锁行为的封装性，简化了面向对象并发代码的开发。 4. 用锁来保护状态可以通过锁来构造一些协议，以实现对共享状态的独占访问。 每个共享的和可变的变量都应该只由一个锁来保护。 5. 活跃性与性能使用两种不同的同步机制不仅会带来混乱，也不会在性能或安全性上带来任何好处。]]></content>
@@ -388,6 +388,19 @@
         <tag>concurrency</tag>
         <tag>线程</tag>
         <tag>并发</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[DNS域名解析过程（不考虑负载均衡等复杂情况）]]></title>
+    <url>%2F2017%2F07%2F22%2Fweb%2Fweb-dns%2F</url>
+    <content type="text"><![CDATA[DNS域名解析过程（不考虑负载均衡等复杂情况）在浏览器中输入：www.abc.com 会发生哪些事情呢？ 1.浏览器检查缓存中有没有该域名对应的解析过的ip地址，如果有，解析过程结束。 浏览器缓存域名是有限制的，不仅缓存的大小有限制，缓存的时间也有限制。缓存时间可以通过TTL属性来控制。这个缓存时间太长或者太短都不好，如果缓存时间太长，一旦域名对应的ip地址变化了，会导致客户端无法正常访问到相应的服务。如果设置的时间太短，会导致用户要频繁的进行域名解析。现在大部分域名解析服务中，默认的TTL时间是10分钟。 2.浏览器会查找本地操作系统的缓存中有没有这个域名对应的DNS解析结果。 操作系统也会有一个域名解析的过程，也就是我们熟知的host文件。例如，我们在测试的时候，可以将一个域名解析到一台测试服务器上，这样不用修改仍和代码就能测试到单独服务器上的代码。 正是因为有这种本地DNS解析的过程，所以黑客就有可能通过修改你的host文件来把特定的域名解析到他指定的ip地址上，导致这些域名被劫持。 3.浏览器会把这个域名发送给LDNS（本地区域名服务器），看看该服务器的缓存有没有结果。 怎么知道LDNS的地址呢？我们自己电脑的网络配置中都会有“DNS服务器”地址这一项（可能不止一个），这个就是LDNS，即本地域名服务器。 这个DNS通常都是提供给你本地互联网接入的一个DNS服务，如果你在学校接入的互联网，那这个DNS服务器肯定在你的学校，如果你是在小区里接入的互联网，那DNS就是共给你接入互联网的服务提供商，即电信或者联通。当然，你也可以自己设置LDNS域名，比如114.114.114.114. 这个专门的域名解析服务器性能都会很好，一般都会缓存域名解析的结果，大约80%的域名解析打这里就已经完成了。 4.LNDS依旧没有命中，直接到ROOT Server域名服务器请求解析。 5.根域名服务器返回给本地域名服务器一个所查寻域的主域名服务器（gTLD Server）地址。 gTLD 是国际顶级域名服务器，如.com、.cn、.org等 6.本地域名服务器（LDNS）再向上一步中的gTLD服务器发送请求。 7.接受请求的gTLD服务器查找并返回此域名对应的Name Server域名服务器的地址。 这个Name Server通常是你注册的域名服务器，比如你在阿里云买了一个域名，那么这个域名解析的热舞就由阿里云提供的服务器来完成。 8.Name Server域名服务器会查询存储的域名和IP的映射关系表,返回给gTLD Server。 正常情况下，会返回IP地址和TTL. 9.gTLD Server返回该域名的IP地址和TTL值给LDNS。 LDNS会将得到的信息进行缓存。 10.LDNS把解析的结果返回给用户（浏览器），用户根据TTL值缓存在本地缓存系统中，域名解析结束。]]></content>
+      <categories>
+        <category>web</category>
+        <category>dns</category>
+      </categories>
+      <tags>
+        <tag>web</tag>
+        <tag>dns</tag>
       </tags>
   </entry>
   <entry>
@@ -430,19 +443,6 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[【effective java】16:复合优先于继承]]></title>
-    <url>%2F2017%2F07%2F20%2Feffectivejava%2Feff-java-16%2F</url>
-    <content type="text"><![CDATA[前言继承是实现代码重用的有力手段，但它并不永远都是最好的选择，使用不当会使软件变得很脆弱。 在包的内部使用继承是非常安全的，在那里，子类和超类都处在同一个程序员的控制之下。对于专门为了继承而设计、并且具有很好文档说明的类来说，使用继承也是非常安全的。 然而，对于普通的具体类进行垮包边界的继承，则是非常危险的。 这里说的继承，不包括实现接口。 ##]]></content>
-      <categories>
-        <category>java</category>
-        <category>effectivejava</category>
-      </categories>
-      <tags>
-        <tag>java</tag>
-        <tag>effectivejava</tag>
-      </tags>
-  </entry>
-  <entry>
     <title><![CDATA[【java 并发】1. 初识java并发]]></title>
     <url>%2F2017%2F07%2F20%2Fjava%20concurrency%2Fjava-concurrency-1%2F</url>
     <content type="text"><![CDATA[1. 线程的优势 1.1 发挥多处理器强大的能力 通过提高处理器资源的利用率来提神系统的吞吐率。（充分利用处理器） 有助于在但处理器系统上获得更高的吞吐率。（合理安排处理器；异步） 1.2 建模的简单性 如果程序中只包含一种类型的任务，那么比包含多种不同类型任务的程序要更容易编写，错误更少，也更容易测试。 1.3 异步事件的简化处理 1.4 响应更灵敏的用户界面 传统的gui采用主事件循环（单线程），程序可能会“冻结” 2. 线程带来的风险 2.1 安全性问题 非同步线程会造成脏读，不可重复读等问题。 2.2 活跃性问题 死锁，饥饿，活锁等 2.3 性能问题 服务时间过长；响应不灵敏；吞吐率过低；资源消耗过高；可伸缩性较低等。 3. 线程无处不在 3.1 每个java程序都会使用线程 3.2 Timer 3.3 Servlet 和 jsp servlet 需要满足被多个线程同时调用（servlet需要是线程安全的） 3.4 远程方法调用（RMI） 两个线程安全问题： 正确的协同在多个对象中共享的状态 对远程对象本身状态的访问 3.5 Swing 和 AWT swing 的一些组件并不是线程安全的，如JTable。swing 程序通过将所有对gui组件的访问局限在事件线程中以实现线程安全性]]></content>
@@ -458,9 +458,9 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[【effective java】10:始终要覆盖toString]]></title>
-    <url>%2F2017%2F07%2F20%2Feffectivejava%2Feff-java-10%2F</url>
-    <content type="text"><![CDATA[10:始终要覆盖toString几个要点 1.虽然 toString 的约定并不像 equals 和 hashcode 的约定，但是提供良好的 toString 实现可以使类用起来更加舒适。 2.不管是否覆盖了 toString 方法，程序员都将以这种方式来产生诊断信息，但是如果没有覆盖 toString 方法，那么产生的信息将会难以理解。 3.在实际应用中，toString 方法应该赶回对象中包含的所有值得关注的信息。如果对象太大，toString 应该返回一个摘要信息。 4.在实现 toString 的时候，要决定是否在文档中指定返回值格式。指定格式的好处是，它可以被用作一种标准的、明确的、适合人阅读的对象表示法。不足之处是，如果这个类已经被广泛使用，一旦指定格式，就必须始终如一的坚持这种格式。 5.无论你是否决定使用格式，都应该在文档中明确的表明你的意图。 6.无论是否指定格式，都为 toString 返回值中包含的所有信息，提供一种编程式的访问路径。]]></content>
+    <title><![CDATA[【effective java】16:复合优先于继承]]></title>
+    <url>%2F2017%2F07%2F20%2Feffectivejava%2Feff-java-16%2F</url>
+    <content type="text"><![CDATA[前言继承是实现代码重用的有力手段，但它并不永远都是最好的选择，使用不当会使软件变得很脆弱。 在包的内部使用继承是非常安全的，在那里，子类和超类都处在同一个程序员的控制之下。对于专门为了继承而设计、并且具有很好文档说明的类来说，使用继承也是非常安全的。 然而，对于普通的具体类进行垮包边界的继承，则是非常危险的。 这里说的继承，不包括实现接口。 ##]]></content>
       <categories>
         <category>java</category>
         <category>effectivejava</category>
@@ -471,9 +471,9 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[【effective java】9:覆盖equals时总要覆盖hashcode]]></title>
-    <url>%2F2017%2F07%2F19%2Feffectivejava%2Feff-java-9%2F</url>
-    <content type="text"><![CDATA[9:覆盖equals时总要覆盖hashcode1.hashcode 通用约定 1.在应用程序执行期间，只要对象的 equals 方法的比较嘈杂所用到的信息没有被修改，那么对这同一个对象调用多次 hashcode 方法都必须始终如一的返回同一个函数。在同一个应用程序的多次执行过过程中，每次执行所返回的整数可以不一致。 2.如果两个对象根据 equals 方法的毕竟是相等的，那么调用这两个对象中任意一个对象的 hashcode 方法都必须产出同样的整数结果。 3.如果两个对象根据 equals 方法比较是不相等的，那么调用这两个对象中任意一个对象的 hashcode 方法，产生的结果可以相同也可以不同。但是你应该知道，给不相等的对象产生不一样的 hash 值，有可能提高散列表的性能。 2.尽可能给不相等的对象产生不一样的 hash 值的简单方法 1.把某个非零的常数值，比如17，保存在一个名为 result 的 int 类型变量中。 2.对于对象中每个关键域 f（指 equals 方法中涉及的每个域），完成以下步骤： a.为该域计算 int 类型的散列码c： 如果该域是 boolean 类型，计算 （f ? 1 : 0）。 如果该域是 byte、char、short 或者 int 类型，计算 （int）f。 如果该域是 long 类型，计算 (int)(f ^ (f &gt;&gt;&gt; 32))。 如果该域是 float 类型，计算 Float.floatToIntBits(f)。 如果该域是 double 类型，计算 Double.doubleToLongBits(f),然后按照上面第三步，为得到的 long 类型值计算散列值。 如果该域是一个对象引用，并且该类的 equals 方法通过递归的调用 equals 的方式来比较这个域，则同样为这个域递归的调用 hashcode。如果需要更复杂d额比较，则为这个域计算一个”范式“，然后针对这个范式调用 hashcode。如果这个域的值为 null，则返回0。 如果该域s回一个数组，则要吧每一个元素当做单独的域来处理。也就是说，递归地应用上述规则。如果数组中的每个元素都很重要，可以利用 Arrays.hashCode 方法。 b.按照下面的公式，把 a 中计算得到的散列码 c 合并到 result 中： result = 31 * result + c; 3.返回 result。 4.写完 hashcode 方法以后，判断一下是否满足三个条件。 在散列码计算过程中，可以把冗余域排除在外。 3.几点注意 如果一个类是不可变的，并且计算散列码的开销也比较大，就应该考虑把散列码缓存在对象内部，而不是每次请求都重新计算。 不要试图从散列码计算中排除掉一个对象的关键部分来提高性能。]]></content>
+    <title><![CDATA[【effective java】10:始终要覆盖toString]]></title>
+    <url>%2F2017%2F07%2F20%2Feffectivejava%2Feff-java-10%2F</url>
+    <content type="text"><![CDATA[10:始终要覆盖toString几个要点 1.虽然 toString 的约定并不像 equals 和 hashcode 的约定，但是提供良好的 toString 实现可以使类用起来更加舒适。 2.不管是否覆盖了 toString 方法，程序员都将以这种方式来产生诊断信息，但是如果没有覆盖 toString 方法，那么产生的信息将会难以理解。 3.在实际应用中，toString 方法应该赶回对象中包含的所有值得关注的信息。如果对象太大，toString 应该返回一个摘要信息。 4.在实现 toString 的时候，要决定是否在文档中指定返回值格式。指定格式的好处是，它可以被用作一种标准的、明确的、适合人阅读的对象表示法。不足之处是，如果这个类已经被广泛使用，一旦指定格式，就必须始终如一的坚持这种格式。 5.无论你是否决定使用格式，都应该在文档中明确的表明你的意图。 6.无论是否指定格式，都为 toString 返回值中包含的所有信息，提供一种编程式的访问路径。]]></content>
       <categories>
         <category>java</category>
         <category>effectivejava</category>
@@ -498,18 +498,16 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[【springboot-入门篇】第5篇-数据库访问之JPA(hibernate)]]></title>
-    <url>%2F2017%2F07%2F18%2Fspring-boot%2F%E3%80%90springboot-%E5%85%A5%E9%97%A8%E7%AF%87%E3%80%91%E7%AC%AC5%E7%AF%87-%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BF%E9%97%AE%E4%B9%8BJPA(hibernate)%2F</url>
-    <content type="text"><![CDATA[hibernate是数据访问解决技术的霸主之一，使用了O/R映射技术实现数据访问。随着hibernate的盛行，它主导了EJB3.0的JPA规范。JPA 机java persistence API，JPA是一个基于O/R映射的规范。所谓规范，就是之定义规则，比如注解、接口，但是不提供实现，软件提供商课按照规范来实现。而使用者只需要知道JPA 有哪些接口就可以了，至于是怎么实现的，完全不需要关心。JPA的主要实现由hibernate，eclipselink和openjpa等。当然，我们不需要关心它们的具体实现方式是什么，我们只需要用就可以了。 未完待续]]></content>
+    <title><![CDATA[【effective java】9:覆盖equals时总要覆盖hashcode]]></title>
+    <url>%2F2017%2F07%2F19%2Feffectivejava%2Feff-java-9%2F</url>
+    <content type="text"><![CDATA[9:覆盖equals时总要覆盖hashcode1.hashcode 通用约定 1.在应用程序执行期间，只要对象的 equals 方法的比较嘈杂所用到的信息没有被修改，那么对这同一个对象调用多次 hashcode 方法都必须始终如一的返回同一个函数。在同一个应用程序的多次执行过过程中，每次执行所返回的整数可以不一致。 2.如果两个对象根据 equals 方法的毕竟是相等的，那么调用这两个对象中任意一个对象的 hashcode 方法都必须产出同样的整数结果。 3.如果两个对象根据 equals 方法比较是不相等的，那么调用这两个对象中任意一个对象的 hashcode 方法，产生的结果可以相同也可以不同。但是你应该知道，给不相等的对象产生不一样的 hash 值，有可能提高散列表的性能。 2.尽可能给不相等的对象产生不一样的 hash 值的简单方法 1.把某个非零的常数值，比如17，保存在一个名为 result 的 int 类型变量中。 2.对于对象中每个关键域 f（指 equals 方法中涉及的每个域），完成以下步骤： a.为该域计算 int 类型的散列码c： 如果该域是 boolean 类型，计算 （f ? 1 : 0）。 如果该域是 byte、char、short 或者 int 类型，计算 （int）f。 如果该域是 long 类型，计算 (int)(f ^ (f &gt;&gt;&gt; 32))。 如果该域是 float 类型，计算 Float.floatToIntBits(f)。 如果该域是 double 类型，计算 Double.doubleToLongBits(f),然后按照上面第三步，为得到的 long 类型值计算散列值。 如果该域是一个对象引用，并且该类的 equals 方法通过递归的调用 equals 的方式来比较这个域，则同样为这个域递归的调用 hashcode。如果需要更复杂d额比较，则为这个域计算一个”范式“，然后针对这个范式调用 hashcode。如果这个域的值为 null，则返回0。 如果该域s回一个数组，则要吧每一个元素当做单独的域来处理。也就是说，递归地应用上述规则。如果数组中的每个元素都很重要，可以利用 Arrays.hashCode 方法。 b.按照下面的公式，把 a 中计算得到的散列码 c 合并到 result 中： result = 31 * result + c; 3.返回 result。 4.写完 hashcode 方法以后，判断一下是否满足三个条件。 在散列码计算过程中，可以把冗余域排除在外。 3.几点注意 如果一个类是不可变的，并且计算散列码的开销也比较大，就应该考虑把散列码缓存在对象内部，而不是每次请求都重新计算。 不要试图从散列码计算中排除掉一个对象的关键部分来提高性能。]]></content>
       <categories>
         <category>java</category>
-        <category>springboot</category>
+        <category>effectivejava</category>
       </categories>
       <tags>
         <tag>java</tag>
-        <tag>springboot</tag>
-        <tag>jpa</tag>
-        <tag>数据库</tag>
+        <tag>effectivejava</tag>
       </tags>
   </entry>
   <entry>
@@ -523,6 +521,21 @@
       <tags>
         <tag>java</tag>
         <tag>effectivejava</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[【springboot-入门篇】第5篇-数据库访问之JPA(hibernate)]]></title>
+    <url>%2F2017%2F07%2F18%2Fspring-boot%2F%E3%80%90springboot-%E5%85%A5%E9%97%A8%E7%AF%87%E3%80%91%E7%AC%AC5%E7%AF%87-%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BF%E9%97%AE%E4%B9%8BJPA(hibernate)%2F</url>
+    <content type="text"><![CDATA[hibernate是数据访问解决技术的霸主之一，使用了O/R映射技术实现数据访问。随着hibernate的盛行，它主导了EJB3.0的JPA规范。JPA 机java persistence API，JPA是一个基于O/R映射的规范。所谓规范，就是之定义规则，比如注解、接口，但是不提供实现，软件提供商课按照规范来实现。而使用者只需要知道JPA 有哪些接口就可以了，至于是怎么实现的，完全不需要关心。JPA的主要实现由hibernate，eclipselink和openjpa等。当然，我们不需要关心它们的具体实现方式是什么，我们只需要用就可以了。 未完待续]]></content>
+      <categories>
+        <category>java</category>
+        <category>springboot</category>
+      </categories>
+      <tags>
+        <tag>java</tag>
+        <tag>springboot</tag>
+        <tag>jpa</tag>
+        <tag>数据库</tag>
       </tags>
   </entry>
   <entry>
@@ -553,6 +566,19 @@
       </tags>
   </entry>
   <entry>
+    <title><![CDATA[【effective java】6:消除过期的对象引用]]></title>
+    <url>%2F2017%2F07%2F16%2Feffectivejava%2Feff-java-6%2F</url>
+    <content type="text"><![CDATA[java 有自己的垃圾回收机制，当你用完一个对象之后，它会被自动回收，这看起来有点不可思议，并且很容易让你觉得你自己再也不需要考虑内存管理的事了。显然，这是一种错误的想法。 1. 过期引用1.1 介绍如果一个栈是先增长，然后再收缩，那么，从栈中弹出来的对象将不会被当做垃圾回收，即使使用栈的程序不再引用这些对象，它们也不会被回收。这是因为，在栈内部维护着对这些对象的过期引用。 所谓的过期引用，是指永远也不会再被解除的引用。 1.2 修复这类问题的修复很简单：一旦对象已经过期，只需要请看这些引用就好了： 123456public Object pop() &#123; if (size == 0) throw new EmptyStackException(); Object result = elements[--size]; elements[size] == null; return result;&#125; 除了释放过期引用，清空过期引用的另一个好处是，如果它们以后又被错误的使用，程序就会立即抛出空指针异常，而不是让错误悄悄的潜下去。 1.3 注意 请空对象引用应该是一种例外而不是一种规范行为。消除过期引用最好的方法是让包含该引用的变量结束其生命周期。 一般而言，只要类是自己管理内存，那么就应该警惕内存泄漏问题。 2. 其他导致内存泄漏的原因2.1 缓存。一旦你把对象引用放到缓存中，他就很容易被遗忘掉，从而使得他不再被使用后的很长一段时间内仍然留在缓存中。 解决方案之一是，可以使用 WeakHashMap 代表缓存 只有当所需要的缓存项的生命周期是由该键的外部引用而不是值决定时，WeakHashMap 才有用处。 2.2 监听器和其回调如果你实现了一个 API，客户端在这个 API 中注册回调，却没有显示的取消回调，那么除非你采取了某些动作，否则他们就会积聚。 确保回调被立即被当做垃圾回收的最佳方法是只把他们保存在弱引用中，例如，只将他们保存成 WeakHashMap 中的键。]]></content>
+      <categories>
+        <category>java</category>
+        <category>effectivejava</category>
+      </categories>
+      <tags>
+        <tag>java</tag>
+        <tag>effectivejava</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[【springboot-入门篇】第3篇--从controller开始学起]]></title>
     <url>%2F2017%2F07%2F16%2Fspring-boot%2F%E3%80%90springboot-%E5%85%A5%E9%97%A8%E7%AF%87%E3%80%91%E7%AC%AC3%E7%AF%87--%E4%BB%8Econtroller%E5%BC%80%E5%A7%8B%E5%AD%A6%E8%B5%B7%2F</url>
     <content type="text"><![CDATA[虽然文章标题是“学起”，但是我也不会真的从头开始讲，默认，你是懂springmvc的 o.o 1. 返回数据与返回页面在写web项目的时候，controller里的返回值一般分为两种，一种是返回页面，也就是ModeAndView，另一种是直接返回数据，比如json格式的数据。 返回一个页面，我们需要用到一些模板引擎，比如熟知的jsp，模板引擎后面会详细讲解。 返回数据一般会选择返回json数据，我们之前的demo项目中使用的@RestController就是一个返回数据的注解。 @RestController是一个组合注解，是由@Controller和@ResponseBody组合而成的。@Controller：将返回值渲染为页面。@ResponseBody：将返回值渲染为数据。 2. spring boot支持的模板引擎spring-boot 支持多种模版引擎包括： FreeMarker Groovy Thymeleaf （Spring 官网使用这个） Velocity JSP （不推荐，jsp在内嵌的servlet容器中运行有一些问题。） 我们在讲前后端分离之前，都会使用Thymeleaf模板引擎，先简单的介绍一下它。 2.1 Thymeleaf模板引擎Thymeleaf是一个java类库，它是一个xml/xhtml/html5的模板引擎，可以作为mvc的web应用的view层。 Thymeleaf还提供了额外的木块与spring mvc集成，所以使用ssm框架的也可以使用这个模板引擎。 本来想列一下Thymeleaf的用法的，但是感觉有点多，以后哪里用到哪里讲好了。 3. 实战接下来，我们通过一个项目，来实践一下两种不同的返回结果。 先看一下最终的目录结构： 3.1 创建项目project_1 选择依赖：web Thymeleaf 3.2 新建一个person类，用来封装数据12345678910111213141516171819202122232425262728293031package com.example.model;public class Person &#123; private String name; private Integer age; public Person() &#123; &#125; public Person(String name, Integer age) &#123; this.name = name; this.age = age; &#125; public void setName(String name) &#123; this.name = name; &#125; public void setAge(Integer age) &#123; this.age = age; &#125; public String getName() &#123; return name; &#125; public Integer getAge() &#123; return age; &#125;&#125; 3.3 新建一个ViewController，用来返回一个视图1234567891011121314151617181920212223242526272829package com.example.controller;import com.example.model.Person;import org.springframework.stereotype.Controller;import org.springframework.ui.Model;import org.springframework.web.bind.annotation.RequestMapping;import java.util.ArrayList;import java.util.List;@Controllerpublic class ViewController &#123; @RequestMapping(&quot;/view&quot;) public String view(Model model)&#123; Person person = new Person(&quot;x&quot;, 22); List&lt;Person&gt; list = new ArrayList&lt;&gt;(); list.add(new Person(&quot;a&quot;, 11)); list.add(new Person(&quot;b&quot;, 12)); list.add(new Person(&quot;c&quot;, 13)); model.addAttribute(&quot;onePerson&quot;, person); model.addAttribute(&quot;manyPerson&quot;, list); return &quot;index&quot;; &#125;&#125; 3.4 创建index.html，用来接收数据123456789101112131415161718192021222324252627282930313233343536&lt;html xmlns:th=&quot;http://www.thymeleaf.org&quot;&gt;&lt;head&gt; &lt;meta charset=&quot;UTF-8&quot;/&gt; &lt;title&gt;test&lt;/title&gt; &lt;link href=&quot;https://cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css&quot; rel=&quot;stylesheet&quot;/&gt; &lt;link href=&quot;https://cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap-theme.min.css&quot; rel=&quot;stylesheet&quot;/&gt;&lt;/head&gt;&lt;body&gt; &lt;div class=&quot;panel panel-primary&quot;&gt; &lt;div class=&quot;panel-heading&quot;&gt; &lt;h3 class=&quot;panel-title&quot;&gt;访问model&lt;/h3&gt; &lt;/div&gt; &lt;div class=&quot;panel-body&quot;&gt; &lt;span th:text=&quot;$&#123;onePerson.name&#125;&quot;&gt;&lt;/span&gt; &lt;/div&gt; &lt;/div&gt; &lt;div th:if=&quot;$&#123;not #lists.isEmpty(manyPerson)&#125;&quot;&gt; &lt;div class=&quot;panel panel-primary&quot;&gt; &lt;div class=&quot;panel-heading&quot;&gt; &lt;h3 class=&quot;panel-title&quot;&gt;列表&lt;/h3&gt; &lt;/div&gt; &lt;div class=&quot;panel-body&quot;&gt; &lt;ul class=&quot;list-group&quot;&gt; &lt;li class=&quot;list-group-item&quot; th:each=&quot;person:$&#123;manyPerson&#125;&quot;&gt; &lt;span th:text=&quot;$&#123;person.name&#125;&quot;&gt;&lt;/span&gt; &lt;span th:text=&quot;$&#123;person.age&#125;&quot;&gt;&lt;/span&gt; &lt;/li&gt; &lt;/ul&gt; &lt;/div&gt; &lt;/div&gt; &lt;/div&gt;&lt;/body&gt;&lt;/html&gt; 这里我们使用了Thymeleaf模板引擎来获得后台传来的数据并解析，使用bootstrap框架显示数据。可以看到，Thymeleaf的用法和jsp还是有点像的。可以直接通过${}的形式来获得attribute中的数据。 在 spring boot 中，模板引擎默认是开启缓存的，如果修改了页面内容，刷新页面是得不到修改后的内容的。我们可以在application.yml中关闭模板引擎缓存：123spring: thymeleaf: cache: false 如果需要详细的Thymeleaf模板的使用方式教程，可以给我留言，我看情况来决定是否要写一篇。因为我用的也不是很多，大部分情况我都是前后端分离的。 3.5 运行项目，浏览器访问http://localhost:8080/view 可以看到，我们成功的在前端获取到了数据。方式就是将数据保存在attribute中，然后再前端页面获取。 3.6 修改ViewController中的@Controller为@RestController，重新运行 我们修改了注解，发现结果变了，直接显示了“index”,是因为@RestController会直接返回数据，而不是渲染页面，所以直接返回了index(这个index，是return语句中的) 3.7 创建DataController，用来直接返回数据12345678910111213141516171819202122package com.example.controller;import com.example.model.Person;import org.springframework.web.bind.annotation.RequestMapping;import org.springframework.web.bind.annotation.RestController;import java.util.Arrays;import java.util.List;@RestController // 使用RestController注解public class DataController &#123; @RequestMapping("/person") public Person person()&#123; return new Person("aa", 10); &#125; @RequestMapping("persons") public List&lt;Person&gt; persons()&#123; return Arrays.asList(new Person("bb", 11), new Person("cc", 12)); &#125;&#125; 3.8 重新运行项目访问http://localhost:8080/person 获得了json格式的数据 访问http://localhost:8080/persons 列表也可以直接渲染为json。 这里需要注意，如果我们方法的返回值是String（参考上面的index），那么返回的结果就是你return的字符串，如果方法的返回值是一个对象（person）或者一个集合（list，map等），那么得到的结果就是一个json字符串。spring boot默认使用jackson来进行解析。 jackson也是可以修改为gson或者fastjson的，我们下篇再讲。 3.9 修改DataController中的@RestController为@Controller，重新运行访问http://localhost:8080/person 访问http://localhost:8080/persons 会发现这两个都报错了，因为@Controller注解是渲染视图的，而我们返回的是对象或者集合，不能完成正常的渲染。 4. 小结本文主要讲解了spring boot 如何渲染视图和数据，讲解了@Controller和@RestController的区别与用法。如果有什么疑问，请及时联系我。 我之前写过一个重新认识java系类（还没写完，会写完的。。），篇幅很长，每一篇文章多的有7、8千字，和多人抱怨说看到一半就不想看了，因为太长了，所以 spring boot 这个系类会尽量的短小精悍，每篇文章只讲一个知识点，这样看着不累~]]></content>
@@ -567,9 +593,9 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[【effective java】6:消除过期的对象引用]]></title>
-    <url>%2F2017%2F07%2F16%2Feffectivejava%2Feff-java-6%2F</url>
-    <content type="text"><![CDATA[java 有自己的垃圾回收机制，当你用完一个对象之后，它会被自动回收，这看起来有点不可思议，并且很容易让你觉得你自己再也不需要考虑内存管理的事了。显然，这是一种错误的想法。 1. 过期引用1.1 介绍如果一个栈是先增长，然后再收缩，那么，从栈中弹出来的对象将不会被当做垃圾回收，即使使用栈的程序不再引用这些对象，它们也不会被回收。这是因为，在栈内部维护着对这些对象的过期引用。 所谓的过期引用，是指永远也不会再被解除的引用。 1.2 修复这类问题的修复很简单：一旦对象已经过期，只需要请看这些引用就好了： 123456public Object pop() &#123; if (size == 0) throw new EmptyStackException(); Object result = elements[--size]; elements[size] == null; return result;&#125; 除了释放过期引用，清空过期引用的另一个好处是，如果它们以后又被错误的使用，程序就会立即抛出空指针异常，而不是让错误悄悄的潜下去。 1.3 注意 请空对象引用应该是一种例外而不是一种规范行为。消除过期引用最好的方法是让包含该引用的变量结束其生命周期。 一般而言，只要类是自己管理内存，那么就应该警惕内存泄漏问题。 2. 其他导致内存泄漏的原因2.1 缓存。一旦你把对象引用放到缓存中，他就很容易被遗忘掉，从而使得他不再被使用后的很长一段时间内仍然留在缓存中。 解决方案之一是，可以使用 WeakHashMap 代表缓存 只有当所需要的缓存项的生命周期是由该键的外部引用而不是值决定时，WeakHashMap 才有用处。 2.2 监听器和其回调如果你实现了一个 API，客户端在这个 API 中注册回调，却没有显示的取消回调，那么除非你采取了某些动作，否则他们就会积聚。 确保回调被立即被当做垃圾回收的最佳方法是只把他们保存在弱引用中，例如，只将他们保存成 WeakHashMap 中的键。]]></content>
+    <title><![CDATA[【effective java】5:避免创建不必要的对象]]></title>
+    <url>%2F2017%2F07%2F15%2Feffectivejava%2Feff-java-5%2F</url>
+    <content type="text"><![CDATA[5:避免创建不必要的对象1. 总览一般来说，最好能重用对象，而不是在每次需要的时候就创建一个相同功能的新对象。 比如，我们不应该这样写：String s = new String(&quot;string&quot;);，而应该这样写：String s = &quot;string&quot;;。 2.几个好的思想 1.静态工厂方法总是优于构造器。 对于同时提供了静态工厂方法和构造器的不可变类，通常可以使用静态工厂方法而不是构造器，以避免创建不必要的对象。例如，静态工厂方法Boolean.valueOf(String)几乎总是优先于构造器Boolean(String)。 2.除了重用不可变的对象之外，也可以重用那些已知的不会被修改的可变对象。 3.要优先使用基本数据类型，而不是他们的包装类，要当心无意识的自动装箱。 4.通过创建附加对象，提升程序的清晰性、简洁性和功能性，这通常是件好事。 小对象的创建和回收动作是十分廉价的，特别是在现代jvm上更是如此。 5.通过维护自己的对象池来避免创建对象并不是一种好的做法，除非池中的对象是非常重量级的。 6.在提倡使用保护性拷贝的时候，因重用对象而付出的代价要远远大于因重复创建对象而付出的代价。]]></content>
       <categories>
         <category>java</category>
         <category>effectivejava</category>
@@ -591,19 +617,6 @@
         <tag>java</tag>
         <tag>springboot</tag>
         <tag>配置</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[【effective java】5:避免创建不必要的对象]]></title>
-    <url>%2F2017%2F07%2F15%2Feffectivejava%2Feff-java-5%2F</url>
-    <content type="text"><![CDATA[5:避免创建不必要的对象1. 总览一般来说，最好能重用对象，而不是在每次需要的时候就创建一个相同功能的新对象。 比如，我们不应该这样写：String s = new String(&quot;string&quot;);，而应该这样写：String s = &quot;string&quot;;。 2.几个好的思想 1.静态工厂方法总是优于构造器。 对于同时提供了静态工厂方法和构造器的不可变类，通常可以使用静态工厂方法而不是构造器，以避免创建不必要的对象。例如，静态工厂方法Boolean.valueOf(String)几乎总是优先于构造器Boolean(String)。 2.除了重用不可变的对象之外，也可以重用那些已知的不会被修改的可变对象。 3.要优先使用基本数据类型，而不是他们的包装类，要当心无意识的自动装箱。 4.通过创建附加对象，提升程序的清晰性、简洁性和功能性，这通常是件好事。 小对象的创建和回收动作是十分廉价的，特别是在现代jvm上更是如此。 5.通过维护自己的对象池来避免创建对象并不是一种好的做法，除非池中的对象是非常重量级的。 6.在提倡使用保护性拷贝的时候，因重用对象而付出的代价要远远大于因重复创建对象而付出的代价。]]></content>
-      <categories>
-        <category>java</category>
-        <category>effectivejava</category>
-      </categories>
-      <tags>
-        <tag>java</tag>
-        <tag>effectivejava</tag>
       </tags>
   </entry>
   <entry>
