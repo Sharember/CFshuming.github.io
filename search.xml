@@ -1,6 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[【java 并发编程】1. java 多线程核心概念]]></title>
+    <url>%2F2018%2F02%2F03%2Fjava%2Fconcurrency%2Fconcept%2F</url>
+    <content type="text"><![CDATA[1. 几个概念1.1 进程：进程有一个独立的执行环境。它通常有一个完整的、私人的基本运行时资源;特别是，每个进程都有其自己的内存空间。 进程往往被视为等同于程序或应用程序。然而，用户将看到一个单独的应用程序可能实际上是一组合作的进程。大多数操作系统都支持进程间通信( Inter Process Communication，简称 IPC)，如管道和套接字。IPC 不仅用于同个系统的进程之间的通信，也可以用在不同系统的进程。 大多数 Java 虚拟机的实现作为一个进程运行。Java 应用程序可以使用 ProcessBuilder 对象创建额外的进程。 1.2 线程线程有时被称为轻量级进程。进程和线程都提供一个执行环境,但创建一个新的线程比创建一个新的进程需要更少的资源。 线程中存在于进程中,每个进程都至少一个线程。线程共享进程的资源，包括内存和打开的文件。这使得工作变得高效，但也存在了一个潜在的问题——通信。 多线程执行是 Java 平台的一个重要特点，每个 java 程序天生就是多线程的。每个应用程序都至少有一个线程，如果算上“系统”的线程（负责内存管理和信号处理）那就更多。但从程序员的角度来看，一个简单的 java 程序只有一个线程，称为主线程。这个线程有能力创建额外的线程，这也就是后面会讲到的多线程编程。 1.3 进程和线程之间的关系线程是运行在进程中的，每一个进程都包含了许多不同的线程。 对于 java 程序而言，每启动一个 jvm 虚拟机实例，就是启动了一个进程。该进程包含了主线程、主线程中创建的线程以及系统自带的守护线程。 该进程中有共用的资源：堆和方法区，每个线程也有自己独立的资源：程序计数器、虚拟机栈和本地方法栈。线程独有的资源只能由该线程访问，进程共用的资源每个线程都可以访问，这也是造成数据竞争的原因。 我们来看一下，一个最简单的 “hello world” 程序都启动了哪些线程： 12345678910public class SimpleJava &#123; public static void main(String[] args) &#123; ThreadMXBean threadMXBean = ManagementFactory.getThreadMXBean(); ThreadInfo[] threadInfos = threadMXBean.dumpAllThreads(false, false); for (ThreadInfo threadInfo : threadInfos) &#123; System.out.println("[" + threadInfo.getThreadId() + "] " + threadInfo.getThreadName()); &#125; &#125;&#125; 当我们 run 该程序时，结果如下(不同的环境结果可能不同)： 12345[5] Monitor Ctrl-Break //监控Ctrl-Break中断信号的线程[4] Signal Dispatcher //分发处理发送给 jvm 信号的线程[3] Finalizer //执行 finalize() 方法的线程[2] Reference Handler //清除 Reference 的线程 [1] main //线程入口，我们熟知的主线程 当我们使用 debug 该程序时，结果如下： 1234567[7] JDWP Command Reader[6] JDWP Event Helper Thread[5] JDWP Transport Listener: dt_socket[4] Signal Dispatcher[3] Finalizer[2] Reference Handler[1] main 可以发现，除了主线程外，jvm 还自动启动了很多守护线程来完成一些任务。 jdk 版本为 jdk1.8.0_152，操作系统：mac osx 10.13 1.4 多线程简单来说，一个进程中运行多个线程，就是多线程。比如我们上面运行的最简单的 java 程序其实就是一个”多线程“程序，只不过处理主线程以外，其他线程都是“守护线程”。 我们平常说的多线程编程一般是不包括守护线程的，我们会在主线程中启动更多的线程来提高系统的执行效率，当然，我们也需要解决多线程编程带来的一些问题，比如数据竞争等。 1.5 并发与并行多线程程序看上去是在同一时间的运行不同的线程，但是事实上，在单核 cpu 的电脑上运行多线程程序时，是通过 cpu 调度算法，让每一个线程都执行一段时间。这样用户看上去同时执行，实际上从 cpu 操作层面不是真正的同时，同一时间其实只有一个线程在执行，这就是并发。 当你有多个 cpu 的时候，就可以在不同的 cpu 上运行不同的线程，这是是正真的在同一时间运行不同的线程，也就是并行。 1.5.1 一个蠢萌的问题写到这的地方，我想到了一个有点蠢的问题：单核 cpu 的情况下有必要写多线程么？反正所有的计算都要让这一个核来做 ，多线程之间的切换还要有额外的开销，不如直接搞成单线程，还可以省掉这部分开销。 这个问题中最大的问题是：我认为一个线程的所有操作都是由 cpu 来完成的，事实上，一个线程做的任务不仅仅和 cpu 的计算有关，还可能和 io 有关，比如读取一个文件或者从 socket 中读取流，这些都是 io 操作，和 cpu 无关。而 io 操作是非常耗时的。 事实上，多线程编程技术，就是在 CPU 还是单核的时代产生的。正是因为那个时候CPU只有单核 ，才产生的多线程、多进程这些东西。CPU 时钟周期非常短，执行速度非常快，对于一个 CPU 来说，发生一次IO操作，CPU 已经可以执行无数次计算了，如果这时候 CPU 啥也不干，就等着 IO 操作完成是很浪费的，因此先辈们，就想办法榨干 CPU 性能，让它在 IO WAIT 时，切换进程或线程，去做别的事情。 1.5.2 线程数量对并发与并行的影响 如果只有一个 cpu，那么是不可能并行的，只能是并发。 当存在多个核的时候，如果线程数量少于核心数，一般是并行的。 如果线程数量大于核心数，那么并发和并行一起存在。 至于怎么调度以及底层的实现，不同的操作系统不同的语言都不相同，具体情况具体分析。 其实这里我也不是特别熟悉，以后学到了再补充。 1.6 IO 密集型和计算密集型 I/O密集型(IO-bound) I/O 密集型指的是系统的 CPU 效能相对硬盘/内存的效能要好很多，此时，系统运作，大部分的状况是 CPU 在等 I/O (硬盘/内存) 的读/写，此时 CPU Loading 不高。 涉及到网络、磁盘IO的任务都是IO密集型任务，这类任务的特点是 CPU 消耗很少，任务的大部分时间都在等待 IO 操作完成（因为 IO 的速度远远低于 CPU 和内存的速度）。对于 IO 密集型任务，任务越多，CPU 效率越高，但也有一个限度。常见的大部分任务都是 IO 密集型任务，比如 Web 应用。 单核 cpu 解决 io 密集型的问题就是使用多线程，这也是当初发明多线程编程的初衷。 计算密集型 (CPU-bound) 计算密集型指的是系统的 硬盘/内存效能相对 CPU 的效能要好很多，此时，系统运作，大部分的状况是 CPU Loading 100%，CPU 要读/写 I/O (硬盘/内存)，I/O在很短的时间就可以完成，而 CPU 还有许多运算要处理，CPU Loading 很高。 计算密集型任务的特点是要进行大量的计算，消耗CPU资源，比如计算圆周率、对视频进行高清解码等等，全靠CPU的运算能力。这种计算密集型任务虽然也可以用多任务完成，但是任务越多，花在任务切换的时间就越多，CPU 执行任务的效率就越低，所以，要最高效地利用 CPU，计算密集型任务同时进行的数量应当等于 CPU 的核心数。 计算密集型任务由于主要消耗 CPU 资源，因此，代码运行效率至关重要。 2. 为什么要用多线程 单核 cpu 下解决 io 密集型任务。 多核 cpu 下更好的利用多核的优势（单线程是无法使用多个核的，浪费） 总而言之：提高效率，提高响应时间，尽可能多的压榨系统资源，利用好 cpu。 参考资料（有改动）http://www.cnblogs.com/balaamwe/archive/2012/07/27/2611622.htmlhttps://www.zhihu.com/question/33515481《java 并发编程的艺术》]]></content>
+      <categories>
+        <category>java</category>
+        <category>并发</category>
+      </categories>
+      <tags>
+        <tag>java</tag>
+        <tag>concurrency</tag>
+        <tag>并发</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[【序列化与反序列化】3. json 与 hession 序列化方式]]></title>
     <url>%2F2018%2F02%2F02%2Fjava%2F%E5%BA%8F%E5%88%97%E5%8C%96%E4%B8%8E%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%2Fjson-hession%2F</url>
     <content type="text"><![CDATA[1. 使用 json 进行序列化###1.1 json 序列化方式简介 json 大家都知道，常用的 json 库有： Gson Jackson fastjson fastjson 效率最高，Gson 和 Jackson 相对稳定一点。这里我们选择使用 fastjson 进行序列化。 1.2 实现12345678910@Overridepublic &lt;T&gt; byte[] serialize(T obj) &#123; JSON.DEFFAULT_DATE_FORMAT = "yyyy-MM-dd HH:mm:ss"; return JSON.toJSONString(obj, SerializerFeature.WriteDateUseDateFormat).getBytes();&#125;@Overridepublic &lt;T&gt; T deserialize(byte[] data, Class&lt;T&gt; clazz) &#123; return JSON.parseObject(new String(data), clazz);&#125; 1.3测试123456789101112131415 @Test public void testJson() &#123; JsonSerializer jsonSerializer = new JsonSerializer(); JavaSerializerModel serializerModel = new JavaSerializerModel(); JavaSerializerModel model = jsonSerializer.deserialize(jsonSerializer.serialize(serializerModel), JavaSerializerModel.class); System.out.println(model.getName()); System.out.println(model.getPhone()); System.out.println(model.getDate()); &#125;/**name123Mon Jan 01 01:01:01 CST 2018*/ 序列化与反序列化成功。 2. 使用 hession 进行序列化2.1 hession 简介hession 是一个支持跨语言传输的二进制序列化协议。相对于 java 默认的序列化机制，hession 具有更好的性能与易用性，而且支持多种不同的语言。 2.2 使用 hession 实现序列化123456789101112131415161718192021222324252627282930@Overridepublic &lt;T&gt; byte[] serialize(T obj) &#123; if (obj == null) &#123; throw new NullPointerException(); &#125; try &#123; ByteArrayOutputStream outputStream = new ByteArrayOutputStream(); HessianOutput output = new HessianOutput(outputStream); output.writeObject(obj); return outputStream.toByteArray(); &#125; catch (IOException e) &#123; throw new RuntimeException(); &#125;&#125;@Override@SuppressWarnings("unchecked")public &lt;T&gt; T deserialize(byte[] data, Class&lt;T&gt; clazz) &#123; if (data == null) &#123; throw new NullPointerException(); &#125; try &#123; ByteArrayInputStream inputStream = new ByteArrayInputStream(data); HessianInput input = new HessianInput(inputStream); return ((T) input.readObject()); &#125; catch (IOException e) &#123; throw new RuntimeException(); &#125;&#125; 2.3 测试12345678910111213141516171819202122 @Test public void testHession() &#123; HessionSerializer hessionSerializer = new HessionSerializer(); JavaSerializerModel serializerModel = new JavaSerializerModel(); JavaSerializerModel model = hessionSerializer.deserialize(hessionSerializer.serialize(serializerModel), JavaSerializerModel.class); System.out.println(model.getName()); System.out.println(model.getPhone()); System.out.println("----2-----"); JavaSerializerModel2 serializerModel2 = new JavaSerializerModel2(); JavaSerializerModel2 model2 = hessionSerializer.deserialize(hessionSerializer.serialize(serializerModel2), JavaSerializerModel2.class); System.out.println(model2.getName()); System.out.println(model2.getPhone()); &#125;/**null123----2-----null123*/ 可以看到，hession 是不会序列化 transient 字段的，自定义 writeObject 也没用。 很多细节没有去研究，感觉暂时用不到 hession 协议，用到的时候再说。。 点击查看源码]]></content>
@@ -266,8 +280,8 @@
         <tag>network</tag>
         <tag>计算机网络</tag>
         <tag>网络</tag>
-        <tag>协议</tag>
         <tag>读书笔记</tag>
+        <tag>协议</tag>
       </tags>
   </entry>
   <entry>
@@ -348,19 +362,6 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[【effective java】14:在公有类中使用访问方法而非公有域]]></title>
-    <url>%2F2017%2F07%2F23%2Feffectivejava%2Feff-java-14%2F</url>
-    <content type="text"><![CDATA[14:在公有类中使用访问方法而非公有域就是提供 get set 方法]]></content>
-      <categories>
-        <category>java</category>
-        <category>effectivejava</category>
-      </categories>
-      <tags>
-        <tag>java</tag>
-        <tag>effectivejava</tag>
-      </tags>
-  </entry>
-  <entry>
     <title><![CDATA[【java 并发】 3. 对象的共享（1）]]></title>
     <url>%2F2017%2F07%2F23%2Fjava%20concurrency%2Fjava-concurrency-3%2F</url>
     <content type="text"><![CDATA[同步的另一个重要的方面是：内存可见性。我们不仅希望放置某个现场正在使用对象状态而另一个线程在同时修改该状态，而且希望确保当一个线程修改了对象状态后，其他线程能够看到发生的状态变化。 1.可见性多线程环境中，如果没有使用同步机制，编译器、处理器以及运行时等都可能对操作的执行顺序进行一些意想不到的调整，这就导致一个线程修改了一个变量，另一个线程不能及时的得知该变量的更新，最终导致意外错误。 1.1 失效数据当一个数据被一个线程改变，而另一个线程读取到了修改前的值，就出现了失效数据。 1.2 非原子的64位操作java 内存模型要求，变量的读取操作和写入操作都必须是原子操作。对于 java 中的 double 和 long 来说，他们都是64位的。jvm 允许将64位的读操作或者写操作分解为两个32位操作。当读取一个非 volatite 类型的 long 变量时，如果对该变量的读操作和写操作是在两个不同的线程中执行的，那么很可能会读到某个值的高32位和另一个值的低32位。 因此，除非用 volatile 来声明或者用锁来保护，否则在多线程环境中，long 和 double 都是不安全的。 1.3 加锁与可见性内置锁可以用于确保某个线程以一种可预测的方式来查看另一个线程的执行结果。这样可以确保某个线程写入该变量的值对于其他线程来说都是可见的。 加锁的行为不仅仅局限于互斥行为，还包括内存可见性。 1.4 volatile 变量java 语言提供了一种稍弱的同步机制，即 volatile 变量，用来确保将变量的更新操作通知到其他线程。 volatile 变量不会被缓存在寄存器或者对其他处理器不可见的地方，因此在读取 volatile 类型的变量时总会返回最新写入的值。 从内存的角度看，写入 volatile 变量相当于退出同步代码块，而读取 volatile 变量就相当于读取同步代码块。 并不建议过度依赖 volatile 变量提供可见性。因为这样的代码相对于加锁来说更脆弱，也更难理解。]]></content>
@@ -376,18 +377,16 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[【java 并发】2. 线程的安全性]]></title>
-    <url>%2F2017%2F07%2F22%2Fjava%20concurrency%2Fjava-concurrency-2%2F</url>
-    <content type="text"><![CDATA[要编写线程安全的代码，其核心在于要对状态访问操作进行管理，特别是对共享的和可变的状态的访问。 共享，意味着变量可以由多个线程同时访问。 可变，意味着变量的值在其生命周期内可以发生变化。 java 中主要的同步机制是synchronized 关键字，它提供一种独占的加锁方式。但“同步”这个术语还包括 volatile 类型的变量，显式锁以及原子变量。 1. 什么是线程安全性当多个线程访问某个类时，这个类始终都能表现出正确的行为，那么就称这个类是线程安全的。 无状态对象一定是线程安全的。 无状态对象：既不包含任何域，也不包含任何对其他类中域的引用，计算中过程中的临时状态仅存在于线程栈上的局部变量中，并且只能由正在执行的线程访问。 比如： 大多数 Servlet 类 都是无状态的，从而极大地降低了在实现 Servlet 线程安全性时的复杂性，只有当 Servlet 在处理请求时需要保存一些信息，线程安全性才会成为一个问题。 2. 原子性静态条件（RaceCondition）：在并发编程中，由于不恰当的执行顺序而出现不正确的结果的情况。 2.1 竞态条件当某个计算的正确性取决于多个线程的交替执行顺序时，就会发生竞态条件。 正确的结果取决于运气。 最常见的竞态条件是“先检查后执行（Check-Then-Act）”。比如懒加载（延迟初始化）。 2.2 延迟初始化12345678910public class LazyInitCase &#123; private ExpensiveObj instance = null; public ExpensiveObj getInstance() &#123; if (instance == null) &#123; instance = new ExpensiveObj(); &#125; return instance; &#125;&#125; 在多线程环境下，这样写就有可能出现错误。 与大多数并发错误一样，竞态条件并不总是会产生错误，还需要执行了某种不恰当的顺序。 2.3 复合操作我们将“先检查后执行”以及“读取-修改-写入”等操作统称为复合操作。为了达到线程安全，复合操作需要是原子操作。 原子操作：要么不执行，要么一次性执行完毕。 java.util.concurrent.atomic 中提供了一些原子变量类。 3. 加锁机制3.1 内置锁每个java对象 都可以用作一个实现同步的锁，这些锁被称为内置锁或者监视器锁。 java的内置锁相当于一种互斥锁。 3.2 重入如果一个锁是可重入的，那么当一个线程试图获得一个已经由他自己持有的锁，这个请求会成功。内置锁是可重入的。 重入，意味着获取锁的操作的粒度是“线程”，而不是“调用”。 重入进一步提升了加锁行为的封装性，简化了面向对象并发代码的开发。 4. 用锁来保护状态可以通过锁来构造一些协议，以实现对共享状态的独占访问。 每个共享的和可变的变量都应该只由一个锁来保护。 5. 活跃性与性能使用两种不同的同步机制不仅会带来混乱，也不会在性能或安全性上带来任何好处。]]></content>
+    <title><![CDATA[【effective java】14:在公有类中使用访问方法而非公有域]]></title>
+    <url>%2F2017%2F07%2F23%2Feffectivejava%2Feff-java-14%2F</url>
+    <content type="text"><![CDATA[14:在公有类中使用访问方法而非公有域就是提供 get set 方法]]></content>
       <categories>
         <category>java</category>
-        <category>concurrency</category>
+        <category>effectivejava</category>
       </categories>
       <tags>
         <tag>java</tag>
-        <tag>concurrency</tag>
-        <tag>线程</tag>
-        <tag>并发</tag>
+        <tag>effectivejava</tag>
       </tags>
   </entry>
   <entry>
@@ -401,6 +400,21 @@
       <tags>
         <tag>web</tag>
         <tag>dns</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[【java 并发】2. 线程的安全性]]></title>
+    <url>%2F2017%2F07%2F22%2Fjava%20concurrency%2Fjava-concurrency-2%2F</url>
+    <content type="text"><![CDATA[要编写线程安全的代码，其核心在于要对状态访问操作进行管理，特别是对共享的和可变的状态的访问。 共享，意味着变量可以由多个线程同时访问。 可变，意味着变量的值在其生命周期内可以发生变化。 java 中主要的同步机制是synchronized 关键字，它提供一种独占的加锁方式。但“同步”这个术语还包括 volatile 类型的变量，显式锁以及原子变量。 1. 什么是线程安全性当多个线程访问某个类时，这个类始终都能表现出正确的行为，那么就称这个类是线程安全的。 无状态对象一定是线程安全的。 无状态对象：既不包含任何域，也不包含任何对其他类中域的引用，计算中过程中的临时状态仅存在于线程栈上的局部变量中，并且只能由正在执行的线程访问。 比如： 大多数 Servlet 类 都是无状态的，从而极大地降低了在实现 Servlet 线程安全性时的复杂性，只有当 Servlet 在处理请求时需要保存一些信息，线程安全性才会成为一个问题。 2. 原子性静态条件（RaceCondition）：在并发编程中，由于不恰当的执行顺序而出现不正确的结果的情况。 2.1 竞态条件当某个计算的正确性取决于多个线程的交替执行顺序时，就会发生竞态条件。 正确的结果取决于运气。 最常见的竞态条件是“先检查后执行（Check-Then-Act）”。比如懒加载（延迟初始化）。 2.2 延迟初始化12345678910public class LazyInitCase &#123; private ExpensiveObj instance = null; public ExpensiveObj getInstance() &#123; if (instance == null) &#123; instance = new ExpensiveObj(); &#125; return instance; &#125;&#125; 在多线程环境下，这样写就有可能出现错误。 与大多数并发错误一样，竞态条件并不总是会产生错误，还需要执行了某种不恰当的顺序。 2.3 复合操作我们将“先检查后执行”以及“读取-修改-写入”等操作统称为复合操作。为了达到线程安全，复合操作需要是原子操作。 原子操作：要么不执行，要么一次性执行完毕。 java.util.concurrent.atomic 中提供了一些原子变量类。 3. 加锁机制3.1 内置锁每个java对象 都可以用作一个实现同步的锁，这些锁被称为内置锁或者监视器锁。 java的内置锁相当于一种互斥锁。 3.2 重入如果一个锁是可重入的，那么当一个线程试图获得一个已经由他自己持有的锁，这个请求会成功。内置锁是可重入的。 重入，意味着获取锁的操作的粒度是“线程”，而不是“调用”。 重入进一步提升了加锁行为的封装性，简化了面向对象并发代码的开发。 4. 用锁来保护状态可以通过锁来构造一些协议，以实现对共享状态的独占访问。 每个共享的和可变的变量都应该只由一个锁来保护。 5. 活跃性与性能使用两种不同的同步机制不仅会带来混乱，也不会在性能或安全性上带来任何好处。]]></content>
+      <categories>
+        <category>java</category>
+        <category>concurrency</category>
+      </categories>
+      <tags>
+        <tag>java</tag>
+        <tag>concurrency</tag>
+        <tag>线程</tag>
+        <tag>并发</tag>
       </tags>
   </entry>
   <entry>
@@ -458,9 +472,9 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[【effective java】16:复合优先于继承]]></title>
-    <url>%2F2017%2F07%2F20%2Feffectivejava%2Feff-java-16%2F</url>
-    <content type="text"><![CDATA[前言继承是实现代码重用的有力手段，但它并不永远都是最好的选择，使用不当会使软件变得很脆弱。 在包的内部使用继承是非常安全的，在那里，子类和超类都处在同一个程序员的控制之下。对于专门为了继承而设计、并且具有很好文档说明的类来说，使用继承也是非常安全的。 然而，对于普通的具体类进行垮包边界的继承，则是非常危险的。 这里说的继承，不包括实现接口。 ##]]></content>
+    <title><![CDATA[【effective java】10:始终要覆盖toString]]></title>
+    <url>%2F2017%2F07%2F20%2Feffectivejava%2Feff-java-10%2F</url>
+    <content type="text"><![CDATA[10:始终要覆盖toString几个要点 1.虽然 toString 的约定并不像 equals 和 hashcode 的约定，但是提供良好的 toString 实现可以使类用起来更加舒适。 2.不管是否覆盖了 toString 方法，程序员都将以这种方式来产生诊断信息，但是如果没有覆盖 toString 方法，那么产生的信息将会难以理解。 3.在实际应用中，toString 方法应该赶回对象中包含的所有值得关注的信息。如果对象太大，toString 应该返回一个摘要信息。 4.在实现 toString 的时候，要决定是否在文档中指定返回值格式。指定格式的好处是，它可以被用作一种标准的、明确的、适合人阅读的对象表示法。不足之处是，如果这个类已经被广泛使用，一旦指定格式，就必须始终如一的坚持这种格式。 5.无论你是否决定使用格式，都应该在文档中明确的表明你的意图。 6.无论是否指定格式，都为 toString 返回值中包含的所有信息，提供一种编程式的访问路径。]]></content>
       <categories>
         <category>java</category>
         <category>effectivejava</category>
@@ -471,9 +485,9 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[【effective java】10:始终要覆盖toString]]></title>
-    <url>%2F2017%2F07%2F20%2Feffectivejava%2Feff-java-10%2F</url>
-    <content type="text"><![CDATA[10:始终要覆盖toString几个要点 1.虽然 toString 的约定并不像 equals 和 hashcode 的约定，但是提供良好的 toString 实现可以使类用起来更加舒适。 2.不管是否覆盖了 toString 方法，程序员都将以这种方式来产生诊断信息，但是如果没有覆盖 toString 方法，那么产生的信息将会难以理解。 3.在实际应用中，toString 方法应该赶回对象中包含的所有值得关注的信息。如果对象太大，toString 应该返回一个摘要信息。 4.在实现 toString 的时候，要决定是否在文档中指定返回值格式。指定格式的好处是，它可以被用作一种标准的、明确的、适合人阅读的对象表示法。不足之处是，如果这个类已经被广泛使用，一旦指定格式，就必须始终如一的坚持这种格式。 5.无论你是否决定使用格式，都应该在文档中明确的表明你的意图。 6.无论是否指定格式，都为 toString 返回值中包含的所有信息，提供一种编程式的访问路径。]]></content>
+    <title><![CDATA[【effective java】16:复合优先于继承]]></title>
+    <url>%2F2017%2F07%2F20%2Feffectivejava%2Feff-java-16%2F</url>
+    <content type="text"><![CDATA[前言继承是实现代码重用的有力手段，但它并不永远都是最好的选择，使用不当会使软件变得很脆弱。 在包的内部使用继承是非常安全的，在那里，子类和超类都处在同一个程序员的控制之下。对于专门为了继承而设计、并且具有很好文档说明的类来说，使用继承也是非常安全的。 然而，对于普通的具体类进行垮包边界的继承，则是非常危险的。 这里说的继承，不包括实现接口。 ##]]></content>
       <categories>
         <category>java</category>
         <category>effectivejava</category>
@@ -539,6 +553,19 @@
       </tags>
   </entry>
   <entry>
+    <title><![CDATA[【effective java】7:避免使用终结方法]]></title>
+    <url>%2F2017%2F07%2F17%2Feffectivejava%2Feff-java-7%2F</url>
+    <content type="text"><![CDATA[7:避免使用终结方法终结方法（finalizer）通常是不可预测的，也是很危险的，一般情况下是不必要的。 为什么要避免使用1终结方法的缺点在于不能保证会被及时的执行。从一个对象变得不可达开始，到它的终结方法被执行，所花费的这段时间是任意长的。 所以，注重时间的任务不应该由终结方法来完成，例如，用终结方法来关闭已打开的文件，这是很严重的错误。 2及时的执行终结方法正是垃圾回收算法的一个主要功能，不同的 jvm 的实现方式有所不同，所以在你自己的电脑上的 jvm 可能运行的很好，但是在其他人的 jvm 下可能差别会很大。 3java 语言规范不保证终结方法会被及时的执行，甚至根本就不保证它们会被执行。当一个程序终结的时候，某些已经无法访问的对象上的终结方法却根本没有执行，这是完全有可能的。 4不要被 System.gc System.runFinalization 这两个所诱惑，它们却是增加了终结方法被执行的机会，但是它们也并不能保证终结方法一定会被执行。唯一可以保证终结方法被执行的方法是 System.runFinalizersOnExit 以及 Runtime.runFinalizersOnExit， 然而它们都有致命的缺陷，已经被废弃了。 5如果未被捕捉的异常在终结过程中被抛出来，那么这种异常可以被忽略，并且该对象的终结过程也会终止。未被捕获的异常会使对象处于破坏的状态，如果另一个线程企图使用这种被破坏的对象，则可能发生任何不确定的行为。 6使用终结方法，会有一个严重的性能损失。 如何正确的终止如果一个类中封装的资源（例如文件或者线程）确实需要终止，应该怎么做才能不用编写终结方法呢？ 只需要提供一个显示的终结方法，并要求客户端在每个实例不再有用的时候显示额调用合格方法。 该类必须记录下自己是否已经被终止了。 比如 javaio 中，各个流的 close() 方法。 显示d额终止方法通常与 try-finally 结构结合起来使用。 终结方法有什么好处1当对象的所有者忘记调用前面段落中建议d 显示终止方法时，终结方法可以充当“安全网” 迟一点释放资源总比不释放好。 2第二个用途与本地对等体有关。 本地对等体是一个本地对象，普通对象通过本地方法委托给一个本地对象，因为本地对等体b㐊一个普通d额对象，所以垃圾回收器不会知道他，当它的 java 对等体被回收的时候，他不会被回收。 在本地对等体并不拥有关键资源的情况下，终结方法是”回收“它的最好选择。如果本地对等体有需要及时回收的资源，那么该类就应该提供合适的显示终止方法。 总结总之，除非是作为安全网，或者是为了终止非关键d额本地资源，不要使用终结方法。]]></content>
+      <categories>
+        <category>java</category>
+        <category>effectivejava</category>
+      </categories>
+      <tags>
+        <tag>java</tag>
+        <tag>effectivejava</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[【springboot-入门篇】第4篇-spring-boot-使用servlet，filter，listener和interceptor]]></title>
     <url>%2F2017%2F07%2F17%2Fspring-boot%2F%E3%80%90springboot-%E5%85%A5%E9%97%A8%E7%AF%87%E3%80%91%E7%AC%AC4%E7%AF%87-spring-boot-%E4%BD%BF%E7%94%A8servlet%EF%BC%8Cfilter%EF%BC%8Clistener%E5%92%8Cinterceptor%2F</url>
     <content type="text"><![CDATA[上一篇我们学习了 spring boot 利用Controller响应数据与响应页面。 一般的Web开发使用 Controller 基本上可以完成大部分需求，但是有的时候我们还是会用到 Servlet、Filter、Listener 等等。 在spring boot中添加自己的Servlet、Filter、Listener有两种方法 代码注册: 通过ServletRegistrationBean、 FilterRegistrationBean 和ServletListenerRegistrationBean 获得控制。 注解注册: 在SpringBootApplication 上使用@ServletComponentScan注解后，Servlet、Filter、Listener 可以直接通过 @WebServlet、@WebFilter、@WebListener 注解自动注册，无需其他代码。 spring boot 中注册servlet代码注册 创建Servlet类：AaServlet.java。 123456789101112131415public class AaServlet extends HttpServlet &#123; @Override protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException &#123; System.out.println(&quot;doGet&quot;); doPost(req, resp); &#125; @Override protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException &#123; System.out.println(&quot;doPost()&quot;); resp.setContentType(&quot;text/html&quot;); PrintWriter out = resp.getWriter(); out.println(&quot;&lt;h1&gt;AaServlet&lt;/h1&gt;&quot;); &#125;&#125; 通过ServletRegistrationBean注册。 1234567//Project2Application.java @Bean public ServletRegistrationBean AaServletRegistration() &#123; ServletRegistrationBean registration = new ServletRegistrationBean(new AaServlet()); registration.addUrlMappings(&quot;/a&quot;); return registration; &#125; 运行测试。 访问：http://localhost:8080/a 注解注册 创建Servlet类：BbServlet.java。 1234567891011121314151617@WebServlet(urlPatterns = &quot;/b&quot;)public class BbServlet extends HttpServlet &#123; @Override protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException &#123; System.out.println(&quot;doGet&quot;); doPost(req, resp); &#125; @Override protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException &#123; System.out.println(&quot;doPost()&quot;); resp.setContentType(&quot;text/html&quot;); PrintWriter out = resp.getWriter(); out.println(&quot;&lt;h1&gt;BbServlet&lt;/h1&gt;&quot;); &#125;&#125; 添加注解@ServletComponentScan。 12345678910111213141516@ServletComponentScan@SpringBootApplicationpublic class Project2Application &#123; public static void main(String[] args) &#123; SpringApplication.run(Project2Application.class, args); &#125; @Bean public ServletRegistrationBean AaServletRegistration() &#123; ServletRegistrationBean registration = new ServletRegistrationBean(new AaServlet()); registration.addUrlMappings(&quot;/a&quot;); return registration; &#125;&#125; 运行测试。 访问：http://localhost:8080/b filter 和 listener的注册和servlet一样。这里就不多说了。 接下来说一下拦截器。 自定义拦截器Spring提供了HandlerInterceptor（拦截器）。它的功能跟过滤器类似，但是提供更精细的的控制能力：在request被响应之前、request被响应之后、视图渲染之前以及request全部结束之后。我们不能通过拦截器修改request内容，但是可以通过抛出异常（或者返回false）来暂停request的执行。 spring boot提供了一些拦截器，我们可以直接拿来使用，比如： ConversionServiceExposingInterceptor CorsInterceptor LocaleChangeInterceptor PathExposingHandlerInterceptor ResourceUrlProviderExposingInterceptor ThemeChangeInterceptor UriTemplateVariablesHandlerInterceptor UserRoleAuthorizationInterceptor 我们也可以自己定义拦截器，定义拦截器的步骤大致分为： 1、创建我们自己的拦截器类并实现 HandlerInterceptor 接口。 2、创建一个Java类继承WebMvcConfigurerAdapter，并重写addInterceptors 方法。3、实例化我们自定义的拦截器，然后将对像手动添加到拦截器链中（在addInterceptors方法中添加）。 我们来亲自试一下： 创建我们自己的拦截器 123456789101112131415161718192021222324//MyInterceptor2public class MyInterceptor1 implements HandlerInterceptor &#123; @Override public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception &#123; System.out.println(&quot;MyInterceptor1==========&gt;在请求处理之前进行调用（Controller方法调用之前）&quot;); return true;// 只有返回true才会继续向下执行，返回false取消当前请求 &#125; @Override public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception &#123; System.out.println(&quot;MyInterceptor1==========&gt;请求处理之后进行调用，但是在视图被渲染之前（Controller方法调用之后）&quot;); &#125; @Override public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception &#123; System.out.println(&quot;MyInterceptor1==========&gt;在整个请求结束之后被调用，也就是在DispatcherServlet 渲染了对应的视图之后执行（主要是用于进行资源清理工作）&quot;); &#125;&#125; 123456789101112131415161718192021222324//MyInterceptor2public class MyInterceptor2 implements HandlerInterceptor &#123; @Override public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception &#123; System.out.println(&quot;MyInterceptor2==========&gt;在请求处理之前进行调用（Controller方法调用之前）&quot;); return true;// 只有返回true才会继续向下执行，返回false取消当前请求 &#125; @Override public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception &#123; System.out.println(&quot;MyInterceptor2==========&gt;请求处理之后进行调用，但是在视图被渲染之前（Controller方法调用之后）&quot;); &#125; @Override public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception &#123; System.out.println(&quot;MyInterceptor2==========&gt;在整个请求结束之后被调用，也就是在DispatcherServlet 渲染了对应的视图之后执行（主要是用于进行资源清理工作）&quot;); &#125;&#125; 创建一个Java类继承WebMvcConfigurerAdapter，并重写addInterceptors 方法,添加拦截器。 123456789101112131415//MyWebAppConfigurer@Configurationpublic class MyWebAppConfigurer extends WebMvcConfigurerAdapter &#123; @Override public void addInterceptors(InterceptorRegistry registry) &#123; // 多个拦截器组成一个拦截器链 // addPathPatterns 用于添加拦截规则 // excludePathPatterns 用户排除拦截 registry.addInterceptor(new MyInterceptor1()).addPathPatterns(&quot;/**&quot;); registry.addInterceptor(new MyInterceptor2()).addPathPatterns(&quot;/**&quot;); super.addInterceptors(registry); &#125;&#125; 测试：运行项目，随便访问一个路径，比如http://localhost:8080/test 浏览器会报错，不用管，看控制台。 拦截器已经起作用了。 值得注意的是：只有经过DispatcherServlet 的请求，才会走拦截器链，我们自定义的Servlet 请求是不会被拦截的，比如我们自定义的Servlet地址是不会被拦截器拦截的。 但是过滤器不同。不管是属于哪个Servlet 只要复合过滤器的过滤规则，过滤器都会拦截。 本篇文章就先介绍到这里，如果哪里讲的不明白，请及时与我联系。 参考文章：Spring Boot 拦截器]]></content>
@@ -550,19 +577,6 @@
         <tag>java</tag>
         <tag>springboot</tag>
         <tag>入门</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title><![CDATA[【effective java】7:避免使用终结方法]]></title>
-    <url>%2F2017%2F07%2F17%2Feffectivejava%2Feff-java-7%2F</url>
-    <content type="text"><![CDATA[7:避免使用终结方法终结方法（finalizer）通常是不可预测的，也是很危险的，一般情况下是不必要的。 为什么要避免使用1终结方法的缺点在于不能保证会被及时的执行。从一个对象变得不可达开始，到它的终结方法被执行，所花费的这段时间是任意长的。 所以，注重时间的任务不应该由终结方法来完成，例如，用终结方法来关闭已打开的文件，这是很严重的错误。 2及时的执行终结方法正是垃圾回收算法的一个主要功能，不同的 jvm 的实现方式有所不同，所以在你自己的电脑上的 jvm 可能运行的很好，但是在其他人的 jvm 下可能差别会很大。 3java 语言规范不保证终结方法会被及时的执行，甚至根本就不保证它们会被执行。当一个程序终结的时候，某些已经无法访问的对象上的终结方法却根本没有执行，这是完全有可能的。 4不要被 System.gc System.runFinalization 这两个所诱惑，它们却是增加了终结方法被执行的机会，但是它们也并不能保证终结方法一定会被执行。唯一可以保证终结方法被执行的方法是 System.runFinalizersOnExit 以及 Runtime.runFinalizersOnExit， 然而它们都有致命的缺陷，已经被废弃了。 5如果未被捕捉的异常在终结过程中被抛出来，那么这种异常可以被忽略，并且该对象的终结过程也会终止。未被捕获的异常会使对象处于破坏的状态，如果另一个线程企图使用这种被破坏的对象，则可能发生任何不确定的行为。 6使用终结方法，会有一个严重的性能损失。 如何正确的终止如果一个类中封装的资源（例如文件或者线程）确实需要终止，应该怎么做才能不用编写终结方法呢？ 只需要提供一个显示的终结方法，并要求客户端在每个实例不再有用的时候显示额调用合格方法。 该类必须记录下自己是否已经被终止了。 比如 javaio 中，各个流的 close() 方法。 显示d额终止方法通常与 try-finally 结构结合起来使用。 终结方法有什么好处1当对象的所有者忘记调用前面段落中建议d 显示终止方法时，终结方法可以充当“安全网” 迟一点释放资源总比不释放好。 2第二个用途与本地对等体有关。 本地对等体是一个本地对象，普通对象通过本地方法委托给一个本地对象，因为本地对等体b㐊一个普通d额对象，所以垃圾回收器不会知道他，当它的 java 对等体被回收的时候，他不会被回收。 在本地对等体并不拥有关键资源的情况下，终结方法是”回收“它的最好选择。如果本地对等体有需要及时回收的资源，那么该类就应该提供合适的显示终止方法。 总结总之，除非是作为安全网，或者是为了终止非关键d额本地资源，不要使用终结方法。]]></content>
-      <categories>
-        <category>java</category>
-        <category>effectivejava</category>
-      </categories>
-      <tags>
-        <tag>java</tag>
-        <tag>effectivejava</tag>
       </tags>
   </entry>
   <entry>
@@ -593,19 +607,6 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[【effective java】5:避免创建不必要的对象]]></title>
-    <url>%2F2017%2F07%2F15%2Feffectivejava%2Feff-java-5%2F</url>
-    <content type="text"><![CDATA[5:避免创建不必要的对象1. 总览一般来说，最好能重用对象，而不是在每次需要的时候就创建一个相同功能的新对象。 比如，我们不应该这样写：String s = new String(&quot;string&quot;);，而应该这样写：String s = &quot;string&quot;;。 2.几个好的思想 1.静态工厂方法总是优于构造器。 对于同时提供了静态工厂方法和构造器的不可变类，通常可以使用静态工厂方法而不是构造器，以避免创建不必要的对象。例如，静态工厂方法Boolean.valueOf(String)几乎总是优先于构造器Boolean(String)。 2.除了重用不可变的对象之外，也可以重用那些已知的不会被修改的可变对象。 3.要优先使用基本数据类型，而不是他们的包装类，要当心无意识的自动装箱。 4.通过创建附加对象，提升程序的清晰性、简洁性和功能性，这通常是件好事。 小对象的创建和回收动作是十分廉价的，特别是在现代jvm上更是如此。 5.通过维护自己的对象池来避免创建对象并不是一种好的做法，除非池中的对象是非常重量级的。 6.在提倡使用保护性拷贝的时候，因重用对象而付出的代价要远远大于因重复创建对象而付出的代价。]]></content>
-      <categories>
-        <category>java</category>
-        <category>effectivejava</category>
-      </categories>
-      <tags>
-        <tag>java</tag>
-        <tag>effectivejava</tag>
-      </tags>
-  </entry>
-  <entry>
     <title><![CDATA[【springboot-入门篇】第2篇--springboot的各种配置]]></title>
     <url>%2F2017%2F07%2F15%2Fspring-boot%2F%E3%80%90springboot-%E5%85%A5%E9%97%A8%E7%AF%87%E3%80%91%E7%AC%AC2%E7%AF%87--springboot%E7%9A%84%E5%90%84%E7%A7%8D%E9%85%8D%E7%BD%AE%2F</url>
     <content type="text"><![CDATA[1. 配置文件简介spring boot使用一个全局配置文件：application.properties或者application.yml，放置在src/main/resources目录下或者类路径的/config目录下。 application.properties是我们熟知的键值对配置文件： application.yml是yaml语言的配置文件，yaml是一种以数据为中心的语言，在配置数据的时候具有面向对象的特征。我们以后的代码都会使用yml格式的配置文件。： spring boot 的全局配置文件的作用是对一些默认配置的配置进行修改。后面我们会详细的讲解。 2. pom配置文件（starter） pom，是maven的配置文件，gradel也差不多，因为我一直在用maven，所以就讲maven了。 为了解决大型项目以及一些常用组件jar包过多的问题，spring boot 为我们提供了许多starter pom，每一个pom都已经添加好了对应的依赖，以往我们需要写茫茫多的dependence，但是现在只需要一个starter就可以了，并且spring boot 还为它们提供了默认的配置和自动配置的bean。 2.1 官方starter 2.1.1 应用程序的starters 名称 描述 spring-boot-starter 核心Spring Boot starter，包括自动配置支持，日志和YAML spring-boot-starter-actuator 生产准备的特性，用于帮我们监控和管理应用 spring-boot-starter-amqp 对”高级消息队列协议”的支持，通过spring-rabbit实现 spring-boot-starter-aop 对面向切面编程的支持，包括spring-aop和AspectJ spring-boot-starter-batch 对Spring Batch的支持，包括HSQLDB数据库 spring-boot-starter-cloud-connectors 对Spring Cloud Connectors的支持，简化在云平台下（例如，Cloud Foundry 和Heroku）服务的连接 spring-boot-starter-data-elasticsearch 对Elasticsearch搜索和分析引擎的支持，包括spring-data-elasticsearch spring-boot-starter-data-gemfire 对GemFire分布式数据存储的支持，包括spring-data-gemfire spring-boot-starter-data-jpa 对”Java持久化API”的支持，包括spring-data-jpa，spring-orm和Hibernate spring-boot-starter-data-mongodb 对MongoDB NOSQL数据库的支持，包括spring-data-mongodb spring-boot-starter-data-rest 对通过REST暴露Spring Data仓库的支持，通过spring-data-rest-webmvc实现 spring-boot-starter-data-solr 对Apache Solr搜索平台的支持，包括spring-data-solr spring-boot-starter-freemarker 对FreeMarker模板引擎的支持 spring-boot-starter-groovy-templates 对Groovy模板引擎的支持 spring-boot-starter-hateoas 对基于HATEOAS的RESTful服务的支持，通过spring-hateoas实现 spring-boot-starter-hornetq 对”Java消息服务API”的支持，通过HornetQ实现 spring-boot-starter-integration 对普通spring-integration模块的支持 spring-boot-starter-jdbc 对JDBC数据库的支持 spring-boot-starter-jersey 对Jersey RESTful Web服务框架的支持 spring-boot-starter-jta-atomikos 对JTA分布式事务的支持，通过Atomikos实现 spring-boot-starter-jta-bitronix 对JTA分布式事务的支持，通过Bitronix实现 spring-boot-starter-mail 对javax.mail的支持 spring-boot-starter-mobile 对spring-mobile的支持 spring-boot-starter-mustache 对Mustache模板引擎的支持 spring-boot-starter-redis 对REDIS键值数据存储的支持，包括spring-redis spring-boot-starter-security 对spring-security的支持 spring-boot-starter-social-facebook 对spring-social-facebook的支持 spring-boot-starter-social-linkedin 对spring-social-linkedin的支持 spring-boot-starter-social-twitter 对spring-social-twitter的支持 spring-boot-starter-test 对常用测试依赖的支持，包括JUnit, Hamcrest和Mockito，还有spring-test模块 spring-boot-starter-thymeleaf 对Thymeleaf模板引擎的支持，包括和Spring的集成 spring-boot-starter-velocity 对Velocity模板引擎的支持 spring-boot-starter-web 对全栈web开发的支持， 包括Tomcat和spring-webmvc spring-boot-starter-websocket 对WebSocket开发的支持 spring-boot-starter-ws 对Spring Web服务的支持 2.1.2 spring boot生产准备的starters： 名称 描述 spring-boot-starter-actuator 添加生产准备特性，比如指标和监控 spring-boot-starter-remote-shell 添加远程ssh shell支持 2.1.3 排除或交换具体技术方面的starters 名称 描述 spring-boot-starter-jetty 导入Jetty HTTP引擎（作为Tomcat的替代） spring-boot-starter-log4j 对Log4J日志系统的支持 spring-boot-starter-logging 导入Spring Boot的默认日志系统 spring-boot-starter-tomcat 导入Spring Boot的默认HTTP引擎 spring-boot-starter-undertow 导入Undertow HTTP引擎（作为Tomcat的替代） 2.2 非官方starter也有一些第三方为spring boot 提供了starter： Handlebars Vaadin Apache Camel WRO4J Spring Batch（高级用法） HDIV Jade Templates(Jade4J) Actitivi 这些都可以在github上找到，感兴趣的可以去搜一下。 3. xml配置文件spring boot 提倡零配置，也就是无xml配置，但是在实际项目中，可能有一些要求必须使用xml配置，这时我们可以使用spring提供的@ImportResource 来加载xml配置，比如： 1@ImportResource(&#123;&quot;classpath:some-context.xml&quot;,&quot;classpath:other-context.xml&quot;&#125;) 4. 命令行参数配置上一篇文章中也有提到，spring boot 项目是可以打成jar包的，然后通过java -jar xxx.jar 来执行，我们都知道，main函数是可以接受参数的，同样，spring boot的main函数也可以。 我们可以通过下面的命令来修改Tomcat的端口号：1java -jar xxx.jar --server.port=9090 5. 自定义属性配置5.1 普通配置在写spring项目的时候，我们可以在properties文件中定义一个变量，然后再代码中通过 @PropertySource 指明 properties 文件的位置，然后通过@Value注入相应的值。 在spring boot 中我们同样可以自定义一个变量，因为spring boot中的全局配置文件默认在一个目录下，所以我们可以直接用@Value注入值。 比如，在上一篇文章的demo项目中，我们可以在application.yml文件中这样定义： 12key: hello: hello world 修改DemoApplication.java代码为： 12345678910111213141516@SpringBootApplication(exclude=&#123;DataSourceAutoConfiguration.class,HibernateJpaAutoConfiguration.class&#125;)@RestControllerpublic class DemoApplication &#123; @Value("$&#123;key.hello&#125;") private String hello; public static void main(String[] args) &#123; SpringApplication.run(DemoApplication.class, args); &#125; @RequestMapping("/hello") public String hello()&#123; return hello; &#125;&#125; 运行项目，在浏览器中访问http://localhost:8080/hello： 值被正常的注入进去了。 5.2 类型安全的配置上面的例子中，使用@Value注入每个配置在实际的应用中会显得格外的麻烦，因为配置一般会有很多，用上面的方式就要写好多@Value，并且如果在多个类文件中都使用这个值的话，工作量会更大。所以，需要一种更好的方式。并且，这种方式是有安全隐患的，比如我需要的是一个long类型，但是注入的却是String，这个时候就报错了： 1Failed to convert value of type &apos;java.lang.String&apos; to required type &apos;long&apos;; spring boot 提供了基于类型安全的配置方式，通过@ConfigurationProperties将properties属性和一个bean及其属性关联，从而实现类型安全的配置。 我们来看一下： application.yml:123key: name: cleverfan sex: man 在demo项目中创建一个class： Person.java 12345678910111213141516171819202122@Component@ConfigurationProperties(prefix = &quot;key&quot;)public class Person &#123; private String name; private String sex; public void setName(String name) &#123; this.name = name; &#125; public void setSex(String sex) &#123; this.sex = sex; &#125; public String getName() &#123; return name; &#125; public String getSex() &#123; return sex; &#125;&#125; 修改DemoApplication.java ： 12345678910111213141516@SpringBootApplication(exclude=&#123;DataSourceAutoConfiguration.class,HibernateJpaAutoConfiguration.class&#125;)@RestControllerpublic class DemoApplication &#123; @Autowired private Person person; public static void main(String[] args) &#123; SpringApplication.run(DemoApplication.class, args); &#125; @RequestMapping(&quot;/hello&quot;) public String hello()&#123; return person.getName() + &quot;: &quot; + person.getSex(); &#125;&#125; 启动项目，访问http://localhost:8080/hello： 回到刚刚的问题，如果这个时候我需要的是long，但是给的是String怎么办呢？这里给出一个很简单的处理方式： Person.java123456789101112131415161718192021222324252627@Component@ConfigurationProperties(prefix = &quot;key&quot;)public class Person &#123; private String name; private long sex; public void setName(String name) &#123; this.name = name; &#125; public void setSex(String sex) &#123; try&#123; this.sex = Long.valueOf(sex); &#125;catch (Exception e)&#123; this.sex = 0L; &#125; &#125; public String getName() &#123; return name; &#125; public long getSex() &#123; return sex; &#125;&#125; yml配置文件不变，我们传递的是字符串，这次重启项目，访问http://localhost:8080/hello： 这样就可以简单的保证数据的安全了。 6. 日志配置spring boot 支持Java Util Loggin、Log4J、Log4J2和LogBack作为日志框架，无论使用哪种日志框架，spring boot已为当前使用日志框架的控制台输出及文件输出做好了配置。 默认情况下，spring boot 使用 Logback作为日志框架。可以在配置文件中（yml）修改默认配置文件的配置： 配置日志级别： 12logging: level: debug 配置日志文件 1234logging: org: springframework: web: debug 7. Profile配置Profile 是 spring 用来针对不同的环境对不同的配置提供支持的，比如生成环境，测试环境和开发环境。全局 Profile 使用application-{profile}.yml(例如application-prod.yml)命名。 下面我们做一个演示，我们把demo项目分为生产（prod）和开发（dev）环境，生产环境下端口号为8000，开发环境下为8888。 我们在demo项目的application.yml文件的同级目录下创建两个文件：application-prod.yml: 12server: port: 8000 application-dev.yml: 12server: port: 8888 目录结构是这样的： application.yml1234567891011key: name: cleverfan sex: manlogging: level: debugspring: profiles: active: dev 启动项目： 端口号是8888 修改application.yml： 123spring: profiles: active: prod 重新启动项目： 端口号的8000 证明我们的配置生效了。 配置就先讲到这里，如果有疑问或者错误，请及时与我联系。如果有需要补充的地方，也可以私戳我~]]></content>
@@ -617,6 +618,19 @@
         <tag>java</tag>
         <tag>springboot</tag>
         <tag>配置</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[【effective java】5:避免创建不必要的对象]]></title>
+    <url>%2F2017%2F07%2F15%2Feffectivejava%2Feff-java-5%2F</url>
+    <content type="text"><![CDATA[5:避免创建不必要的对象1. 总览一般来说，最好能重用对象，而不是在每次需要的时候就创建一个相同功能的新对象。 比如，我们不应该这样写：String s = new String(&quot;string&quot;);，而应该这样写：String s = &quot;string&quot;;。 2.几个好的思想 1.静态工厂方法总是优于构造器。 对于同时提供了静态工厂方法和构造器的不可变类，通常可以使用静态工厂方法而不是构造器，以避免创建不必要的对象。例如，静态工厂方法Boolean.valueOf(String)几乎总是优先于构造器Boolean(String)。 2.除了重用不可变的对象之外，也可以重用那些已知的不会被修改的可变对象。 3.要优先使用基本数据类型，而不是他们的包装类，要当心无意识的自动装箱。 4.通过创建附加对象，提升程序的清晰性、简洁性和功能性，这通常是件好事。 小对象的创建和回收动作是十分廉价的，特别是在现代jvm上更是如此。 5.通过维护自己的对象池来避免创建对象并不是一种好的做法，除非池中的对象是非常重量级的。 6.在提倡使用保护性拷贝的时候，因重用对象而付出的代价要远远大于因重复创建对象而付出的代价。]]></content>
+      <categories>
+        <category>java</category>
+        <category>effectivejava</category>
+      </categories>
+      <tags>
+        <tag>java</tag>
+        <tag>effectivejava</tag>
       </tags>
   </entry>
   <entry>
