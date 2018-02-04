@@ -473,7 +473,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.fanhub.cn/2017/07/22/web/web-dns/">
+    <link itemprop="mainEntityOfPage" href="http://blog.fanhub.cn/2017/07/23/java concurrency/java-concurrency-3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="CFshuming">
@@ -492,7 +492,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/07/22/web/web-dns/" itemprop="url">DNS域名解析过程（不考虑负载均衡等复杂情况）</a></h1>
+                <a class="post-title-link" href="/2017/07/23/java concurrency/java-concurrency-3/" itemprop="url">【java 并发】 3. 对象的共享（1）</a></h1>
         
 
         <div class="post-meta">
@@ -504,8 +504,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-22T20:46:25+08:00">
-                2017-07-22
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-23T20:46:25+08:00">
+                2017-07-23
               </time>
             
 
@@ -527,8 +527,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/web/" itemprop="url" rel="index">
-                    <span itemprop="name">web</span>
+                  <a href="/categories/java/" itemprop="url" rel="index">
+                    <span itemprop="name">java</span>
                   </a>
                 </span>
 
@@ -538,8 +538,8 @@
                 
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/web/dns/" itemprop="url" rel="index">
-                    <span itemprop="name">dns</span>
+                  <a href="/categories/java/concurrency/" itemprop="url" rel="index">
+                    <span itemprop="name">concurrency</span>
                   </a>
                 </span>
 
@@ -557,8 +557,8 @@
                 <i class="fa fa-comment-o"></i>
               </span>
               
-                <a href="/2017/07/22/web/web-dns/#SOHUCS" itemprop="discussionUrl">
-                  <span id="url::http://blog.fanhub.cn/2017/07/22/web/web-dns/" class="cy_cmt_count" data-xid="2017/07/22/web/web-dns/" itemprop="commentsCount" ></span>
+                <a href="/2017/07/23/java concurrency/java-concurrency-3/#SOHUCS" itemprop="discussionUrl">
+                  <span id="url::http://blog.fanhub.cn/2017/07/23/java concurrency/java-concurrency-3/" class="cy_cmt_count" data-xid="2017/07/23/java concurrency/java-concurrency-3/" itemprop="commentsCount" ></span>
                 </a>
               
             
@@ -588,16 +588,12 @@
       
         
           
-          DNS域名解析过程（不考虑负载均衡等复杂情况）在浏览器中输入：www.abc.com 会发生哪些事情呢？
-
-1.浏览器检查缓存中有没有该域名对应的解析过的ip地址，如果有，解析过程结束。
-
-
-浏览器缓存域名是有限制的，不仅缓存的大小有限制，缓存的时间也有限制。缓存时间可以通过TTL属性来控制。这个缓
+          同步的另一个重要的方面是：内存可见性。我们不仅希望放置某个现场正在使用对象状态而另一个线程在同时修改该状态，而且希望确保当一个线程修改了对象状态后，其他线程能够看到发生的状态变化。
+1.可见性多线程环境中，如果没有使用同步机制，编译器、处理器以及运行时等都可能对操作的执行顺序进行一些意想不到的调整，
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2017/07/22/web/web-dns/#more" rel="contents">
+            <a class="btn" href="/2017/07/23/java concurrency/java-concurrency-3/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -826,6 +822,181 @@ java 中主要的同步机制是synchronized 关键字，它提供一种独占�
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blog.fanhub.cn/2017/07/22/web/web-dns/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="CFshuming">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="舒铭的后花园">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/07/22/web/web-dns/" itemprop="url">DNS域名解析过程（不考虑负载均衡等复杂情况）</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-22T20:46:25+08:00">
+                2017-07-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/web/" itemprop="url" rel="index">
+                    <span itemprop="name">web</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/web/dns/" itemprop="url" rel="index">
+                    <span itemprop="name">dns</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-comment-o"></i>
+              </span>
+              
+                <a href="/2017/07/22/web/web-dns/#SOHUCS" itemprop="discussionUrl">
+                  <span id="url::http://blog.fanhub.cn/2017/07/22/web/web-dns/" class="cy_cmt_count" data-xid="2017/07/22/web/web-dns/" itemprop="commentsCount" ></span>
+                </a>
+              
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+          DNS域名解析过程（不考虑负载均衡等复杂情况）在浏览器中输入：www.abc.com 会发生哪些事情呢？
+
+1.浏览器检查缓存中有没有该域名对应的解析过的ip地址，如果有，解析过程结束。
+
+
+浏览器缓存域名是有限制的，不仅缓存的大小有限制，缓存的时间也有限制。缓存时间可以通过TTL属性来控制。这个缓
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2017/07/22/web/web-dns/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://blog.fanhub.cn/2017/07/22/effectivejava/eff-java-13/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -984,182 +1155,11 @@ java 中主要的同步机制是synchronized 关键字，它提供一种独占�
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.fanhub.cn/2017/07/22/effectivejava/eff-java-12/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="CFshuming">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="舒铭的后花园">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/07/22/effectivejava/eff-java-12/" itemprop="url">【effective java】12:考虑实现Comparable接口</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-22T18:46:25+08:00">
-                2017-07-22
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/java/" itemprop="url" rel="index">
-                    <span itemprop="name">java</span>
-                  </a>
-                </span>
-
-                
-                
-                  ， 
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/java/effectivejava/" itemprop="url" rel="index">
-                    <span itemprop="name">effectivejava</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-              <span class="post-meta-divider">|</span>
-              <span class="post-meta-item-icon">
-                <i class="fa fa-comment-o"></i>
-              </span>
-              
-                <a href="/2017/07/22/effectivejava/eff-java-12/#SOHUCS" itemprop="discussionUrl">
-                  <span id="url::http://blog.fanhub.cn/2017/07/22/effectivejava/eff-java-12/" class="cy_cmt_count" data-xid="2017/07/22/effectivejava/eff-java-12/" itemprop="commentsCount" ></span>
-                </a>
-              
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-          12:考虑实现Comparable接口简介一旦实现了 Comparable 接口，他就可以和许多反省算法以及依赖于该接口的集合实现进行协作。
-java 平台类库中的所有值类都实现了 Comparable 接口。如果你正在编写一个值类，它具有非常明显的内在排序关系，比如按字母排序、按数值顺序或者时间排
-          ...
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2017/07/22/effectivejava/eff-java-12/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/5/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/page/7/">7</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><a class="extend next" rel="next" href="/page/7/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/page/5/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/page/7/">7</a><span class="space">&hellip;</span><a class="page-number" href="/page/11/">11</a><a class="extend next" rel="next" href="/page/7/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1205,7 +1205,7 @@ java 平台类库中的所有值类都实现了 Comparable 接口。如果你正
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">50</span>
+                  <span class="site-state-item-count">51</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
